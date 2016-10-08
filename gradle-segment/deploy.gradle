@@ -1,0 +1,93 @@
+def deployFolder="scripts/deploy/"
+def deployFilePrefix="activities_ui_"
+
+def deployScript = deployFilePrefix + "deploy.sh"
+def deployScriptLocation = deployFolder + deployScript
+
+def testConf1 = deployFilePrefix + "test1.conf"
+def testConf1Location = deployFolder  + testConf1
+
+def testConf2 = deployFilePrefix + "test2.conf"
+def testConf2Location = deployFolder  + testConf2
+
+def productionConf1 = deployFilePrefix + "production1.conf"
+def productionConf1Location = deployFolder  + productionConf1
+
+def productionConf2 = deployFilePrefix + "production2.conf"
+def productionConf2Location = deployFolder  + productionConf2
+
+def remoteLocation = "/home/pi"
+
+ssh.settings {
+    user = 'pi'
+    identity = file("${System.getProperty('user.home')}/.ssh/id_rsa")
+}
+
+remotes {
+    testServer1 {
+        role 'testServer'
+        host = '192.168.1.33'
+    }
+    testServer2 {
+        role 'testServer'
+        host = '192.168.1.34'
+    }
+    prodServer1 {
+        role 'prodServer'
+        host = '192.168.1.33'
+    }
+    prodServer2 {
+        role 'prodServer'
+        host = '192.168.1.34'
+    }
+}
+
+task deployToTest << {
+    ssh.run {
+        session(remotes.testServer1) {
+            put from: "${testConf1Location}", into: "${remoteLocation}"
+            put from: "${deployScriptLocation}", into: "${remoteLocation}"
+
+            execute "sudo chmod 744 ${testConf1}"
+            execute "sudo chmod 744 ${deployScript}"
+
+            execute "sudo ./${deployScript} ${repoId} ${artifactVersion} ${testConf1}"
+            execute "sudo rm ${deployFilePrefix}*"
+        }
+        session(remotes.testServer2) {
+            put from: "${testConf2Location}", into: "${remoteLocation}"
+            put from: "${deployScriptLocation}", into: "${remoteLocation}"
+
+            execute "sudo chmod 744 ${testConf2}"
+            execute "sudo chmod 744 ${deployScript}"
+
+            execute "sudo ./${deployScript} ${repoId} ${artifactVersion} ${testConf2}"
+            execute "sudo rm ${deployFilePrefix}*"
+        }
+    }
+}
+
+task deployToProduction << {
+    ssh.run {
+        session(remotes.prodServer1) {
+            put from: "${productionConf1Location}", into: "${remoteLocation}"
+            put from: "${deployScriptLocation}", into: "${remoteLocation}"
+
+            execute "sudo chmod 744 ${productionConf1}"
+            execute "sudo chmod 744 ${deployScript}"
+
+            execute "sudo ./${deployScript} ${repoId} ${artifactVersion} ${productionConf1}"
+            execute "sudo rm ${deployFilePrefix}*"
+        }
+        session(remotes.prodServer2) {
+            put from: "${productionConf2Location}", into: "${remoteLocation}"
+            put from: "${deployScriptLocation}", into: "${remoteLocation}"
+
+            execute "sudo chmod 744 ${productionConf2}"
+            execute "sudo chmod 744 ${deployScript}"
+
+            execute "sudo ./${deployScript} ${repoId} ${artifactVersion} ${productionConf2}"
+            execute "sudo rm ${deployFilePrefix}*"
+        }
+    }
+}

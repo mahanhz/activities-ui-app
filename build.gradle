@@ -1,32 +1,98 @@
 buildscript {
 	ext {
+		NEXUS_REPO_URL = 'http://192.168.1.31:8082/nexus/content/repositories'
+
 		springBootVersion = '1.4.1.RELEASE'
+		sshVersion = '2.2.0'
+		gradleReleaseVersion = '2.4.0'
+		gradleOwaspVersion = '1.4.3'
+		gradleGitPropertiesVersion = '1.4.17'
 	}
+
 	repositories {
 		mavenCentral()
+
+		maven {
+			url 'https://plugins.gradle.org/m2/'
+		}
 	}
+
 	dependencies {
 		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+		classpath("org.hidetake:gradle-ssh-plugin:${sshVersion}")
+		classpath("net.researchgate:gradle-release:${gradleReleaseVersion}")
+		classpath("org.owasp:dependency-check-gradle:${gradleOwaspVersion}")
+		classpath("gradle.plugin.com.gorylenko.gradle-git-properties:gradle-git-properties:${gradleGitPropertiesVersion}")
 	}
 }
 
 apply plugin: 'java'
-apply plugin: 'eclipse'
+apply plugin: 'maven'
 apply plugin: 'spring-boot'
+apply plugin: 'org.hidetake.ssh'
+apply plugin: 'net.researchgate.release'
+apply plugin: 'jacoco'
+apply plugin: 'pmd'
+apply plugin: 'findbugs'
+apply plugin: 'org.owasp.dependencycheck'
+apply plugin: 'idea'
+apply plugin: 'com.gorylenko.gradle-git-properties'
 
-jar {
-	baseName = 'activities-ui'
-	version = '0.0.1-SNAPSHOT'
-}
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
-repositories {
-	mavenCentral()
+task wrapper(type: Wrapper) {
+	gradleVersion = '2.14'
 }
 
+// Dependencies
+apply from: 'gradle-segment/dependencies.gradle'
 
-dependencies {
-	compile('org.springframework.boot:spring-boot-starter')
-	testCompile('org.springframework.boot:spring-boot-starter-test')
+// Test
+apply from: 'gradle-segment/test.gradle'
+
+// Code analysis
+apply from: 'gradle-segment/code-analysis.gradle'
+
+// Publish to Nexus
+apply from: 'gradle-segment/publish.gradle'
+
+// Deploy
+apply from: 'gradle-segment/deploy.gradle'
+
+// Git properties that display in the actuator /info endpoint
+gitProperties {
+	dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ z"
+	dateFormatTimeZone = "UTC"
+}
+
+springBoot {
+	executable = true
+
+	embeddedLaunchScriptProperties = [initInfoDescription: project.description,
+									  initInfoShortDescription: project.name,
+									  initInfoProvides: jar.baseName,
+									  mode: 'service']
+
+	buildInfo {
+		additionalProperties = [
+				'description': "${description}",
+				'jenkins.node': "${System.env.NODE_NAME}",
+				'jenkins.job-name': "${System.env.JOB_NAME}",
+				'jenkins.build-timestamp': "${System.env.BUILD_TIMESTAMP}",
+				'jenkins.build-id': "${System.env.BUILD_ID}",
+				'jenkins.build-number': "${System.env.BUILD_NUMBER}",
+				'jenkins.git-commit': "${System.env.GIT_COMMIT_ID}", // Custom env variable set in the Jenkinsfile
+				'jenkins.git-branch': "${System.env.BRANCH_NAME}"
+		]
+	}
+}
+// Create a fully executable jar
+
+// Make the System.properties available in the bootRun task.
+bootRun.systemProperties = System.properties
+
+// Automatically expand info properties
+processResources {
+	filesMatching('**/application.yml') { expand(project.properties) }
 }

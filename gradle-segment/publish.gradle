@@ -1,0 +1,31 @@
+group = 'com.amhzing.activities.ui'
+
+jar {
+	baseName = 'activities-ui'
+
+	// Do not include environment specific properties in the built jar
+	exclude 'application-*'
+	exclude 'bootstrap-*'
+}
+
+uploadArchives {
+	repositories {
+		mavenDeployer {
+			repository(url: "${NEXUS_REPO_URL}/releases") {
+				authentication(userName: mavenUser, password: mavenPassword)
+			}
+			snapshotRepository(url: "${NEXUS_REPO_URL}/snapshots") {
+				authentication(userName: mavenUser, password: mavenPassword)
+			}
+		}
+	}
+}
+
+release {
+	// These allow an older master to be published (e.g. latest master did not pass all tests)
+	failOnCommitNeeded = false
+	failOnUnversionedFiles = false
+	failOnUpdateNeeded = false
+}
+
+afterReleaseBuild.dependsOn uploadArchives

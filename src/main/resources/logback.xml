@@ -1,0 +1,82 @@
+<configuration>
+    <!-- always a good idea to add an on console status listener -->
+    <statusListener class="ch.qos.logback.core.status.OnConsoleStatusListener" />
+
+    <!-- added this as recommended by spring-boot-admin -->
+    <include resource="org/springframework/boot/logging/logback/base.xml"/>
+    <jmxConfigurator/>
+
+    <!-- added this as recommended by logstash-logback-encoder.
+         See TCP Appenders https://github.com/logstash/logstash-logback-encoder -->
+    <shutdownHook class="ch.qos.logback.core.hook.DelayingShutdownHook" />
+
+    <property name="logFileName" value="activities-ui" />
+    <property name="productionProfile" value="production" />
+
+    <if condition='"${spring.profiles.active}".contains("${productionProfile}")'>
+        <then>
+            <property name="logLevel" value="INFO"/>
+            <appender name="LOGSTASH" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+                <destination>192.168.1.35:4564</destination>
+                <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+                    <timeZone>UTC</timeZone>
+                </encoder>
+            </appender>
+        </then>
+        <else>
+            <property name="logLevel" value="DEBUG"/>
+        </else>
+    </if>
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%date %level [%thread] %logger{10} [%file:%line] %msg%n</pattern>
+            <outputPatternAsHeader>true</outputPatternAsHeader>
+        </encoder>
+    </appender>
+
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- if the app.log.path is not specified then default to the current directory . -->
+        <file>${app.log.path:-.}/${logFileName}.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- daily rollover -->
+            <fileNamePattern>${app.log.path:-.}/${logFileName}.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <!-- keep 30 days' worth of history capped at 100MB total size -->
+            <maxHistory>30</maxHistory>
+            <!--<totalSizeCap>100MB</totalSizeCap>-->
+        </rollingPolicy>
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+            <timeZone>UTC</timeZone>
+        </encoder>
+    </appender>
+
+    <appender name="ASYNC_STDOUT" class="ch.qos.logback.classic.AsyncAppender">
+        <queueSize>500</queueSize>
+        <discardingThreshold>0</discardingThreshold>
+        <appender-ref ref="STDOUT" />
+    </appender>
+
+    <appender name="ASYNC_FILE" class="ch.qos.logback.classic.AsyncAppender">
+        <queueSize>500</queueSize>
+        <discardingThreshold>0</discardingThreshold>
+        <appender-ref ref="FILE" />
+    </appender>
+
+    <logger name="com.amhzing" level="${logLevel}" additivity="false">
+        <!-- Write to logstash if production and stdout if not -->
+        <if condition='"${spring.profiles.active}".contains("${productionProfile}")'>
+            <then>
+                <appender-ref ref="LOGSTASH" />
+            </then>
+            <else>
+                <appender-ref ref="STDOUT" />
+            </else>
+        </if>
+        <appender-ref ref="ASYNC_FILE" />
+    </logger>
+
+    <root level="WARN">
+        <appender-ref ref="STDOUT" />
+    </root>
+
+</configuration>

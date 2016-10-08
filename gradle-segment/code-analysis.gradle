@@ -1,0 +1,19 @@
+findbugs {
+    sourceSets = [sourceSets.main, sourceSets.test]
+    ignoreFailures = true
+}
+
+pmd {
+    sourceSets = [sourceSets.main, sourceSets.test]
+    ignoreFailures = true
+}
+
+dependencyCheck {
+    format = 'ALL'
+}
+
+// This is needed as Vaadin causes javadoc to fail otherwise
+javadoc
+{
+    options.addStringOption("sourcepath", "")
+}

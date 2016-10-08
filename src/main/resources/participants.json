@@ -1,0 +1,61 @@
+{
+  "participants": [
+    {
+      "participantId": "011f8860-79d0-11e6-bb43-6daecd7a1ae9",
+      "name": {
+        "firstName": "Marcus",
+        "middleName": "Jones",
+        "lastName": "Davids",
+        "suffix": "II"
+      },
+      "address": {
+        "addressLine1": "Elm street 1",
+        "addressLine2": "add2",
+        "city": "city1",
+        "postalCode": "pc1",
+        "country": {
+          "code": "SE",
+          "name": ""
+        }
+      },
+      "contactNumber": {
+        "primaryNumber": "123456789"
+      },
+      "email": {
+        "primaryEmail": "test_011@example.com"
+      }
+    },
+    {
+      "participantId": "0601b7ef-7b6a-11e6-8271-d722232a0d04",
+      "name": {
+        "firstName": "Mahan",
+        "middleName": null,
+        "lastName": "Hashemizadeh",
+        "suffix": null
+      },
+      "address": {
+        "addressLine1": "Brotorps Alle 3",
+        "addressLine2": null,
+        "city": "Sundbyberg",
+        "postalCode": "17441",
+        "country": {
+          "code": "SE",
+          "name": ""
+        }
+      },
+      "contactNumber": {
+        "primaryNumber": "0765532627"
+      },
+      "email": {
+        "primaryEmail": "test_123@example.com"
+      }
+    }
+  ],
+  "errors": [
+    {
+      "code": "",
+      "message": "",
+      "correlationId": ""
+    }
+  ]
+}

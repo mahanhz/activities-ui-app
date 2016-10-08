@@ -1,0 +1,21 @@
+def integrationTests = 'com/amhzing/activities/ui/integrationtest/**'
+def functionalTests = 'com/amhzing/activities/ui/functionaltest/**'
+def smokeTests = 'com/amhzing/activities/ui/smoketest/**'
+
+test {
+    exclude integrationTests
+    exclude functionalTests
+    exclude smokeTests
+}
+
+task integrationTest(type:Test) {
+    include integrationTests
+}
+
+task functionalTest(type:Test) {
+    include functionalTests
+}
+
+task smokeTest(type:Test) {
+    include smokeTests
+}
