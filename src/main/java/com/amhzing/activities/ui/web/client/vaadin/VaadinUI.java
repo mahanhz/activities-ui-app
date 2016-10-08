@@ -9,7 +9,6 @@ import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import static com.sun.deploy.trace.TraceLevel.UI;
 import static org.apache.commons.lang3.Validate.notNull;
 
 @Theme("valo")

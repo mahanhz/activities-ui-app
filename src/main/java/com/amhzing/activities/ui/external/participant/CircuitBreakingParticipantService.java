@@ -1,21 +1,25 @@
-package com.amhzing.activities.ui.participant;
+package com.amhzing.activities.ui.external.participant;
 
-import com.amhzing.activities.ui.participant.mapping.Participants;
-import com.amhzing.activities.ui.participant.response.ErrorResponse;
-import com.amhzing.activities.ui.participant.response.ParticipantResponse;
+
+import com.amhzing.activities.ui.external.participant.response.ErrorResponse;
+import com.amhzing.activities.ui.external.participant.response.ParticipantResponse;
+import com.amhzing.activities.ui.query.data.participant.Failure;
+import com.amhzing.activities.ui.query.data.participant.ParticipantService;
+import com.amhzing.activities.ui.query.data.participant.QueryCriteria;
+import com.amhzing.activities.ui.query.data.participant.mapping.Participants;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import io.atlassian.fugue.Either;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
-import static com.amhzing.activities.ui.participant.Failure.SYSTEM_IS_DOWN;
-import static com.amhzing.activities.ui.participant.Failure.SYSTEM_RETURNED_ERRORS;
+import static com.amhzing.activities.ui.query.data.participant.Failure.SYSTEM_IS_DOWN;
+import static com.amhzing.activities.ui.query.data.participant.Failure.SYSTEM_RETURNED_ERRORS;
 import static io.atlassian.fugue.Either.left;
 import static io.atlassian.fugue.Either.right;
 import static java.util.stream.Collectors.collectingAndThen;
 import static java.util.stream.Collectors.toList;
-import static org.springframework.util.Assert.notNull;
+import static org.apache.commons.lang3.Validate.notNull;
 
 public class CircuitBreakingParticipantService implements ParticipantService<Failure, Participants> {
 

@@ -1,5 +1,10 @@
 package com.amhzing.activities.ui.web.client.vaadin.page;
 
+import com.amhzing.activities.ui.query.data.participant.Failure;
+import com.amhzing.activities.ui.query.data.participant.ParticipantService;
+import com.amhzing.activities.ui.query.data.participant.QueryCriteria;
+import com.amhzing.activities.ui.query.data.participant.mapping.Participant;
+import com.amhzing.activities.ui.query.data.participant.mapping.Participants;
 import com.vaadin.data.Item;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.data.util.GeneratedPropertyContainer;

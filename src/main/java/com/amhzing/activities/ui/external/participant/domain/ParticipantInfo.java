@@ -1,20 +1,25 @@
-package com.amhzing.activities.ui.participant.mapping;
+package com.amhzing.activities.ui.external.participant.domain;
+
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Objects;
 
 import static org.apache.commons.lang3.Validate.notBlank;
 import static org.apache.commons.lang3.Validate.notNull;
 
-public class Participant {
+@JsonInclude
+public class ParticipantInfo {
 
-    private String participantId;
-    private Name name;
-    private Address address;
-    private ContactNumber contactNumber;
-    private Email email;
+    private final String participantId;
+    private final Name name;
+    private final Address address;
+    private final ContactNumber contactNumber;
+    private final Email email;
 
-    private Participant(final String participantId, final Name name, final Address address,
-                        final ContactNumber contactNumber, final Email email) {
+    private ParticipantInfo(final String participantId, final Name name, final Address address,
+                            final ContactNumber contactNumber, final Email email) {
         this.participantId = notBlank(participantId);
         this.name = notNull(name);
         this.address = notNull(address);
@@ -22,12 +27,13 @@ public class Participant {
         this.email = email;
     }
 
-    public static Participant create(final String participantId,
-                                     final Name name,
-                                     final Address address,
-                                     final ContactNumber contactNumber,
-                                     final Email email) {
-        return new Participant(participantId, name, address, contactNumber, email);
+    @JsonCreator
+    public static ParticipantInfo create(@JsonProperty("participantId") final String participantId,
+                                         @JsonProperty("name") final Name name,
+                                         @JsonProperty("address") final Address address,
+                                         @JsonProperty("contactNumber") final ContactNumber contactNumber,
+                                         @JsonProperty("email") final Email email) {
+        return new ParticipantInfo(participantId, name, address, contactNumber, email);
     }
 
     public String getParticipantId() {
@@ -50,31 +56,11 @@ public class Participant {
         return email;
     }
 
-    public void setName(final Name name) {
-        this.name = name;
-    }
-
-    public void setParticipantId(final String participantId) {
-        this.participantId = participantId;
-    }
-
-    public void setAddress(final Address address) {
-        this.address = address;
-    }
-
-    public void setContactNumber(final ContactNumber contactNumber) {
-        this.contactNumber = contactNumber;
-    }
-
-    public void setEmail(final Email email) {
-        this.email = email;
-    }
-
     @Override
     public boolean equals(final Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        final Participant that = (Participant) o;
+        final ParticipantInfo that = (ParticipantInfo) o;
         return Objects.equals(participantId, that.participantId) &&
                 Objects.equals(name, that.name) &&
                 Objects.equals(address, that.address) &&

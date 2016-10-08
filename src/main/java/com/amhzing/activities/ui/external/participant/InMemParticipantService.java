@@ -1,18 +1,21 @@
-package com.amhzing.activities.ui.participant;
+package com.amhzing.activities.ui.external.participant;
 
-import com.amhzing.activities.ui.participant.mapping.Participants;
-import com.amhzing.activities.ui.participant.response.ParticipantResponse;
+import com.amhzing.activities.ui.external.participant.response.ParticipantResponse;
+import com.amhzing.activities.ui.query.data.participant.Failure;
+import com.amhzing.activities.ui.query.data.participant.ParticipantService;
+import com.amhzing.activities.ui.query.data.participant.QueryCriteria;
+import com.amhzing.activities.ui.query.data.participant.mapping.Participants;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.atlassian.fugue.Either;
 
 import java.io.IOException;
 
-import static com.amhzing.activity.facilitated.query.data.participant.Failure.INTERNAL_ERROR;
+import static com.amhzing.activities.ui.query.data.participant.Failure.INTERNAL_ERROR;
 import static io.atlassian.fugue.Either.left;
 import static io.atlassian.fugue.Either.right;
 import static java.util.stream.Collectors.collectingAndThen;
 import static java.util.stream.Collectors.toList;
-import static org.springframework.util.Assert.notNull;
+import static org.apache.commons.lang3.Validate.notNull;
 
 public class InMemParticipantService implements ParticipantService<Failure, Participants> {
 

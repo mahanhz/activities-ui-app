@@ -1,4 +1,4 @@
-package com.amhzing.activities.ui.participant.domain;
+package com.amhzing.activities.ui.external.participant.domain;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -9,17 +9,17 @@ import java.util.Objects;
 import static org.apache.commons.lang3.Validate.notBlank;
 
 @JsonInclude
-public class ContactNumber {
+public class Email {
 
     private final String value;
 
-    private ContactNumber(final String value) {
+    private Email(final String value) {
         this.value = notBlank(value);
     }
 
     @JsonCreator
-    public static ContactNumber create(@JsonProperty("primaryNumber") final String contactNumber) {
-        return new ContactNumber(contactNumber);
+    public static Email create(@JsonProperty("primaryEmail") final String email) {
+        return new Email(email);
     }
 
     public String getValue() {
@@ -30,8 +30,8 @@ public class ContactNumber {
     public boolean equals(final Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        final ContactNumber that = (ContactNumber) o;
-        return Objects.equals(value, that.value);
+        final Email email = (Email) o;
+        return Objects.equals(value, email.value);
     }
 
     @Override
@@ -41,7 +41,7 @@ public class ContactNumber {
 
     @Override
     public String toString() {
-        return "ContactNumber{" +
+        return "Email{" +
                 "value='" + value + '\'' +
                 '}';
     }

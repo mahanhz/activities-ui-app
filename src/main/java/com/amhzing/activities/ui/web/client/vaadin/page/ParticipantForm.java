@@ -1,14 +1,13 @@
 package com.amhzing.activities.ui.web.client.vaadin.page;
 
-import com.amhzing.activities.ui.participant.mapping.Address;
-import com.amhzing.activities.ui.participant.mapping.Name;
-import com.amhzing.activities.ui.participant.mapping.Participant;
+import com.amhzing.activities.ui.query.data.participant.mapping.Address;
+import com.amhzing.activities.ui.query.data.participant.mapping.Name;
+import com.amhzing.activities.ui.query.data.participant.mapping.Participant;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.TextField;
 
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import static org.apache.commons.lang3.Validate.notNull;
-import static org.springframework.util.Assert.notNull;
 
 public class ParticipantForm extends FormLayout {
 

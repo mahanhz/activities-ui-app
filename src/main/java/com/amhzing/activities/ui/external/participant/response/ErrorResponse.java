@@ -1,4 +1,4 @@
-package com.amhzing.activities.ui.participant.response;
+package com.amhzing.activities.ui.external.participant.response;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;

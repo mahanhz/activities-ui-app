@@ -1,4 +1,4 @@
-package com.amhzing.activities.ui.participant;
+package com.amhzing.activities.ui.query.data.participant;
 
 import io.atlassian.fugue.Either;
 

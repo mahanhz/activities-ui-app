@@ -1,8 +1,10 @@
 package com.amhzing.activities.ui.web.controller;
 
 import com.amhzing.activities.ui.annotation.LogExecutionTime;
-import com.amhzing.activities.ui.participant.QueryCriteria;
-import com.amhzing.activities.ui.participant.mapping.Participants;
+import com.amhzing.activities.ui.query.data.participant.Failure;
+import com.amhzing.activities.ui.query.data.participant.ParticipantService;
+import com.amhzing.activities.ui.query.data.participant.QueryCriteria;
+import com.amhzing.activities.ui.query.data.participant.mapping.Participants;
 import io.atlassian.fugue.Either;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -1,11 +1,10 @@
-package com.amhzing.activities.ui.participant;
+package com.amhzing.activities.ui.external.participant;
 
-import com.amhzing.activities.ui.participant.domain.ParticipantInfo;
-import com.amhzing.activities.ui.participant.mapping.Participant;
+import com.amhzing.activities.ui.external.participant.domain.ParticipantInfo;
+import com.amhzing.activities.ui.query.data.participant.mapping.*;
 
 import static org.apache.commons.lang.StringUtils.isNotBlank;
 import static org.apache.commons.lang3.Validate.notNull;
-import static org.springframework.util.Assert.notNull;
 
 class ParticipantFactory {
 

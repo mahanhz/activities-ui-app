@@ -1,7 +1,6 @@
 package com.amhzing.activities.ui.integrationtest;
 
 import com.amhzing.activities.ui.ActivitiesUIApplication;
-import com.amhzing.activity.facilitated.FacilitatedActivityApplication;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +17,7 @@ import org.springframework.util.MultiValueMap;
 
 import java.util.Map;
 
+import static org.junit.Assert.assertEquals;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 
 @RunWith(SpringRunner.class)

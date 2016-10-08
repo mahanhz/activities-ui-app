@@ -1,6 +1,6 @@
-package com.amhzing.activities.ui.participant.response;
+package com.amhzing.activities.ui.external.participant.response;
 
-import com.amhzing.activities.ui.participant.domain.ParticipantInfo;
+import com.amhzing.activities.ui.external.participant.domain.ParticipantInfo;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;

@@ -1,4 +1,4 @@
-package com.amhzing.activities.ui.participant.mapping;
+package com.amhzing.activities.ui.query.data.participant.mapping;
 
 import com.google.common.collect.ImmutableList;
 

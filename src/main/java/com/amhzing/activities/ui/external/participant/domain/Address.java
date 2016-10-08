@@ -1,4 +1,4 @@
-package com.amhzing.activities.ui.participant.domain;
+package com.amhzing.activities.ui.external.participant.domain;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
