@@ -1,6 +1,6 @@
 package com.amhzing.activities.ui.integrationtest;
 
-import com.amhzing.activities.ui.ActivitiesUIApplication;
+import com.amhzing.activities.ui.ActivitiesApplication;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +21,7 @@ import static org.junit.Assert.assertEquals;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = ActivitiesUIApplication.class,
+@SpringBootTest(classes = ActivitiesApplication.class,
                 webEnvironment = WebEnvironment.RANDOM_PORT)
 public class ActivitiesUIApplicationIT {
 
