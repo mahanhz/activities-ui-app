@@ -1,10 +1,10 @@
 package com.amhzing.activities.ui.integrationtest;
 
 import com.amhzing.activities.ui.ActivitiesUIApplication;
-import com.amhzing.activities.ui.query.data.participant.Failure;
-import com.amhzing.activities.ui.query.data.participant.ParticipantService;
-import com.amhzing.activities.ui.query.data.participant.QueryCriteria;
-import com.amhzing.activities.ui.query.data.participant.mapping.Participants;
+import com.amhzing.activities.ui.application.Failure;
+import com.amhzing.activities.ui.application.ParticipantService;
+import com.amhzing.activities.ui.application.QueryCriteria;
+import com.amhzing.activities.ui.application.Participants;
 import io.atlassian.fugue.Either;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import static com.amhzing.activities.ui.query.data.participant.Failure.SYSTEM_IS_DOWN;
+import static com.amhzing.activities.ui.application.Failure.SYSTEM_IS_DOWN;
 import static com.netflix.config.ConfigurationManager.getConfigInstance;
 import static io.atlassian.fugue.Either.left;
 import static org.assertj.core.api.Assertions.assertThat;

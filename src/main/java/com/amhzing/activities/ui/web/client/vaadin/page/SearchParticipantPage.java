@@ -1,10 +1,10 @@
 package com.amhzing.activities.ui.web.client.vaadin.page;
 
-import com.amhzing.activities.ui.query.data.participant.Failure;
-import com.amhzing.activities.ui.query.data.participant.ParticipantService;
-import com.amhzing.activities.ui.query.data.participant.QueryCriteria;
-import com.amhzing.activities.ui.query.data.participant.mapping.Participant;
-import com.amhzing.activities.ui.query.data.participant.mapping.Participants;
+import com.amhzing.activities.ui.application.Failure;
+import com.amhzing.activities.ui.application.ParticipantService;
+import com.amhzing.activities.ui.application.Participants;
+import com.amhzing.activities.ui.application.QueryCriteria;
+import com.amhzing.activities.ui.web.client.model.ParticipantModel;
 import com.vaadin.data.Item;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.data.util.GeneratedPropertyContainer;
@@ -17,6 +17,7 @@ import com.vaadin.ui.themes.ValoTheme;
 import io.atlassian.fugue.Either;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import static com.amhzing.activities.ui.web.client.adapter.ParticipantAdapter.adaptParticipant;
 import static com.vaadin.data.Validator.InvalidValueException;
 import static com.vaadin.event.ShortcutAction.KeyCode.ENTER;
 import static com.vaadin.ui.Grid.SelectionMode.MULTI;
@@ -57,7 +58,7 @@ public class SearchParticipantPage {
     private void initWidgets() {
         countryText.setInputPrompt("Country code");
         cityText.setInputPrompt("City");
-        addressLine1Text.setInputPrompt("Address line 1");
+        addressLine1Text.setInputPrompt("AddressModel line 1");
         lastNameText.setInputPrompt("Last name");
         idText.setInputPrompt("Id");
 
@@ -115,7 +116,7 @@ public class SearchParticipantPage {
             if (event.getSelected().isEmpty()) {
                 participantForm.setVisible(false);
             } else {
-                final Participant participant = (Participant) event.getSelected().iterator().next();
+                final ParticipantModel participant = (ParticipantModel) event.getSelected().iterator().next();
                 participantForm.participantDetails(participant);
             }
         });
@@ -150,13 +151,11 @@ public class SearchParticipantPage {
     private void populateGrid(final Participants response) {
         grid.setVisible(true);
 
-        final BeanItemContainer<Participant> participants = new BeanItemContainer<>(Participant.class);
+        final BeanItemContainer<ParticipantModel> participants = new BeanItemContainer<>(ParticipantModel.class);
         participants.addNestedContainerBean("name");
         participants.addNestedContainerBean("address");
-        participants.addNestedContainerBean("contactNumber");
-        participants.addNestedContainerBean("email");
 
-        participants.addAll(response.getParticipants());
+        participants.addAll(adaptParticipant(response.getParticipants()));
 
         final GeneratedPropertyContainer gpc = new GeneratedPropertyContainer(participants);
 
@@ -168,8 +167,8 @@ public class SearchParticipantPage {
 
         grid.getColumn("info")
             .setRenderer(new ButtonRenderer(event -> {
-                if (event.getItemId() instanceof Participant) {
-                    final Participant participant = (Participant) event.getItemId();
+                if (event.getItemId() instanceof ParticipantModel) {
+                    final ParticipantModel participant = (ParticipantModel) event.getItemId();
                     participantForm.participantDetails(participant);
                 } else {
                     participantForm.setVisible(false);

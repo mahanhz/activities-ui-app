@@ -1,16 +1,17 @@
 package com.amhzing.activities.ui.external.participant;
 
 import com.amhzing.activities.ui.external.participant.response.ParticipantResponse;
-import com.amhzing.activities.ui.query.data.participant.Failure;
-import com.amhzing.activities.ui.query.data.participant.ParticipantService;
-import com.amhzing.activities.ui.query.data.participant.QueryCriteria;
-import com.amhzing.activities.ui.query.data.participant.mapping.Participants;
+import com.amhzing.activities.ui.application.Failure;
+import com.amhzing.activities.ui.application.ParticipantService;
+import com.amhzing.activities.ui.application.QueryCriteria;
+import com.amhzing.activities.ui.application.Participants;
+import com.amhzing.activities.ui.infra.ParticipantFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.atlassian.fugue.Either;
 
 import java.io.IOException;
 
-import static com.amhzing.activities.ui.query.data.participant.Failure.INTERNAL_ERROR;
+import static com.amhzing.activities.ui.application.Failure.INTERNAL_ERROR;
 import static io.atlassian.fugue.Either.left;
 import static io.atlassian.fugue.Either.right;
 import static java.util.stream.Collectors.collectingAndThen;

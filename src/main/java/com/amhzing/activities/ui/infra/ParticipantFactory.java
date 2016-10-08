@@ -1,12 +1,12 @@
-package com.amhzing.activities.ui.external.participant;
+package com.amhzing.activities.ui.infra;
 
+import com.amhzing.activities.ui.domain.participant.*;
 import com.amhzing.activities.ui.external.participant.domain.ParticipantInfo;
-import com.amhzing.activities.ui.query.data.participant.mapping.*;
 
 import static org.apache.commons.lang.StringUtils.isNotBlank;
 import static org.apache.commons.lang3.Validate.notNull;
 
-class ParticipantFactory {
+public class ParticipantFactory {
 
     private ParticipantFactory() {
     }

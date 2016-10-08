@@ -1,5 +1,6 @@
-package com.amhzing.activities.ui.query.data.participant.mapping;
+package com.amhzing.activities.ui.application;
 
+import com.amhzing.activities.ui.domain.participant.Participant;
 import com.google.common.collect.ImmutableList;
 
 import java.util.List;

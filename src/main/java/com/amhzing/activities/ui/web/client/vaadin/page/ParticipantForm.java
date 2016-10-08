@@ -1,8 +1,9 @@
 package com.amhzing.activities.ui.web.client.vaadin.page;
 
-import com.amhzing.activities.ui.query.data.participant.mapping.Address;
-import com.amhzing.activities.ui.query.data.participant.mapping.Name;
-import com.amhzing.activities.ui.query.data.participant.mapping.Participant;
+
+import com.amhzing.activities.ui.web.client.model.AddressModel;
+import com.amhzing.activities.ui.web.client.model.NameModel;
+import com.amhzing.activities.ui.web.client.model.ParticipantModel;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.TextField;
 
@@ -19,15 +20,15 @@ public class ParticipantForm extends FormLayout {
     private TextField emailText = new TextField();
     private TextField idText = new TextField();
 
-    public void participantDetails(final Participant participant) {
+    public void participantDetails(final ParticipantModel participant) {
         notNull(participant);
 
-        nameText.setCaption("Name");
+        nameText.setCaption("NameModel");
         nameText.setValue(name(participant));
         setWidth(nameText);
         setReadOnly(nameText);
 
-        addressText.setCaption("Address");
+        addressText.setCaption("AddressModel");
         addressText.setValue(address(participant));
         setWidth(addressText);
         setReadOnly(addressText);
@@ -59,8 +60,8 @@ public class ParticipantForm extends FormLayout {
         field.setEnabled(false);
     }
 
-    private String name(final Participant participant) {
-        final Name name = participant.getName();
+    private String name(final ParticipantModel participant) {
+        final NameModel name = participant.getName();
 
         return defaultValue(name.getFirstName(), " ")
                 + defaultValue(name.getMiddleName(), " ")
@@ -68,30 +69,22 @@ public class ParticipantForm extends FormLayout {
                 + defaultValue(name.getSuffix());
     }
 
-    private String address(final Participant participant) {
-        final Address address = participant.getAddress();
+    private String address(final ParticipantModel participant) {
+        final AddressModel address = participant.getAddress();
 
         return defaultValue(address.getAddressLine1(), ", ")
                 + defaultValue(address.getAddressLine2(), ", ")
                 + defaultValue(address.getCity(), ", ")
-                + defaultValue(address.getCountry().getCode(), ", ")
+                + defaultValue(address.getCountry(), ", ")
                 + defaultValue(address.getPostalCode());
     }
 
-    private String contactNumber(final Participant participant) {
-        if (participant.getContactNumber() != null) {
-            return defaultValue(participant.getContactNumber().getValue());
-        }
-
-        return "";
+    private String contactNumber(final ParticipantModel participant) {
+        return defaultValue(participant.getContactNumber());
     }
 
-    private String email(final Participant participant) {
-        if (participant.getEmail() != null) {
-            return defaultValue(participant.getEmail().getValue());
-        }
-
-        return "";
+    private String email(final ParticipantModel participant) {
+        return defaultValue(participant.getEmail());
     }
 
     private String defaultValue(final String value, final String concat) {

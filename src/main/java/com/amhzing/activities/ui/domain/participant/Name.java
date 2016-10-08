@@ -1,14 +1,9 @@
-package com.amhzing.activities.ui.external.participant.domain;
-
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
+package com.amhzing.activities.ui.domain.participant;
 
 import java.util.Objects;
 
 import static org.apache.commons.lang3.Validate.notBlank;
 
-@JsonInclude
 public class Name {
 
     private final String firstName;
@@ -23,11 +18,10 @@ public class Name {
         this.suffix = suffix;
     }
 
-    @JsonCreator
-    public static Name create(@JsonProperty("firstName") final String firstName,
-                              @JsonProperty("middleName") final String middleName,
-                              @JsonProperty("lastName") final String lastName,
-                              @JsonProperty("suffix") final String suffix) {
+    public static Name create(final String firstName,
+                              final String middleName,
+                              final String lastName,
+                              final String suffix) {
         return new Name(firstName, middleName, lastName, suffix);
     }
 

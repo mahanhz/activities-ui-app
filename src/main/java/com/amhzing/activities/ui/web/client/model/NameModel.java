@@ -1,51 +1,66 @@
-package com.amhzing.activities.ui.query.data.participant.mapping;
+package com.amhzing.activities.ui.web.client.model;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-import static org.apache.commons.lang3.Validate.notBlank;
+public class NameModel implements Serializable {
 
-public class Name {
+    private String firstName;
+    private String middleName;
+    private String lastName;
+    private String suffix;
 
-    private final String firstName;
-    private final String middleName;
-    private final String lastName;
-    private final String suffix;
+    public NameModel() {
+    }
 
-    private Name(final String firstName, final String middleName, final String lastName, final String suffix) {
+    private NameModel(final String firstName, final String middleName, final String lastName, final String suffix) {
         this.firstName = firstName;
         this.middleName = middleName;
-        this.lastName = notBlank(lastName);
+        this.lastName = lastName;
         this.suffix = suffix;
     }
 
-    public static Name create(final String firstName,
-                              final String middleName,
-                              final String lastName,
-                              final String suffix) {
-        return new Name(firstName, middleName, lastName, suffix);
+    public static NameModel create(final String firstName, final String middleName, final String lastName, final String suffix) {
+        return new NameModel(firstName, middleName, lastName, suffix);
     }
 
     public String getFirstName() {
         return firstName;
     }
 
+    public void setFirstName(final String firstName) {
+        this.firstName = firstName;
+    }
+
     public String getMiddleName() {
         return middleName;
+    }
+
+    public void setMiddleName(final String middleName) {
+        this.middleName = middleName;
     }
 
     public String getLastName() {
         return lastName;
     }
 
+    public void setLastName(final String lastName) {
+        this.lastName = lastName;
+    }
+
     public String getSuffix() {
         return suffix;
+    }
+
+    public void setSuffix(final String suffix) {
+        this.suffix = suffix;
     }
 
     @Override
     public boolean equals(final Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        final Name name = (Name) o;
+        final NameModel name = (NameModel) o;
         return Objects.equals(firstName, name.firstName) &&
                 Objects.equals(middleName, name.middleName) &&
                 Objects.equals(lastName, name.lastName) &&
@@ -59,7 +74,7 @@ public class Name {
 
     @Override
     public String toString() {
-        return "Name{" +
+        return "NameModel{" +
                 "firstName='" + firstName + '\'' +
                 ", middleName='" + middleName + '\'' +
                 ", lastName='" + lastName + '\'' +

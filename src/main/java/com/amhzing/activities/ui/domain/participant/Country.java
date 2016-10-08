@@ -1,4 +1,4 @@
-package com.amhzing.activities.ui.query.data.participant.mapping;
+package com.amhzing.activities.ui.domain.participant;
 
 import java.util.Objects;
 

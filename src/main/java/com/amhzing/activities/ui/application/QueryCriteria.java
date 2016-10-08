@@ -1,4 +1,4 @@
-package com.amhzing.activities.ui.query.data.participant;
+package com.amhzing.activities.ui.application;
 
 import java.util.Objects;
 
