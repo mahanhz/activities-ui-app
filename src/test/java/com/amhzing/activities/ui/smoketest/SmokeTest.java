@@ -1,6 +1,6 @@
 package com.amhzing.activities.ui.smoketest;
 
-import com.amhzing.activities.ui.ActivitiesApplication;
+import com.amhzing.activities.ui.ActivitiesUIApplication;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,7 +16,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringBootTest(classes = ActivitiesApplication.class)
+@SpringBootTest(classes = ActivitiesUIApplication.class)
 public class SmokeTest {
 
     @Value("${server.base-uri}")

@@ -1,6 +1,6 @@
 package com.amhzing.activities.ui.integrationtest;
 
-import com.amhzing.activities.ui.ActivitiesApplication;
+import com.amhzing.activities.ui.ActivitiesUIApplication;
 import com.amhzing.activities.ui.query.data.participant.Failure;
 import com.amhzing.activities.ui.query.data.participant.ParticipantService;
 import com.amhzing.activities.ui.query.data.participant.QueryCriteria;
@@ -20,7 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = ActivitiesApplication.class,
+@SpringBootTest(classes = ActivitiesUIApplication.class,
                 webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class ExternalParticipantIT {
 
