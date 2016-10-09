@@ -1,20 +1,47 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
-<head>
-    <title>Spring Security Example </title>
-</head>
-<body>
-<div th:if="${param.error}">
-    Invalid username and password.
-</div>
-<div th:if="${param.logout}">
-    You have been logged out.
-</div>
-<form th:action="@{/login}" method="post">
-    <div><label> User Name : <input type="text" name="username"/> </label></div>
-    <div><label> Password: <input type="password" name="password"/> </label></div>
-    <div><input type="submit" value="Log In"/></div>
-</form>
-</body>
+    <head>
+        <title>Login</title>
+        <script th:src="@{/webjars/modernizr/2.8.3/modernizr.min.js}"></script>
+
+        <link th:href="@{css/reset.css}" rel="stylesheet" media="screen" />
+        <link th:href="@{/webjars/font-awesome/4.6.3/css/font-awesome.min.css}" rel="stylesheet" media="screen" />
+        <link th:href="@{css/style.css}" rel="stylesheet" media="screen" />
+    </head>
+    <body>
+        <div th:if="${param.error}">
+            Invalid username and password.
+        </div>
+
+        <div th:if="${param.logout}">
+            You have been logged out.
+        </div>
+
+
+        <form th:action="@{/login}" method="post" th:class="login">
+            <fieldset>
+                <div class="input">
+                    <input type="text" placeholder="Username" name="username" required="true" autofocus="autofocus" />
+                    <span><i class="fa fa-user"></i></span>
+                </div>
+
+                <div class="input">
+                    <input type="password" placeholder="Password" name="password" required="true" />
+                    <span><i class="fa fa-lock"></i></span>
+                </div>
+
+                <button type="submit" class="submit"><i class="fa fa-long-arrow-right"></i></button>
+            </fieldset>
+
+            <div class="feedback">
+                login successful <br />
+                redirecting...
+            </div>
+
+        </form>
+
+        <script th:src="@{/webjars/jquery/3.1.1/jquery.min.js}"></script>
+        <script th:src="@{js/login.js}"></script>
+    </body>
 </html>
