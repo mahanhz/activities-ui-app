@@ -4,14 +4,13 @@ import com.amhzing.activities.ui.web.client.vaadin.page.SearchParticipantPage;
 import com.vaadin.annotations.Theme;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.spring.annotation.SpringUI;
-import com.vaadin.ui.TabSheet;
-import com.vaadin.ui.UI;
-import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.*;
+import com.vaadin.ui.themes.ValoTheme;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.apache.commons.lang3.Validate.notNull;
 
-@Theme("valo")
+@Theme(ValoTheme.THEME_NAME)
 @SpringUI(path = "/vaadin")
 public class VaadinUI extends UI {
 
@@ -28,8 +27,9 @@ public class VaadinUI extends UI {
 
         final VerticalLayout pageLayout = new VerticalLayout();
         final TabSheet tabsheet = new TabSheet();
-        pageLayout.addComponent(tabsheet);
-        pageLayout.setSpacing(true);
+
+        pageLayout.addComponents(headerLayout(), tabsheet);
+        //pageLayout.setSpacing(true);
         pageLayout.setMargin(true);
 
         searchForParticipants(tabsheet);
@@ -37,6 +37,21 @@ public class VaadinUI extends UI {
         createActivity(tabsheet);
 
         setContent(pageLayout);
+    }
+
+    private Layout headerLayout() {
+        final HorizontalLayout headerLayout = new HorizontalLayout();
+
+        final Button logoutBtn = new Button("Logout", event -> {
+            // Let Spring Security handle the logout by redirecting to the logout URL
+            getPage().setLocation("logout");
+        });
+
+        headerLayout.addComponent(logoutBtn);
+        headerLayout.setComponentAlignment(logoutBtn, Alignment.TOP_RIGHT);
+        headerLayout.setSizeFull();
+
+        return headerLayout;
     }
 
     private void searchForParticipants(final TabSheet tabsheet) {

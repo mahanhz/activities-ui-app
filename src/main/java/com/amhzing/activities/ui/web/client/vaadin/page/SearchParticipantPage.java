@@ -11,6 +11,7 @@ import com.vaadin.data.util.GeneratedPropertyContainer;
 import com.vaadin.data.util.PropertyValueGenerator;
 import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.spring.annotation.SpringComponent;
+import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.*;
 import com.vaadin.ui.renderers.ButtonRenderer;
 import com.vaadin.ui.themes.ValoTheme;
@@ -24,6 +25,7 @@ import static com.vaadin.ui.Grid.SelectionMode.MULTI;
 import static org.apache.commons.lang3.Validate.notNull;
 
 @SpringComponent
+@UIScope
 public class SearchParticipantPage {
 
     private ParticipantService<Failure, Participants> participantService;
@@ -58,7 +60,7 @@ public class SearchParticipantPage {
     private void initWidgets() {
         countryText.setInputPrompt("Country code");
         cityText.setInputPrompt("City");
-        addressLine1Text.setInputPrompt("AddressModel line 1");
+        addressLine1Text.setInputPrompt("Address line 1");
         lastNameText.setInputPrompt("Last name");
         idText.setInputPrompt("Id");
 

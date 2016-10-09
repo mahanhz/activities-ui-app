@@ -1,6 +1,5 @@
 package com.amhzing.activities.ui.external.participant;
 
-
 import com.amhzing.activities.ui.external.participant.response.ErrorResponse;
 import com.amhzing.activities.ui.external.participant.response.ParticipantResponse;
 import com.amhzing.activities.ui.application.Failure;
