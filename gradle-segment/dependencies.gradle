@@ -22,6 +22,7 @@ ext {
     vaadinVersion = '7.7.3'
 
     webjarsJqueryVersion = '3.1.1'
+    webjarsBootstrapVersion = '3.3.7-1'
     webjarsLocatorVersion = '0.32'
     webjarsFontAwesomeVersion = '4.6.3'
     webjarsModernizrVersion = '2.8.3'
@@ -71,6 +72,7 @@ dependencies {
     compile ("com.vaadin:vaadin-spring-boot-starter:${vaadinSpringBootVersion}")
 
     compile ("org.webjars:jquery:${webjarsJqueryVersion}")
+    compile ("org.webjars:bootstrap:${webjarsBootstrapVersion}")
     compile ("org.webjars:font-awesome:${webjarsFontAwesomeVersion}")
     compile ("org.webjars:modernizr:${webjarsModernizrVersion}")
     compile ("org.webjars:webjars-locator:${webjarsLocatorVersion}")
