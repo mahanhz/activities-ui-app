@@ -184,18 +184,11 @@ public class SearchParticipantPage {
     private void getParticipants(final QueryCriteria queryCriteria) {
         final Either<Failure, Participants> response = participantService.participantsByCriteria(queryCriteria);
 
-//        if (response.isRight()) {
-//            populateGrid(response.right().get());
-//        } else {
-//            resultErrorPanel.setSizeFull();
-//            final Label content = new Label("Sorry about this!<br/> Unfortunately something went wrong!", ContentMode.HTML);
-//            content.setStyleName("text-error");
-//            resultErrorPanel.setContent(content);
-//            resultErrorPanel.setVisible(true);
-//        }
-
-        banner.show("Sorry about this!<br/> Unfortunately something went wrong!");
-
+        if (response.isRight()) {
+            populateGrid(response.right().get());
+        } else {
+            banner.show("Sorry about this!<br/> Unfortunately something went wrong!");
+        }
     }
 
     private void populateGrid(final Participants response) {
