@@ -1,9 +1,7 @@
 package com.amhzing.activities.ui.configuration.properties;
 
-import com.amhzing.activities.ui.annotation.Online;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-@Online
 @ConfigurationProperties(prefix="external.participant")
 public class ExternalConfigProperties {
 

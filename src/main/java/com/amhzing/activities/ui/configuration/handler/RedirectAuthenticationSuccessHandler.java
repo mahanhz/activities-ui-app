@@ -12,9 +12,12 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
+import static com.amhzing.activities.ui.configuration.AppSecurityConfig.VAADIN_USER;
 import static java.util.stream.Collectors.toList;
 
 public class RedirectAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
+
+    private static final String ROLE = "ROLE_";
 
     @Override
     public void onAuthenticationSuccess(final HttpServletRequest request, final HttpServletResponse response, final Authentication authentication) throws IOException, ServletException {
@@ -29,10 +32,8 @@ public class RedirectAuthenticationSuccessHandler implements AuthenticationSucce
                                                  .map(GrantedAuthority::getAuthority)
                                                  .collect(toList());
 
-        if (roles.contains("ROLE_VAADIN_USER")) {
+        if (roles.contains(ROLE + VAADIN_USER)) {
             return "/vaadin";
-        } else if (roles.contains("ROLE_ADMIN")) {
-            return "/admin";
         } else {
             throw new IllegalStateException();
         }
