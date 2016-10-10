@@ -9,7 +9,7 @@ import com.vaadin.data.Item;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.data.util.GeneratedPropertyContainer;
 import com.vaadin.data.util.PropertyValueGenerator;
-import com.vaadin.data.validator.StringLengthValidator;
+import com.vaadin.shared.ui.combobox.FilteringMode;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.*;
@@ -18,10 +18,14 @@ import com.vaadin.ui.themes.ValoTheme;
 import io.atlassian.fugue.Either;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.Locale;
+
 import static com.amhzing.activities.ui.web.client.adapter.ParticipantAdapter.adaptParticipant;
-import static com.vaadin.data.Validator.InvalidValueException;
 import static com.vaadin.event.ShortcutAction.KeyCode.ENTER;
 import static com.vaadin.ui.Grid.SelectionMode.MULTI;
+import static java.util.stream.Collectors.toList;
 import static org.apache.commons.lang3.Validate.notNull;
 
 @SpringComponent
@@ -30,17 +34,17 @@ public class SearchParticipantPage {
 
     private ParticipantService<Failure, Participants> participantService;
 
-    private TextField countryText = new TextField();
+    private Banner banner = new Banner();
+    private ComboBox countrySelect = new ComboBox();
     private TextField cityText = new TextField();
     private TextField addressLine1Text = new TextField();
     private TextField lastNameText = new TextField();
     private TextField idText = new TextField();
 
     private Button searchBtn = new Button("Search");
-
-    private ParticipantForm participantForm = new ParticipantForm();
-
     private Grid grid = new Grid();
+    private ParticipantForm participantForm = new ParticipantForm();
+    private Panel resultErrorPanel = new Panel();
 
     @Autowired
     public SearchParticipantPage(final ParticipantService<Failure, Participants> participantService) {
@@ -58,59 +62,94 @@ public class SearchParticipantPage {
     }
 
     private void initWidgets() {
-        countryText.setInputPrompt("Country code");
+
+        UI.getCurrent().addWindow(banner);
+
         cityText.setInputPrompt("City");
         addressLine1Text.setInputPrompt("Address line 1");
         lastNameText.setInputPrompt("Last name");
         idText.setInputPrompt("Id");
 
-        countryText.setValidationVisible(false);
-        countryText.addValidator(new StringLengthValidator("Invalid country code (was {0})", 2, 3, false));
-        countryText.focus();
+        initCountrySelect();
 
         searchBtn.setClickShortcut(ENTER);
-
         grid.setSelectionMode(MULTI);
-        showResults(false);
+        hideResults();
+    }
+
+    private void initCountrySelect() {
+        countrySelect.setValidationVisible(false);
+        countrySelect.setRequired(true);
+        countrySelect.setRequiredError("Please select a country!");
+
+        final BeanItemContainer<Country> countries = new BeanItemContainer(Country.class, countries());
+        countrySelect.setContainerDataSource(countries);
+        countrySelect.setItemCaptionPropertyId("name");
+        countrySelect.setFilteringMode(FilteringMode.CONTAINS);
+        countrySelect.focus();
+    }
+
+    private List<Country> countries() {
+        return Arrays.stream(Locale.getISOCountries())
+                     .map(countryCode -> new Locale("", countryCode))
+                     .map(locale -> Country.create(locale.getCountry(), locale.getDisplayCountry()))
+                     .collect(toList());
     }
 
     private HorizontalLayout searchLayout() {
-        CssLayout filtering = new CssLayout();
-        filtering.addComponents(countryText, cityText, addressLine1Text, lastNameText, idText);
+        final CssLayout filtering = new CssLayout();
+        filtering.addComponents(countrySelect, cityText, addressLine1Text, lastNameText, idText);
         filtering.setStyleName(ValoTheme.LAYOUT_COMPONENT_GROUP);
 
         searchButtonListener();
 
-        HorizontalLayout searchLayout = new HorizontalLayout(filtering, searchBtn);
+        final HorizontalLayout searchLayout = new HorizontalLayout(filtering, searchBtn);
         searchLayout.setSpacing(true);
         return searchLayout;
     }
 
-    private HorizontalLayout resultLayout() {
+    private VerticalLayout resultLayout() {
         //gridSelectionListener();
 
-        HorizontalLayout resultLayout = new HorizontalLayout(grid, participantForm);
-        resultLayout.setSpacing(true);
-        resultLayout.setSizeFull();
+        final VerticalLayout resultLayout = new VerticalLayout();
+
+        HorizontalLayout foundResultLayout = new HorizontalLayout(grid, participantForm);
+        foundResultLayout.setSpacing(true);
+        foundResultLayout.setSizeFull();
         grid.setSizeFull();
-        resultLayout.setExpandRatio(grid, 1.7f);
-        resultLayout.setExpandRatio(participantForm, 1.3f);
+        foundResultLayout.setExpandRatio(grid, 1.7f);
+        foundResultLayout.setExpandRatio(participantForm, 1.3f);
+
+        resultLayout.addComponents(foundResultLayout, resultErrorPanel);
 
         return resultLayout;
     }
 
     private void searchButtonListener() {
         searchBtn.addClickListener(e -> {
-            setValidationVisibility(false);
-            showResults(false);
+            preValidationVisibility();
+            hideResults();
             try {
                 validateFields();
                 getParticipants(queryCriteria());
-            } catch (final InvalidValueException ex) {
+            } catch (final Exception ex) {
                 Notification.show(ex.getMessage());
-                setValidationVisibility(true);
+                validationErrorsVisibility();
             }
         });
+    }
+
+    private void preValidationVisibility() {
+        countrySelect.setValidationVisible(false);
+    }
+
+    private void validationErrorsVisibility() {
+        countrySelect.setValidationVisible(true);
+        countrySelect.focus();
+    }
+
+    private void validateFields() {
+        countrySelect.validate();
     }
 
     private void gridSelectionListener() {
@@ -124,30 +163,39 @@ public class SearchParticipantPage {
         });
     }
 
-    private void setValidationVisibility(final boolean isVisible) {
-        countryText.setValidationVisible(isVisible);
-    }
-
-    private void validateFields() {
-        countryText.validate();
-    }
-
     private QueryCriteria queryCriteria() {
-        return QueryCriteria.create(countryText.getValue(),
+        return QueryCriteria.create(countryCode(),
                                     cityText.getValue(),
                                     addressLine1Text.getValue(),
                                     lastNameText.getValue(),
                                     idText.getValue());
     }
 
+    private String countryCode() {
+        final Object country = countrySelect.getValue();
+
+        if (country instanceof Country) {
+            return ((Country) country).getCode();
+        } else {
+            throw new IllegalArgumentException("No country exists for selected value: " + country);
+        }
+    }
+
     private void getParticipants(final QueryCriteria queryCriteria) {
         final Either<Failure, Participants> response = participantService.participantsByCriteria(queryCriteria);
 
-        if (response.isRight()) {
-            populateGrid(response.right().get());
-        } else {
-            // TODO - Should display something meaningful when an error occurs
-        }
+//        if (response.isRight()) {
+//            populateGrid(response.right().get());
+//        } else {
+//            resultErrorPanel.setSizeFull();
+//            final Label content = new Label("Sorry about this!<br/> Unfortunately something went wrong!", ContentMode.HTML);
+//            content.setStyleName("text-error");
+//            resultErrorPanel.setContent(content);
+//            resultErrorPanel.setVisible(true);
+//        }
+
+        banner.show("Sorry about this!<br/> Unfortunately something went wrong!");
+
     }
 
     private void populateGrid(final Participants response) {
@@ -193,8 +241,9 @@ public class SearchParticipantPage {
         };
     }
 
-    private void showResults(final boolean isVisible) {
+    private void hideResults() {
         grid.setVisible(false);
         participantForm.setVisible(false);
+        resultErrorPanel.setVisible(false);
     }
 }

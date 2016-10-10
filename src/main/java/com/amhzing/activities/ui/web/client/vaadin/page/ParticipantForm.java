@@ -23,12 +23,12 @@ public class ParticipantForm extends FormLayout {
     public void participantDetails(final ParticipantModel participant) {
         notNull(participant);
 
-        nameText.setCaption("NameModel");
+        nameText.setCaption("Name");
         nameText.setValue(name(participant));
         setWidth(nameText);
         setReadOnly(nameText);
 
-        addressText.setCaption("AddressModel");
+        addressText.setCaption("Address");
         addressText.setValue(address(participant));
         setWidth(addressText);
         setReadOnly(addressText);

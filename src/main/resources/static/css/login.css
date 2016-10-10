@@ -1,3 +1,11 @@
 .modal {
   top: 15%;
 }
+
+.modal-dialog {
+    width: 30%;
+}
+
+.btn-primary {
+    width: 60%;
+}
