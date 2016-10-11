@@ -13,6 +13,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+import static com.amhzing.activities.ui.feature.AppFeatures.ACTIVITY_FACILITATED;
+import static com.amhzing.activities.ui.feature.AppFeatures.ACTIVITY_HOSTED;
 import static org.apache.commons.lang3.Validate.notNull;
 
 @Theme("activities")
@@ -54,7 +56,13 @@ public class VaadinUI extends UI {
 
         searchForParticipants(tabsheet);
 
-        createActivity(tabsheet);
+        if (ACTIVITY_FACILITATED.isActive()) {
+            createFacilitatedActivity(tabsheet);
+        }
+
+        if (ACTIVITY_HOSTED.isActive()) {
+            createHostedActivity(tabsheet);
+        }
 
         setContent(pageLayout);
     }
@@ -81,8 +89,13 @@ public class VaadinUI extends UI {
         tabsheet.addTab(tabContents, "Search for Participants");
     }
 
-    private void createActivity(final TabSheet tabsheet) {
+    private void createFacilitatedActivity(final TabSheet tabsheet) {
         final VerticalLayout tabContents = new VerticalLayout();
-        tabsheet.addTab(tabContents, "Create Activity");
+        tabsheet.addTab(tabContents, "Facilitated Activities");
+    }
+
+    private void createHostedActivity(final TabSheet tabsheet) {
+        final VerticalLayout tabContents = new VerticalLayout();
+        tabsheet.addTab(tabContents, "Hosted Activities");
     }
 }

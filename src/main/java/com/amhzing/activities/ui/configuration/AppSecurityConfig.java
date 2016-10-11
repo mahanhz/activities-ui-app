@@ -8,6 +8,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
+import static com.amhzing.activities.ui.configuration.AuthenticationConfig.VAADIN_USER;
+
 @Configuration
 @Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)
 public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
@@ -16,7 +18,9 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf()
                 .disable() // Use Vaadin's CSRF protection
-            .authorizeRequests().anyRequest().authenticated()
+            .authorizeRequests()
+                .antMatchers("/vaadin/**").hasRole(VAADIN_USER)
+                .anyRequest().authenticated()
                 .and()
             .formLogin()
                 .loginPage("/login")

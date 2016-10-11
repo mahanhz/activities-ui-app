@@ -69,6 +69,8 @@ gitProperties {
 springBoot {
 	executable = true
 
+	excludeDevtools = true
+
 	embeddedLaunchScriptProperties = [initInfoDescription: project.description,
 									  initInfoShortDescription: project.name,
 									  initInfoProvides: jar.baseName,
