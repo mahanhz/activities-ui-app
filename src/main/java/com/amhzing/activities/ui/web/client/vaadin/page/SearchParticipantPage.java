@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Locale;
 
 import static com.amhzing.activities.ui.web.client.adapter.ParticipantAdapter.adaptParticipant;
+import static com.vaadin.data.Validator.InvalidValueException;
 import static com.vaadin.event.ShortcutAction.KeyCode.ENTER;
 import static com.vaadin.ui.Grid.SelectionMode.MULTI;
 import static java.util.stream.Collectors.toList;
@@ -32,9 +33,9 @@ import static org.apache.commons.lang3.Validate.notNull;
 @UIScope
 public class SearchParticipantPage {
 
+    private static final String ERROR_MESSAGE = "Sorry about this!<br/>Unfortunately something went wrong!";
     private ParticipantService<Failure, Participants> participantService;
 
-    private Banner banner = new Banner();
     private ComboBox countrySelect = new ComboBox();
     private TextField cityText = new TextField();
     private TextField addressLine1Text = new TextField();
@@ -62,9 +63,6 @@ public class SearchParticipantPage {
     }
 
     private void initWidgets() {
-
-        UI.getCurrent().addWindow(banner);
-
         cityText.setInputPrompt("City");
         addressLine1Text.setInputPrompt("Address line 1");
         lastNameText.setInputPrompt("Last name");
@@ -132,8 +130,11 @@ public class SearchParticipantPage {
             try {
                 validateFields();
                 getParticipants(queryCriteria());
+            } catch (final InvalidValueException ex) {
+                Notify.warn(ex.getMessage());
+                validationErrorsVisibility();
             } catch (final Exception ex) {
-                Notification.show(ex.getMessage());
+                Notify.error(ERROR_MESSAGE);
                 validationErrorsVisibility();
             }
         });
@@ -187,7 +188,7 @@ public class SearchParticipantPage {
         if (response.isRight()) {
             populateGrid(response.right().get());
         } else {
-            banner.show("Sorry about this!<br/> Unfortunately something went wrong!");
+            Notify.error(ERROR_MESSAGE);
         }
     }
 

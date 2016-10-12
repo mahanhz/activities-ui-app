@@ -7,6 +7,7 @@ buildscript {
 		gradleReleaseVersion = '2.4.0'
 		gradleOwaspVersion = '1.4.3'
 		gradleGitPropertiesVersion = '1.4.17'
+		gradleSassVersion = '1.2.2'
 	}
 
 	repositories {
@@ -23,6 +24,7 @@ buildscript {
 		classpath("net.researchgate:gradle-release:${gradleReleaseVersion}")
 		classpath("org.owasp:dependency-check-gradle:${gradleOwaspVersion}")
 		classpath("gradle.plugin.com.gorylenko.gradle-git-properties:gradle-git-properties:${gradleGitPropertiesVersion}")
+		classpath("gradle.plugin.org.kravemir.gradle.sass:GradleSassPlugin:${gradleSassVersion}")
 	}
 }
 
@@ -37,6 +39,7 @@ apply plugin: 'findbugs'
 apply plugin: 'org.owasp.dependencycheck'
 apply plugin: 'idea'
 apply plugin: 'com.gorylenko.gradle-git-properties'
+apply plugin: "org.kravemir.gradle.sass"
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -47,6 +50,9 @@ task wrapper(type: Wrapper) {
 
 // Dependencies
 apply from: 'gradle-segment/dependencies.gradle'
+
+// Sass
+apply from: 'gradle-segment/sass.gradle'
 
 // Test
 apply from: 'gradle-segment/test.gradle'

@@ -18,7 +18,7 @@ stage ('Build') {
     node {
         checkout scm
 
-        gradle 'clean test assemble'
+        gradle 'clean compileSass test assemble'
 
         stash excludes: 'build/', includes: '**', name: 'source'
         stash includes: 'build/jacoco/*.exec', name: 'unitCodeCoverage'

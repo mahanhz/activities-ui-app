@@ -19,6 +19,7 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf()
                 .disable() // Use Vaadin's CSRF protection
             .authorizeRequests()
+                .antMatchers("/config-message").permitAll()
                 .antMatchers("/vaadin/**").hasRole(VAADIN_USER)
                 .anyRequest().authenticated()
                 .and()

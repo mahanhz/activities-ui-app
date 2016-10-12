@@ -18,3 +18,13 @@ server:
 management:
   port: 13310
   context-path: ${server.context-path}/manage
+
+togglz:
+  console:
+    enabled: true
+    path: /togglz-console
+    feature-admin-authority: ROLE_ADMIN
+
+vaadin:
+  servlet:
+    productionMode: true

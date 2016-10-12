@@ -1,0 +1,17 @@
+sass {
+    main {
+        srcDir = file("$projectDir/src/main/resources/static/css")
+        outDir = file("$projectDir/src/main/resources/static/css")
+    }
+}
+
+task vaadinSass(type:JavaExec) {
+    main = 'com.vaadin.sass.SassCompiler'
+    classpath = sourceSets.main.compileClasspath
+    args = ["src/main/resources/VAADIN/themes/activities/styles.scss", "src/main/resources/VAADIN/themes/activities/styles.css"]
+}
+
+task compileSass {
+    dependsOn 'mainSass'
+    dependsOn 'vaadinSass'
+}
