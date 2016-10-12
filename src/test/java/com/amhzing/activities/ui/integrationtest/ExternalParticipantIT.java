@@ -2,9 +2,9 @@ package com.amhzing.activities.ui.integrationtest;
 
 import com.amhzing.activities.ui.ActivitiesUIApplication;
 import com.amhzing.activities.ui.application.Failure;
-import com.amhzing.activities.ui.application.ParticipantService;
-import com.amhzing.activities.ui.application.QueryCriteria;
 import com.amhzing.activities.ui.application.Participants;
+import com.amhzing.activities.ui.application.QueryCriteria;
+import com.amhzing.activities.ui.infra.DefaultParticipantService;
 import io.atlassian.fugue.Either;
 import org.junit.Before;
 import org.junit.Test;
@@ -25,7 +25,7 @@ import static org.junit.Assert.assertTrue;
 public class ExternalParticipantIT {
 
     @Autowired
-    private ParticipantService<Failure, Participants> participantService;
+    private DefaultParticipantService participantService;
 
     @Before
     public void init() {

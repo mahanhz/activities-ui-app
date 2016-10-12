@@ -13,8 +13,6 @@ import com.amhzing.activities.ui.web.client.model.NameModel;
 import com.amhzing.activities.ui.web.client.model.ParticipantModel;
 import com.amhzing.activities.ui.web.client.model.SearchSpecification;
 import io.atlassian.fugue.Either;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,12 +27,10 @@ import static org.apache.commons.lang3.Validate.notNull;
 @Service
 public class ParticipantAdapter {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ParticipantAdapter.class);
-
     private DefaultParticipantService participantService;
 
     @Autowired
-    public ParticipantAdapter(final DefaultParticipantService participantServicevav) {
+    public ParticipantAdapter(final DefaultParticipantService participantService) {
         this.participantService = notNull(participantService);
     }
 
