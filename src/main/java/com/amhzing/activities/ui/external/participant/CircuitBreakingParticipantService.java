@@ -3,10 +3,10 @@ package com.amhzing.activities.ui.external.participant;
 import com.amhzing.activities.ui.external.participant.response.ErrorResponse;
 import com.amhzing.activities.ui.external.participant.response.ParticipantResponse;
 import com.amhzing.activities.ui.application.Failure;
-import com.amhzing.activities.ui.application.ParticipantService;
 import com.amhzing.activities.ui.application.QueryCriteria;
 import com.amhzing.activities.ui.application.Participants;
 import com.amhzing.activities.ui.infra.ParticipantFactory;
+import com.amhzing.activities.ui.infra.DefaultParticipantService;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import io.atlassian.fugue.Either;
 import org.springframework.web.client.RestTemplate;
@@ -21,7 +21,7 @@ import static java.util.stream.Collectors.collectingAndThen;
 import static java.util.stream.Collectors.toList;
 import static org.apache.commons.lang3.Validate.notNull;
 
-public class CircuitBreakingParticipantService implements ParticipantService<Failure, Participants> {
+public class CircuitBreakingParticipantService implements DefaultParticipantService {
 
     private static final String GROUP_KEY = "participantsGroupKey";
     private static final String COMMAND_KEY_BY_CRITERIA = "participantsByCriteria";

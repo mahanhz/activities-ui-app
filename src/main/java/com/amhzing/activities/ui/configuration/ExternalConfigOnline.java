@@ -3,9 +3,7 @@ package com.amhzing.activities.ui.configuration;
 import com.amhzing.activities.ui.annotation.Online;
 import com.amhzing.activities.ui.configuration.properties.ExternalConfigProperties;
 import com.amhzing.activities.ui.external.participant.CircuitBreakingParticipantService;
-import com.amhzing.activities.ui.application.Failure;
-import com.amhzing.activities.ui.application.ParticipantService;
-import com.amhzing.activities.ui.application.Participants;
+import com.amhzing.activities.ui.infra.DefaultParticipantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
@@ -28,7 +26,7 @@ public class ExternalConfigOnline {
     }
 
     @Bean
-    public ParticipantService<Failure, Participants> participantService() {
+    public DefaultParticipantService participantService() {
         return new CircuitBreakingParticipantService(restTemplate(), externalConfigProperties.getUrl());
     }
 }

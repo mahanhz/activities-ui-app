@@ -1,10 +1,9 @@
 package com.amhzing.activities.ui.web.client.vaadin.page;
 
-import com.amhzing.activities.ui.application.Failure;
-import com.amhzing.activities.ui.application.ParticipantService;
-import com.amhzing.activities.ui.application.Participants;
-import com.amhzing.activities.ui.application.QueryCriteria;
+import com.amhzing.activities.ui.web.client.adapter.ParticipantAdapter;
+import com.amhzing.activities.ui.web.client.exception.UIFriendlyException;
 import com.amhzing.activities.ui.web.client.model.ParticipantModel;
+import com.amhzing.activities.ui.web.client.model.SearchSpecification;
 import com.vaadin.data.Item;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.data.util.GeneratedPropertyContainer;
@@ -15,14 +14,15 @@ import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.*;
 import com.vaadin.ui.renderers.ButtonRenderer;
 import com.vaadin.ui.themes.ValoTheme;
-import io.atlassian.fugue.Either;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
-import static com.amhzing.activities.ui.web.client.adapter.ParticipantAdapter.adaptParticipant;
+import static com.amhzing.activities.ui.web.client.exception.UIFriendlyException.HTML_ERROR_MESSAGE;
 import static com.vaadin.data.Validator.InvalidValueException;
 import static com.vaadin.event.ShortcutAction.KeyCode.ENTER;
 import static com.vaadin.ui.Grid.SelectionMode.MULTI;
@@ -33,8 +33,9 @@ import static org.apache.commons.lang3.Validate.notNull;
 @UIScope
 public class SearchParticipantPage {
 
-    private static final String ERROR_MESSAGE = "Sorry about this!<br/>Unfortunately something went wrong!";
-    private ParticipantService<Failure, Participants> participantService;
+    private static final Logger LOGGER = LoggerFactory.getLogger(SearchParticipantPage.class);
+
+    private ParticipantAdapter participantAdapter;
 
     private ComboBox countrySelect = new ComboBox();
     private TextField cityText = new TextField();
@@ -48,8 +49,8 @@ public class SearchParticipantPage {
     private Panel resultErrorPanel = new Panel();
 
     @Autowired
-    public SearchParticipantPage(final ParticipantService<Failure, Participants> participantService) {
-        this.participantService = notNull(participantService);
+    public SearchParticipantPage(final ParticipantAdapter participantAdapter) {
+        this.participantAdapter = notNull(participantAdapter);
     }
 
     public void populate(final VerticalLayout pageLayout) {
@@ -129,12 +130,13 @@ public class SearchParticipantPage {
             hideResults();
             try {
                 validateFields();
-                getParticipants(queryCriteria());
+                getParticipants(searchSpec());
             } catch (final InvalidValueException ex) {
                 Notify.warn(ex.getMessage());
                 validationErrorsVisibility();
             } catch (final Exception ex) {
-                Notify.error(ERROR_MESSAGE);
+                LOGGER.error("Could not search for participants due to an error", ex);
+                Notify.error(HTML_ERROR_MESSAGE);
                 validationErrorsVisibility();
             }
         });
@@ -164,12 +166,12 @@ public class SearchParticipantPage {
         });
     }
 
-    private QueryCriteria queryCriteria() {
-        return QueryCriteria.create(countryCode(),
-                                    cityText.getValue(),
-                                    addressLine1Text.getValue(),
-                                    lastNameText.getValue(),
-                                    idText.getValue());
+    private SearchSpecification searchSpec() {
+        return SearchSpecification.create(countryCode(),
+                                          cityText.getValue(),
+                                          addressLine1Text.getValue(),
+                                          lastNameText.getValue(),
+                                          idText.getValue());
     }
 
     private String countryCode() {
@@ -182,24 +184,24 @@ public class SearchParticipantPage {
         }
     }
 
-    private void getParticipants(final QueryCriteria queryCriteria) {
-        final Either<Failure, Participants> response = participantService.participantsByCriteria(queryCriteria);
+    private void getParticipants(final SearchSpecification searchSpec) {
 
-        if (response.isRight()) {
-            populateGrid(response.right().get());
-        } else {
-            Notify.error(ERROR_MESSAGE);
+        try {
+            final List<ParticipantModel> participants = participantAdapter.participants(searchSpec);
+            populateGrid(participants);
+        } catch (final UIFriendlyException ex) {
+            Notify.error(ex.getMessage());
         }
     }
 
-    private void populateGrid(final Participants response) {
+    private void populateGrid(final List<ParticipantModel> participantModels) {
         grid.setVisible(true);
 
         final BeanItemContainer<ParticipantModel> participants = new BeanItemContainer<>(ParticipantModel.class);
         participants.addNestedContainerBean("name");
         participants.addNestedContainerBean("address");
 
-        participants.addAll(adaptParticipant(response.getParticipants()));
+        participants.addAll(participantModels);
 
         final GeneratedPropertyContainer gpc = new GeneratedPropertyContainer(participants);
 
@@ -223,8 +225,7 @@ public class SearchParticipantPage {
     private PropertyValueGenerator<String> propertyValueGenerator() {
         return new PropertyValueGenerator<String>() {
             @Override
-            public String getValue(Item item, Object itemId,
-                                   Object propertyId) {
+            public String getValue(Item item, Object itemId, Object propertyId) {
                 return "info"; // The caption
             }
 

@@ -1,5 +1,6 @@
 package com.amhzing.activities.ui.web.client.vaadin;
 
+import com.amhzing.activities.ui.web.client.adapter.UIAccessService;
 import com.amhzing.activities.ui.web.client.vaadin.handler.DiscreetErrorHandler;
 import com.amhzing.activities.ui.web.client.vaadin.page.SearchParticipantPage;
 import com.vaadin.annotations.Theme;
@@ -14,8 +15,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-import static com.amhzing.activities.ui.feature.AppFeatures.ACTIVITY_FACILITATED;
-import static com.amhzing.activities.ui.feature.AppFeatures.ACTIVITY_HOSTED;
 import static org.apache.commons.lang3.Validate.notNull;
 
 @Theme("activities")
@@ -23,12 +22,15 @@ import static org.apache.commons.lang3.Validate.notNull;
 public class VaadinUI extends UI {
 
     private ServletContext servletContext;
+    private UIAccessService uiAccessService;
     private SearchParticipantPage searchParticipantPage;
 
     @Autowired
     public VaadinUI(final ServletContext servletContext,
+                    final UIAccessService uiAccessService,
                     final SearchParticipantPage searchParticipantPage) {
         this.servletContext = notNull(servletContext);
+        this.uiAccessService = notNull(uiAccessService);
         this.searchParticipantPage = notNull(searchParticipantPage);
     }
 
@@ -59,11 +61,11 @@ public class VaadinUI extends UI {
 
         searchForParticipants(tabsheet);
 
-        if (ACTIVITY_FACILITATED.isActive()) {
+        if (uiAccessService.includeFacilitatedActivity()) {
             createFacilitatedActivity(tabsheet);
         }
 
-        if (ACTIVITY_HOSTED.isActive()) {
+        if (uiAccessService.includeHostedActivity()) {
             createHostedActivity(tabsheet);
         }
 

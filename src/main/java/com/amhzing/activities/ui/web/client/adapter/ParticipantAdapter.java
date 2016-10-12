@@ -1,21 +1,65 @@
 package com.amhzing.activities.ui.web.client.adapter;
 
+import com.amhzing.activities.ui.application.Failure;
+import com.amhzing.activities.ui.application.Participants;
+import com.amhzing.activities.ui.application.QueryCriteria;
 import com.amhzing.activities.ui.domain.participant.Address;
 import com.amhzing.activities.ui.domain.participant.Name;
 import com.amhzing.activities.ui.domain.participant.Participant;
+import com.amhzing.activities.ui.infra.DefaultParticipantService;
+import com.amhzing.activities.ui.web.client.exception.UIFriendlyException;
 import com.amhzing.activities.ui.web.client.model.AddressModel;
 import com.amhzing.activities.ui.web.client.model.NameModel;
 import com.amhzing.activities.ui.web.client.model.ParticipantModel;
+import com.amhzing.activities.ui.web.client.model.SearchSpecification;
+import io.atlassian.fugue.Either;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static com.amhzing.activities.ui.web.client.exception.UIFriendlyException.HTML_ERROR_MESSAGE;
 import static java.util.stream.Collectors.toList;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import static org.apache.commons.lang3.Validate.noNullElements;
+import static org.apache.commons.lang3.Validate.notNull;
 
+@Service
 public class ParticipantAdapter {
 
-    public static List<ParticipantModel> adaptParticipant(final List<Participant> participants) {
+    private static final Logger LOGGER = LoggerFactory.getLogger(ParticipantAdapter.class);
+
+    private DefaultParticipantService participantService;
+
+    @Autowired
+    public ParticipantAdapter(final DefaultParticipantService participantServicevav) {
+        this.participantService = notNull(participantService);
+    }
+
+    public List<ParticipantModel> participants(final SearchSpecification searchSpec) {
+        notNull(searchSpec);
+
+        final Either<Failure, Participants> response = participantService.participantsByCriteria(queryCriteria(searchSpec));
+
+        if (response.isRight()) {
+            final Participants participants = response.right().get();
+            return adaptParticipant(participants.getParticipants());
+        }
+
+        throw new UIFriendlyException(HTML_ERROR_MESSAGE);
+    }
+
+    private static QueryCriteria queryCriteria(final SearchSpecification searchSpec) {
+        return QueryCriteria.create(searchSpec.getCountry(),
+                                    searchSpec.getCity(),
+                                    searchSpec.getAddressLine1(),
+                                    searchSpec.getLastName(),
+                                    searchSpec.getParticipantId());
+    }
+
+    private static List<ParticipantModel> adaptParticipant(final List<Participant> participants) {
         noNullElements(participants);
 
         return participants.stream()

@@ -2,9 +2,7 @@ package com.amhzing.activities.ui.configuration;
 
 import com.amhzing.activities.ui.annotation.Offline;
 import com.amhzing.activities.ui.external.participant.InMemParticipantService;
-import com.amhzing.activities.ui.application.Failure;
-import com.amhzing.activities.ui.application.ParticipantService;
-import com.amhzing.activities.ui.application.Participants;
+import com.amhzing.activities.ui.infra.DefaultParticipantService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -13,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
 public class ExternalConfigOffline {
 
     @Bean
-    public ParticipantService<Failure, Participants> participantService() {
+    public DefaultParticipantService participantService() {
         return new InMemParticipantService();
     }
 }

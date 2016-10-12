@@ -10,14 +10,18 @@ import org.springframework.security.config.annotation.authentication.configurers
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class AuthenticationConfig extends GlobalAuthenticationConfigurerAdapter {
 
+    public static final String ROLE_PREFIX = "ROLE_";
     public static final String ADMIN = "ADMIN";
     public static final String VAADIN_USER = "VAADIN_USER";
+    public static final String COORDINATOR = "COORDINATOR";
 
     @Override
     public void init(AuthenticationManagerBuilder auth) throws Exception {
         auth.inMemoryAuthentication()
             .withUser("admin").password("p").roles(ADMIN)
             .and()
-            .withUser("vaadin").password("p").roles(VAADIN_USER);
+            .withUser("vaadin").password("p").roles(VAADIN_USER)
+            .and()
+            .withUser("coordinator").password("p").roles(COORDINATOR, VAADIN_USER);
     }
 }
