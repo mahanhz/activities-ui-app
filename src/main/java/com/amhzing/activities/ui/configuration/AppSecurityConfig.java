@@ -40,6 +40,6 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/css/*", "/js/*", "/less/*"); // Static resources are ignored
+        web.ignoring().antMatchers("/css/*", "/js/*"); // Static resources are ignored
     }
 }

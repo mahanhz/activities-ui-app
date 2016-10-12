@@ -1,5 +1,6 @@
 package com.amhzing.activities.ui.web.client.vaadin;
 
+import com.amhzing.activities.ui.web.client.vaadin.handler.DiscreetErrorHandler;
 import com.amhzing.activities.ui.web.client.vaadin.page.SearchParticipantPage;
 import com.vaadin.annotations.Theme;
 import com.vaadin.server.VaadinRequest;
@@ -46,6 +47,8 @@ public class VaadinUI extends UI {
     @Override
     protected void init(final VaadinRequest request) {
         notNull(request);
+
+        UI.getCurrent().setErrorHandler(new DiscreetErrorHandler());
 
         final VerticalLayout pageLayout = new VerticalLayout();
         final TabSheet tabsheet = new TabSheet();
