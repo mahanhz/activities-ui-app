@@ -62,9 +62,7 @@ public class CircuitBreakingParticipantService implements DefaultParticipantServ
     }
 
     private boolean hasErrors(final List<ErrorResponse> errors) {
-        final long errorCount = errors.stream().filter(error -> !error.isEmpty()).count();
-
-        return errorCount > 0;
+        return errors.stream().filter(error -> !error.isEmpty()).findFirst().isPresent();
     }
 
     private static SearchSpecification searchSpecification(final QueryCriteria queryCriteria) {
