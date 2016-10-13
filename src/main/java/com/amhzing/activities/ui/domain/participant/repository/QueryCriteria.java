@@ -1,4 +1,4 @@
-package com.amhzing.activities.ui.application.participant;
+package com.amhzing.activities.ui.domain.participant.repository;
 
 import java.util.Objects;
 

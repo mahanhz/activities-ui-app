@@ -1,18 +1,16 @@
 package com.amhzing.activities.ui.web.client.adapter;
 
-import com.amhzing.activities.ui.application.Failure;
-import com.amhzing.activities.ui.application.participant.Participants;
-import com.amhzing.activities.ui.application.participant.QueryCriteria;
-import com.amhzing.activities.ui.domain.participant.Address;
-import com.amhzing.activities.ui.domain.participant.Name;
-import com.amhzing.activities.ui.domain.participant.Participant;
-import com.amhzing.activities.ui.application.participant.DefaultParticipantService;
+import com.amhzing.activities.ui.application.exception.FailureException;
+import com.amhzing.activities.ui.application.participant.ParticipantService;
+import com.amhzing.activities.ui.domain.participant.model.Address;
+import com.amhzing.activities.ui.domain.participant.model.Name;
+import com.amhzing.activities.ui.domain.participant.model.Participant;
+import com.amhzing.activities.ui.domain.participant.repository.QueryCriteria;
 import com.amhzing.activities.ui.web.client.exception.UIFriendlyException;
 import com.amhzing.activities.ui.web.client.model.AddressModel;
 import com.amhzing.activities.ui.web.client.model.NameModel;
 import com.amhzing.activities.ui.web.client.model.ParticipantModel;
 import com.amhzing.activities.ui.web.client.model.SearchSpecification;
-import io.atlassian.fugue.Either;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,24 +25,28 @@ import static org.apache.commons.lang3.Validate.notNull;
 @Service
 public class ParticipantAdapter {
 
-    private DefaultParticipantService participantService;
+    private ParticipantService participantService;
 
     @Autowired
-    public ParticipantAdapter(final DefaultParticipantService participantService) {
+    public ParticipantAdapter(final ParticipantService participantService) {
         this.participantService = notNull(participantService);
     }
 
     public List<ParticipantModel> participants(final SearchSpecification searchSpec) {
         notNull(searchSpec);
 
-        final Either<Failure, Participants> response = participantService.participantsByCriteria(queryCriteria(searchSpec));
-
-        if (response.isRight()) {
-            final Participants participants = response.right().get();
-            return adaptParticipant(participants.getParticipants());
+        try {
+            final List<Participant> participantList = participantService.getParticipants(queryCriteria(searchSpec));
+            return adaptParticipant(participantList);
+        } catch (FailureException ex) {
+            String message = HTML_ERROR_MESSAGE;
+            if (isNotBlank(ex.getCorrelatedErrorId())) {
+                message += "<br/>To follow up please reference this error id: " + ex.getCorrelatedErrorId();
+            }
+            throw new UIFriendlyException(message);
+        } catch (Exception ex) {
+            throw new UIFriendlyException(HTML_ERROR_MESSAGE);
         }
-
-        throw new UIFriendlyException(HTML_ERROR_MESSAGE);
     }
 
     private static QueryCriteria queryCriteria(final SearchSpecification searchSpec) {

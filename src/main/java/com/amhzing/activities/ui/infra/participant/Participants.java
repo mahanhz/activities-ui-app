@@ -1,6 +1,6 @@
-package com.amhzing.activities.ui.application.participant;
+package com.amhzing.activities.ui.infra.participant;
 
-import com.amhzing.activities.ui.domain.participant.Participant;
+import com.amhzing.activities.ui.domain.participant.model.Participant;
 import com.google.common.collect.ImmutableList;
 
 import java.util.List;

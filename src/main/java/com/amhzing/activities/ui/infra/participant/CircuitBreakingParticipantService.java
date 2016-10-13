@@ -1,20 +1,21 @@
-package com.amhzing.activities.ui.infra;
+package com.amhzing.activities.ui.infra.participant;
 
-import com.amhzing.activities.ui.application.participant.DefaultParticipantService;
-import com.amhzing.activities.ui.application.Failure;
-import com.amhzing.activities.ui.application.participant.Participants;
-import com.amhzing.activities.ui.application.participant.QueryCriteria;
+import com.amhzing.activities.ui.domain.participant.repository.QueryCriteria;
 import com.amhzing.activities.ui.external.participant.ExternalParticipantService;
 import com.amhzing.activities.ui.external.participant.request.SearchSpecification;
 import com.amhzing.activities.ui.external.participant.response.ErrorResponse;
 import com.amhzing.activities.ui.external.participant.response.ParticipantResponse;
+import com.fasterxml.uuid.Generators;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import io.atlassian.fugue.Either;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
+import java.util.UUID;
 
-import static com.amhzing.activities.ui.application.Failure.SYSTEM_IS_DOWN;
-import static com.amhzing.activities.ui.application.Failure.SYSTEM_RETURNED_ERRORS;
+import static com.amhzing.activities.ui.infra.participant.Failure.SYSTEM_IS_DOWN;
+import static com.amhzing.activities.ui.infra.participant.Failure.SYSTEM_RETURNED_ERRORS;
 import static io.atlassian.fugue.Either.left;
 import static io.atlassian.fugue.Either.right;
 import static java.util.stream.Collectors.collectingAndThen;
@@ -22,6 +23,8 @@ import static java.util.stream.Collectors.toList;
 import static org.apache.commons.lang3.Validate.notNull;
 
 public class CircuitBreakingParticipantService implements DefaultParticipantService {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(CircuitBreakingParticipantService.class);
 
     private static final String GROUP_KEY = "participantsGroupKey";
     private static final String COMMAND_KEY_BY_CRITERIA = "participantsByCriteria";
@@ -35,13 +38,15 @@ public class CircuitBreakingParticipantService implements DefaultParticipantServ
 
     @Override
     @HystrixCommand(groupKey = GROUP_KEY, commandKey = COMMAND_KEY_BY_CRITERIA, fallbackMethod = FALLBACK)
-    public Either<Failure, Participants> participantsByCriteria(final QueryCriteria queryCriteria) {
+    public Either<CorrelatedFailure, Participants> participantsByCriteria(final QueryCriteria queryCriteria) {
         notNull(queryCriteria);
 
         final ParticipantResponse response = externalParticipantService.searchParticipants(searchSpecification(queryCriteria));
 
         if (hasErrors(response.getErrors())) {
-            return left(SYSTEM_RETURNED_ERRORS);
+            final UUID errorId = Generators.timeBasedGenerator().generate();
+            LOGGER.error("External system returned errors in its response. Correlating Error Id: {}", errorId);
+            return left(CorrelatedFailure.create(SYSTEM_RETURNED_ERRORS, errorId.toString()));
         }
 
         final Participants participants = response.getParticipants()
@@ -52,8 +57,8 @@ public class CircuitBreakingParticipantService implements DefaultParticipantServ
         return right(participants);
     }
 
-    public Either<Failure, Participants> fallback(final QueryCriteria queryCriteria, final Throwable e) {
-        return left(SYSTEM_IS_DOWN);
+    public Either<CorrelatedFailure, Participants> fallback(final QueryCriteria queryCriteria, final Throwable e) {
+        return left(CorrelatedFailure.failureOnly(SYSTEM_IS_DOWN));
     }
 
     private boolean hasErrors(final List<ErrorResponse> errors) {

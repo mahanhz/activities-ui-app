@@ -1,10 +1,10 @@
 package com.amhzing.activities.ui.integrationtest;
 
 import com.amhzing.activities.ui.ActivitiesUIApplication;
-import com.amhzing.activities.ui.application.Failure;
-import com.amhzing.activities.ui.application.participant.Participants;
-import com.amhzing.activities.ui.application.participant.QueryCriteria;
-import com.amhzing.activities.ui.application.participant.DefaultParticipantService;
+import com.amhzing.activities.ui.domain.participant.repository.QueryCriteria;
+import com.amhzing.activities.ui.infra.participant.CorrelatedFailure;
+import com.amhzing.activities.ui.infra.participant.DefaultParticipantService;
+import com.amhzing.activities.ui.infra.participant.Participants;
 import io.atlassian.fugue.Either;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,11 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import static com.amhzing.activities.ui.application.Failure.SYSTEM_IS_DOWN;
+import static com.amhzing.activities.ui.infra.participant.Failure.SYSTEM_IS_DOWN;
 import static com.netflix.config.ConfigurationManager.getConfigInstance;
-import static io.atlassian.fugue.Either.left;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = ActivitiesUIApplication.class,
@@ -36,27 +34,32 @@ public class ExternalParticipantIT {
     public void should_get_participant_when_circuit_is_closed() throws Exception {
         givenTimeout(10000);
 
-        final Either<Failure, Participants> result = participantService.participantsByCriteria(queryCriteria());
+        final Either<CorrelatedFailure, Participants> result = participantService.participantsByCriteria(queryCriteria());
 
-        assertTrue("Result was not right. It was: " + result, result.isRight());
+        assertThat(result).isNotNull();
+        assertThat(result.isRight()).as("Result was not right. It was: %s", result).isTrue();
     }
 
     @Test
     public void should_fallback_when_circuit_is_open() throws Exception {
         givenCircuitIsOpen();
 
-        final Either<Failure, Participants> result = participantService.participantsByCriteria(queryCriteria());
+        final Either<CorrelatedFailure, Participants> result = participantService.participantsByCriteria(queryCriteria());
 
-        assertThat(result).isEqualTo(left(SYSTEM_IS_DOWN));
+        assertThat(result).isNotNull();
+        assertThat(result.isLeft()).as("Result was not left. It was: %s", result).isTrue();
+        assertThat(result.left().get().getFailure()).isEqualTo(SYSTEM_IS_DOWN);
     }
 
     @Test
     public void should_fallback_when_timeout() throws Exception {
         givenTimeout(1);
 
-        final Either<Failure, Participants> result = participantService.participantsByCriteria(queryCriteria());
+        final Either<CorrelatedFailure, Participants> result = participantService.participantsByCriteria(queryCriteria());
 
-        assertThat(result).isEqualTo(left(SYSTEM_IS_DOWN));
+        assertThat(result).isNotNull();
+        assertThat(result.isLeft()).as("Result was not left. It was: %s", result).isTrue();
+        assertThat(result.left().get().getFailure()).isEqualTo(SYSTEM_IS_DOWN);
     }
 
     private void givenCircuitIsOpen() {
@@ -68,6 +71,6 @@ public class ExternalParticipantIT {
     }
 
     private QueryCriteria queryCriteria() {
-        return QueryCriteria.create("se", "", "", "", "");
+        return QueryCriteria.create("us", "", "", "", "");
     }
 }

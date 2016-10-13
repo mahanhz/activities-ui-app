@@ -1,8 +1,8 @@
 package com.amhzing.activities.ui.configuration;
 
 import com.amhzing.activities.ui.annotation.Offline;
-import com.amhzing.activities.ui.infra.InMemParticipantService;
-import com.amhzing.activities.ui.application.participant.DefaultParticipantService;
+import com.amhzing.activities.ui.infra.participant.InMemParticipantService;
+import com.amhzing.activities.ui.infra.participant.DefaultParticipantService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

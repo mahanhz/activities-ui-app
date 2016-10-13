@@ -1,6 +1,6 @@
-package com.amhzing.activities.ui.infra;
+package com.amhzing.activities.ui.infra.participant;
 
-import com.amhzing.activities.ui.domain.participant.*;
+import com.amhzing.activities.ui.domain.participant.model.*;
 import com.amhzing.activities.ui.external.participant.domain.ParticipantInfo;
 
 import static org.apache.commons.lang.StringUtils.isNotBlank;

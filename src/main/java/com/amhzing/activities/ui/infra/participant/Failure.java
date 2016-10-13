@@ -1,4 +1,4 @@
-package com.amhzing.activities.ui.application;
+package com.amhzing.activities.ui.infra.participant;
 
 public enum Failure {
 
