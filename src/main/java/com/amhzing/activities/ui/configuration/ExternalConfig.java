@@ -7,4 +7,5 @@ import org.springframework.context.annotation.Import;
 @Import({ExternalConfigOnline.class, ExternalConfigOffline.class})
 public class ExternalConfig {
 
+
 }

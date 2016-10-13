@@ -1,12 +1,12 @@
 package com.amhzing.activities.ui.web.client.adapter;
 
 import com.amhzing.activities.ui.application.Failure;
-import com.amhzing.activities.ui.application.Participants;
-import com.amhzing.activities.ui.application.QueryCriteria;
+import com.amhzing.activities.ui.application.participant.Participants;
+import com.amhzing.activities.ui.application.participant.QueryCriteria;
 import com.amhzing.activities.ui.domain.participant.Address;
 import com.amhzing.activities.ui.domain.participant.Name;
 import com.amhzing.activities.ui.domain.participant.Participant;
-import com.amhzing.activities.ui.infra.DefaultParticipantService;
+import com.amhzing.activities.ui.application.participant.DefaultParticipantService;
 import com.amhzing.activities.ui.web.client.exception.UIFriendlyException;
 import com.amhzing.activities.ui.web.client.model.AddressModel;
 import com.amhzing.activities.ui.web.client.model.NameModel;

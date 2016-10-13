@@ -1,15 +1,15 @@
-package com.amhzing.activities.ui.external.participant;
+package com.amhzing.activities.ui.infra;
 
+import com.amhzing.activities.ui.application.participant.DefaultParticipantService;
+import com.amhzing.activities.ui.application.Failure;
+import com.amhzing.activities.ui.application.participant.Participants;
+import com.amhzing.activities.ui.application.participant.QueryCriteria;
+import com.amhzing.activities.ui.external.participant.ExternalParticipantService;
+import com.amhzing.activities.ui.external.participant.request.SearchSpecification;
 import com.amhzing.activities.ui.external.participant.response.ErrorResponse;
 import com.amhzing.activities.ui.external.participant.response.ParticipantResponse;
-import com.amhzing.activities.ui.application.Failure;
-import com.amhzing.activities.ui.application.QueryCriteria;
-import com.amhzing.activities.ui.application.Participants;
-import com.amhzing.activities.ui.infra.ParticipantFactory;
-import com.amhzing.activities.ui.infra.DefaultParticipantService;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import io.atlassian.fugue.Either;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
@@ -27,12 +27,10 @@ public class CircuitBreakingParticipantService implements DefaultParticipantServ
     private static final String COMMAND_KEY_BY_CRITERIA = "participantsByCriteria";
     private static final String FALLBACK = "fallback";
 
-    private RestTemplate restTemplate;
-    private String participantUrl;
+    private ExternalParticipantService externalParticipantService;
 
-    public CircuitBreakingParticipantService(final RestTemplate restTemplate, final String participantUrl) {
-        this.restTemplate = notNull(restTemplate);
-        this.participantUrl = participantUrl;
+    public CircuitBreakingParticipantService(final ExternalParticipantService externalParticipantService) {
+        this.externalParticipantService = notNull(externalParticipantService);
     }
 
     @Override
@@ -40,10 +38,7 @@ public class CircuitBreakingParticipantService implements DefaultParticipantServ
     public Either<Failure, Participants> participantsByCriteria(final QueryCriteria queryCriteria) {
         notNull(queryCriteria);
 
-        // TODO - This should be expanded to pass all wuery criteria to participant url
-        final String url = participantUrl + "/query/" + queryCriteria.getCountry();
-        final ParticipantResponse response = restTemplate.getForObject(url,
-                                                                       ParticipantResponse.class);
+        final ParticipantResponse response = externalParticipantService.searchParticipants(searchSpecification(queryCriteria));
 
         if (hasErrors(response.getErrors())) {
             return left(SYSTEM_RETURNED_ERRORS);
@@ -65,5 +60,13 @@ public class CircuitBreakingParticipantService implements DefaultParticipantServ
         final long errorCount = errors.stream().filter(error -> !error.isEmpty()).count();
 
         return errorCount > 0;
+    }
+
+    private static SearchSpecification searchSpecification(final QueryCriteria queryCriteria) {
+        return SearchSpecification.create(queryCriteria.getCountry(),
+                                          queryCriteria.getCity(),
+                                          queryCriteria.getAddressLine1(),
+                                          queryCriteria.getLastName(),
+                                          queryCriteria.getParticipantId());
     }
 }

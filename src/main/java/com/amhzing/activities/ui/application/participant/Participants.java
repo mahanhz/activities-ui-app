@@ -1,4 +1,4 @@
-package com.amhzing.activities.ui.application;
+package com.amhzing.activities.ui.application.participant;
 
 import com.amhzing.activities.ui.domain.participant.Participant;
 import com.google.common.collect.ImmutableList;

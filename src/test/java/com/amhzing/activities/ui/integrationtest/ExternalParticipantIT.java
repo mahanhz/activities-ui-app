@@ -2,9 +2,9 @@ package com.amhzing.activities.ui.integrationtest;
 
 import com.amhzing.activities.ui.ActivitiesUIApplication;
 import com.amhzing.activities.ui.application.Failure;
-import com.amhzing.activities.ui.application.Participants;
-import com.amhzing.activities.ui.application.QueryCriteria;
-import com.amhzing.activities.ui.infra.DefaultParticipantService;
+import com.amhzing.activities.ui.application.participant.Participants;
+import com.amhzing.activities.ui.application.participant.QueryCriteria;
+import com.amhzing.activities.ui.application.participant.DefaultParticipantService;
 import io.atlassian.fugue.Either;
 import org.junit.Before;
 import org.junit.Test;

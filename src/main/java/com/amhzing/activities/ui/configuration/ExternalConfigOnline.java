@@ -2,8 +2,10 @@ package com.amhzing.activities.ui.configuration;
 
 import com.amhzing.activities.ui.annotation.Online;
 import com.amhzing.activities.ui.configuration.properties.ExternalConfigProperties;
-import com.amhzing.activities.ui.external.participant.CircuitBreakingParticipantService;
-import com.amhzing.activities.ui.infra.DefaultParticipantService;
+import com.amhzing.activities.ui.external.participant.ExternalParticipantService;
+import com.amhzing.activities.ui.external.participant.SearchExternalParticipantService;
+import com.amhzing.activities.ui.infra.CircuitBreakingParticipantService;
+import com.amhzing.activities.ui.application.participant.DefaultParticipantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
@@ -26,7 +28,12 @@ public class ExternalConfigOnline {
     }
 
     @Bean
+    public ExternalParticipantService externalParticipantService() {
+        return new SearchExternalParticipantService(restTemplate(), externalConfigProperties.getUrl());
+    }
+
+    @Bean
     public DefaultParticipantService participantService() {
-        return new CircuitBreakingParticipantService(restTemplate(), externalConfigProperties.getUrl());
+        return new CircuitBreakingParticipantService(externalParticipantService());
     }
 }

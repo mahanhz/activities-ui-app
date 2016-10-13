@@ -1,11 +1,10 @@
-package com.amhzing.activities.ui.external.participant;
+package com.amhzing.activities.ui.infra;
 
+import com.amhzing.activities.ui.application.participant.DefaultParticipantService;
 import com.amhzing.activities.ui.application.Failure;
-import com.amhzing.activities.ui.application.Participants;
-import com.amhzing.activities.ui.application.QueryCriteria;
+import com.amhzing.activities.ui.application.participant.Participants;
+import com.amhzing.activities.ui.application.participant.QueryCriteria;
 import com.amhzing.activities.ui.external.participant.response.ParticipantResponse;
-import com.amhzing.activities.ui.infra.DefaultParticipantService;
-import com.amhzing.activities.ui.infra.ParticipantFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.atlassian.fugue.Either;
 
