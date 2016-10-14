@@ -1,15 +1,23 @@
 package com.amhzing.activities.ui.domain.participant.model;
 
+import org.apache.commons.validator.routines.EmailValidator;
+
 import java.util.Objects;
 
+import static org.apache.commons.lang3.StringUtils.trim;
+import static org.apache.commons.lang3.Validate.isTrue;
 import static org.apache.commons.lang3.Validate.notBlank;
 
 public class Email {
 
+    static final int MAX_LENGTH = 50;
+
     private final String value;
 
     private Email(final String value) {
-        this.value = notBlank(value);
+        isValid(value);
+
+        this.value = trim(value);
     }
 
     public static Email create(final String email) {
@@ -38,5 +46,13 @@ public class Email {
         return "Email{" +
                 "value='" + value + '\'' +
                 '}';
+    }
+
+    private boolean isValid(final String value) {
+        notBlank(value);
+        isTrue(value.length() <= MAX_LENGTH);
+        isTrue(EmailValidator.getInstance().isValid(value));
+
+        return true;
     }
 }

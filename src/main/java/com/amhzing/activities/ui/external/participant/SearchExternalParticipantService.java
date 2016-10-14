@@ -20,8 +20,20 @@ public class SearchExternalParticipantService implements ExternalParticipantServ
     public ParticipantResponse searchParticipants(final SearchSpecification searchSpecification) {
         notNull(searchSpecification);
 
-        // TODO - This should be expanded to pass all data to participant url
-        final String url = participantUrl + "/query/" + searchSpecification.getCountry();
+        final String url = participantUrl + "/query/" + uri(searchSpecification);
         return restTemplate.getForObject(url, ParticipantResponse.class);
+    }
+
+    private String uri(final SearchSpecification searchSpecification) {
+        return searchSpecification.getCountry()
+                + "/" +
+                searchSpecification.getCity()
+                + "/" +
+                searchSpecification.getAddressLine1()
+                + "/" +
+                searchSpecification.getLastName()
+                + "/" +
+                searchSpecification.getParticipantId();
+
     }
 }

@@ -27,6 +27,8 @@ ext {
 
     togglzVersion = '2.3.0.Final'
     togglzThymeleafVersion = '1.0.1.RELEASE'
+
+    junitParamsVersion = '1.0.5'
 }
 
 repositories {
@@ -79,6 +81,8 @@ dependencies {
     compile ("org.togglz:togglz-console:${togglzVersion}")
     compile ("org.togglz:togglz-spring-security:${togglzVersion}")
     compile ("com.github.heneke.thymeleaf:thymeleaf-extras-togglz:${togglzThymeleafVersion}")
+
+    compile ("pl.pragmatists:JUnitParams:${junitParamsVersion}")
 
     testCompile ('org.springframework.boot:spring-boot-starter-test')
     testCompile ("org.togglz:togglz-junit:${togglzVersion}")

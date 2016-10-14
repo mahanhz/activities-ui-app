@@ -27,7 +27,7 @@ public class Address {
 
     public static Address create(final String addressLine1,
                                  final String addressLine2,
-                                 String city,
+                                 final String city,
                                  final String postalCode,
                                  final Country country) {
         return new Address(addressLine1, addressLine2, city, postalCode, country);
