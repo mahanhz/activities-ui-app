@@ -59,7 +59,7 @@ public class Name {
 
     @Override
     public String toString() {
-        return "NameModel{" +
+        return "Name{" +
                 "firstName='" + firstName + '\'' +
                 ", middleName='" + middleName + '\'' +
                 ", lastName='" + lastName + '\'' +

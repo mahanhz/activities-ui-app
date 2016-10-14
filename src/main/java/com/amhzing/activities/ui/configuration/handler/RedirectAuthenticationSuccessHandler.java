@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.util.List;
 
 import static com.amhzing.activities.ui.configuration.AuthenticationConfig.ADMIN;
+import static com.amhzing.activities.ui.configuration.AuthenticationConfig.ROLE_PREFIX;
 import static com.amhzing.activities.ui.configuration.AuthenticationConfig.VAADIN_USER;
 import static java.util.stream.Collectors.toList;
 import static org.apache.commons.lang3.StringUtils.isBlank;
@@ -22,43 +23,45 @@ import static org.apache.commons.lang3.StringUtils.replace;
 
 public class RedirectAuthenticationSuccessHandler extends SavedRequestAwareAuthenticationSuccessHandler {
 
-    private static final String ROLE = "ROLE_";
+    static final String VAADIN_URI = "/vaadin";
+    static final String TOGGLZ_CONSOLE_URI = "/togglz-console";
+
     private RequestCache requestCache = new HttpSessionRequestCache();
 
     @Override
     public void onAuthenticationSuccess(final HttpServletRequest request, final HttpServletResponse response, final Authentication authentication) throws IOException, ServletException {
         final SavedRequest savedRequest = requestCache.getRequest(request, response);
-        String targetUrl = "";
+        String targetUri = "";
 
-        final String roleBasedTargetUrl = url(authentication);
+        final String roleBasedTargetUri = uri(authentication);
 
-        if ((savedRequest == null) && isBlank(roleBasedTargetUrl)) {
+        if ((savedRequest == null) && isBlank(roleBasedTargetUri)) {
             super.onAuthenticationSuccess(request, response, authentication);
             return;
         }
 
         clearAuthenticationAttributes(request);
 
-        targetUrl = useSavedUrl(savedRequest, request) ? savedRequest.getRedirectUrl() : roleBasedTargetUrl;
-        getRedirectStrategy().sendRedirect(request, response, targetUrl);
+        targetUri = useSavedUri(savedRequest, request) ? savedRequest.getRedirectUrl() : roleBasedTargetUri;
+        getRedirectStrategy().sendRedirect(request, response, targetUri);
     }
 
-    String url(Authentication authentication) {
+    String uri(final Authentication authentication) {
         final List<String> roles = authentication.getAuthorities()
                                                  .stream()
                                                  .map(GrantedAuthority::getAuthority)
                                                  .collect(toList());
 
-        if (roles.contains(ROLE + VAADIN_USER)) {
-            return "/vaadin";
-        } else if (roles.contains(ROLE + ADMIN)) {
-            return "/togglz-console";
+        if (roles.contains(ROLE_PREFIX + VAADIN_USER)) {
+            return VAADIN_URI;
+        } else if (roles.contains(ROLE_PREFIX + ADMIN)) {
+            return TOGGLZ_CONSOLE_URI;
         }
 
         return null;
     }
 
-    private boolean useSavedUrl(final SavedRequest savedRequest, final HttpServletRequest request) {
+    private boolean useSavedUri(final SavedRequest savedRequest, final HttpServletRequest request) {
         if (savedRequest == null) {
             return false;
         } else if (savedRequest instanceof DefaultSavedRequest) {

@@ -22,9 +22,9 @@ import static java.util.stream.Collectors.collectingAndThen;
 import static java.util.stream.Collectors.toList;
 import static org.apache.commons.lang3.Validate.notNull;
 
-public class CircuitBreakingParticipantService implements DefaultParticipantService {
+public class CircuitBreakingParticipantRepository implements DefaultParticipantRepository {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(CircuitBreakingParticipantService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(CircuitBreakingParticipantRepository.class);
 
     private static final String GROUP_KEY = "participantsGroupKey";
     private static final String COMMAND_KEY_BY_CRITERIA = "participantsByCriteria";
@@ -32,7 +32,7 @@ public class CircuitBreakingParticipantService implements DefaultParticipantServ
 
     private ExternalParticipantService externalParticipantService;
 
-    public CircuitBreakingParticipantService(final ExternalParticipantService externalParticipantService) {
+    public CircuitBreakingParticipantRepository(final ExternalParticipantService externalParticipantService) {
         this.externalParticipantService = notNull(externalParticipantService);
     }
 

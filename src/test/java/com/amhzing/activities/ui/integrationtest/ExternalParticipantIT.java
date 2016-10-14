@@ -3,7 +3,7 @@ package com.amhzing.activities.ui.integrationtest;
 import com.amhzing.activities.ui.ActivitiesUIApplication;
 import com.amhzing.activities.ui.domain.participant.repository.QueryCriteria;
 import com.amhzing.activities.ui.infra.participant.CorrelatedFailure;
-import com.amhzing.activities.ui.infra.participant.DefaultParticipantService;
+import com.amhzing.activities.ui.infra.participant.DefaultParticipantRepository;
 import com.amhzing.activities.ui.infra.participant.Participants;
 import io.atlassian.fugue.Either;
 import org.junit.Before;
@@ -23,7 +23,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class ExternalParticipantIT {
 
     @Autowired
-    private DefaultParticipantService participantService;
+    private DefaultParticipantRepository participantRepository;
 
     @Before
     public void init() {
@@ -34,7 +34,7 @@ public class ExternalParticipantIT {
     public void should_get_participant_when_circuit_is_closed() throws Exception {
         givenTimeout(10000);
 
-        final Either<CorrelatedFailure, Participants> result = participantService.participantsByCriteria(queryCriteria());
+        final Either<CorrelatedFailure, Participants> result = participantRepository.participantsByCriteria(queryCriteria());
 
         assertThat(result).isNotNull();
         assertThat(result.isRight()).as("Result was not right. It was: %s", result).isTrue();
@@ -44,7 +44,7 @@ public class ExternalParticipantIT {
     public void should_fallback_when_circuit_is_open() throws Exception {
         givenCircuitIsOpen();
 
-        final Either<CorrelatedFailure, Participants> result = participantService.participantsByCriteria(queryCriteria());
+        final Either<CorrelatedFailure, Participants> result = participantRepository.participantsByCriteria(queryCriteria());
 
         assertThat(result).isNotNull();
         assertThat(result.isLeft()).as("Result was not left. It was: %s", result).isTrue();
@@ -55,7 +55,7 @@ public class ExternalParticipantIT {
     public void should_fallback_when_timeout() throws Exception {
         givenTimeout(1);
 
-        final Either<CorrelatedFailure, Participants> result = participantService.participantsByCriteria(queryCriteria());
+        final Either<CorrelatedFailure, Participants> result = participantRepository.participantsByCriteria(queryCriteria());
 
         assertThat(result).isNotNull();
         assertThat(result.isLeft()).as("Result was not left. It was: %s", result).isTrue();

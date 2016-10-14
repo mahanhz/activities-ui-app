@@ -69,7 +69,7 @@ public class Participant {
 
     @Override
     public String toString() {
-        return "ParticipantModel{" +
+        return "Participant{" +
                 "participantId='" + participantId + '\'' +
                 ", name=" + name +
                 ", address=" + address +

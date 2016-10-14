@@ -75,7 +75,7 @@ public class ParticipantInfo {
 
     @Override
     public String toString() {
-        return "ParticipantModel{" +
+        return "ParticipantInfo{" +
                 "participantId='" + participantId + '\'' +
                 ", name=" + name +
                 ", address=" + address +

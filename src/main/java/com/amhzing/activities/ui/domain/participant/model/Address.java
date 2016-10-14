@@ -72,7 +72,7 @@ public class Address {
 
     @Override
     public String toString() {
-        return "AddressModel{" +
+        return "Address{" +
                 "addressLine1='" + addressLine1 + '\'' +
                 ", addressLine2='" + addressLine2 + '\'' +
                 ", city='" + city + '\'' +

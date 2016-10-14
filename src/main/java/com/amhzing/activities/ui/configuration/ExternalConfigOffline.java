@@ -1,8 +1,8 @@
 package com.amhzing.activities.ui.configuration;
 
 import com.amhzing.activities.ui.annotation.Offline;
-import com.amhzing.activities.ui.infra.participant.InMemParticipantService;
-import com.amhzing.activities.ui.infra.participant.DefaultParticipantService;
+import com.amhzing.activities.ui.infra.participant.InMemParticipantRepository;
+import com.amhzing.activities.ui.infra.participant.DefaultParticipantRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
 public class ExternalConfigOffline {
 
     @Bean
-    public DefaultParticipantService participantService() {
-        return new InMemParticipantService();
+    public DefaultParticipantRepository participantRepository() {
+        return new InMemParticipantRepository();
     }
 }

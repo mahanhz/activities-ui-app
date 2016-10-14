@@ -16,7 +16,7 @@ import static java.util.stream.Collectors.collectingAndThen;
 import static java.util.stream.Collectors.toList;
 import static org.apache.commons.lang3.Validate.notNull;
 
-public class InMemParticipantService implements DefaultParticipantService {
+public class InMemParticipantRepository implements DefaultParticipantRepository {
 
     @Override
     public Either<CorrelatedFailure, Participants> participantsByCriteria(final QueryCriteria queryCriteria) {
