@@ -13,6 +13,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import static com.amhzing.activities.ui.infra.participant.Failure.SYSTEM_RETURNED_ERRORS;
 import static io.atlassian.fugue.Either.right;
 import static java.util.stream.Collectors.collectingAndThen;
 import static java.util.stream.Collectors.toList;
@@ -35,23 +36,37 @@ public class CircuitBreakingParticipantRepositoryTest {
 
     @Test
     public void should_get_participants() {
-        given(externalParticipantService.searchParticipants(any())).willReturn(response());
+        final ParticipantResponse response = response(noError());
 
-        final Either<CorrelatedFailure, Participants> response = repository.participantsByCriteria(queryCriteria());
+        given(externalParticipantService.searchParticipants(any())).willReturn(response);
 
-        assertThat(response.isRight()).isEqualTo(true);
-        assertThat(response).isEqualTo(right(participants()));
+        final Either<CorrelatedFailure, Participants> result = repository.participantsByCriteria(queryCriteria());
+
+        assertThat(result.isRight()).isEqualTo(true);
+        assertThat(result).isEqualTo(right(participants(response)));
     }
 
-    private Participants participants() {
-        return response().getParticipants()
-                         .stream()
-                         .map(ParticipantFactory::createParticipant)
-                         .collect(collectingAndThen(toList(), Participants::create));
+    @Test
+    public void should_fail_with_exception() {
+        final ParticipantResponse response = response(error());
+
+        given(externalParticipantService.searchParticipants(any())).willReturn(response);
+
+        final Either<CorrelatedFailure, Participants> result = repository.participantsByCriteria(queryCriteria());
+
+        assertThat(result.isLeft()).isEqualTo(true);
+        assertThat(result.left().get().getFailure()).isEqualTo(SYSTEM_RETURNED_ERRORS);
     }
 
-    private ParticipantResponse response() {
-        return ParticipantResponse.create(ImmutableList.of(participantInfo()), ImmutableList.of(errorResponse()));
+    private Participants participants(final ParticipantResponse response) {
+        return response.getParticipants()
+                       .stream()
+                       .map(ParticipantFactory::createParticipant)
+                       .collect(collectingAndThen(toList(), Participants::create));
+    }
+
+    private ParticipantResponse response(final ErrorResponse errorResponse) {
+        return ParticipantResponse.create(ImmutableList.of(participantInfo()), ImmutableList.of(errorResponse));
     }
 
     private ParticipantInfo participantInfo() {
@@ -74,8 +89,12 @@ public class CircuitBreakingParticipantRepositoryTest {
         return Email.create("test@example.com");
     }
 
-    private ErrorResponse errorResponse() {
+    private ErrorResponse noError() {
         return ErrorResponse.create("", "", "");
+    }
+
+    private ErrorResponse error() {
+        return ErrorResponse.create("Code1", "Message1", "CorrelationId1");
     }
 
     private QueryCriteria queryCriteria() {

@@ -16,23 +16,25 @@ properties([[$class: 'BuildDiscarderProperty', strategy:
 
 stage ('Build') {
     node {
-        checkout scm
+        timeout(time: 10, unit: 'SECONDS') {
+            checkout scm
 
-        gradle 'clean compileSass test assemble'
+            gradle 'clean compileSass test assemble'
 
-        stash excludes: 'build/', includes: '**', name: 'source'
-        stash includes: 'build/jacoco/*.exec', name: 'unitCodeCoverage'
-        // step([$class: 'JUnitResultArchiver', testResults: '**/build/test-results/*.xml'])
+            stash excludes: 'build/', includes: '**', name: 'source'
+            stash includes: 'build/jacoco/*.exec', name: 'unitCodeCoverage'
+            // step([$class: 'JUnitResultArchiver', testResults: '**/build/test-results/*.xml'])
 
-        // Obtaining commit id like this until JENKINS-26100 is implemented
-        // See http://stackoverflow.com/questions/36304208/jenkins-workflow-checkout-accessing-branch-name-and-git-commit
-        sh 'git rev-parse HEAD > commit'
-        COMMIT_ID = readFile('commit').trim()
+            // Obtaining commit id like this until JENKINS-26100 is implemented
+            // See http://stackoverflow.com/questions/36304208/jenkins-workflow-checkout-accessing-branch-name-and-git-commit
+            sh 'git rev-parse HEAD > commit'
+            COMMIT_ID = readFile('commit').trim()
 
-        // Custom environment variable (e.g. for display in Spring Boot manage info page)
-        env.GIT_COMMIT_ID = COMMIT_ID
+            // Custom environment variable (e.g. for display in Spring Boot manage info page)
+            env.GIT_COMMIT_ID = COMMIT_ID
 
-        FALLBACK_RELEASE_VERSION = releaseVersion()
+            FALLBACK_RELEASE_VERSION = releaseVersion()
+        }
     }
 }
 
