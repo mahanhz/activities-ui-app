@@ -19,6 +19,7 @@ public final class Notify {
                                 final Notification.Type type) {
         notNull(caption);
         notNull(description);
+        notNull(type);
 
         final Notification notification = new Notification(caption,
                                                            description,

@@ -1,5 +1,7 @@
 package com.amhzing.activities.ui.web.client.vaadin.page;
 
+import static org.apache.commons.lang3.Validate.notBlank;
+
 public class Country {
 
     private String code;
@@ -9,8 +11,8 @@ public class Country {
     }
 
     private Country(final String code, final String name) {
-        this.code = code;
-        this.name = name;
+        this.code = notBlank(code);
+        this.name = notBlank(name);
     }
 
     public static Country create(final String code, final String name) {

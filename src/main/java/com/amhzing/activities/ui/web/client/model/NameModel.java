@@ -3,6 +3,8 @@ package com.amhzing.activities.ui.web.client.model;
 import java.io.Serializable;
 import java.util.Objects;
 
+import static org.apache.commons.lang3.Validate.notBlank;
+
 public class NameModel implements Serializable {
 
     private String firstName;
@@ -16,7 +18,7 @@ public class NameModel implements Serializable {
     private NameModel(final String firstName, final String middleName, final String lastName, final String suffix) {
         this.firstName = firstName;
         this.middleName = middleName;
-        this.lastName = lastName;
+        this.lastName = notBlank(lastName);
         this.suffix = suffix;
     }
 

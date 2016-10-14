@@ -3,6 +3,8 @@ package com.amhzing.activities.ui.web.client.model;
 import java.io.Serializable;
 import java.util.Objects;
 
+import static org.apache.commons.lang3.Validate.notBlank;
+
 public class AddressModel implements Serializable {
 
     private String addressLine1;
@@ -15,11 +17,11 @@ public class AddressModel implements Serializable {
     }
 
     private AddressModel(final String addressLine1, final String addressLine2, final String city, final String postalCode, final String country) {
-        this.addressLine1 = addressLine1;
+        this.addressLine1 = notBlank(addressLine1);
         this.addressLine2 = addressLine2;
-        this.city = city;
+        this.city = notBlank(city);
         this.postalCode = postalCode;
-        this.country = country;
+        this.country = notBlank(country);
     }
 
     public static AddressModel create(final String addressLine1, final String addressLine2, final String city, final String postalCode, final String country) {
