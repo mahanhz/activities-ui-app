@@ -16,7 +16,7 @@ properties([[$class: 'BuildDiscarderProperty', strategy:
 
 stage ('Build') {
     node {
-        timeout(time: 10, unit: 'SECONDS') {
+        timeout(time: 5, unit: 'MINUTES') {
             checkout scm
 
             gradle 'clean compileSass test assemble'
@@ -41,36 +41,42 @@ stage ('Build') {
 if (!isMasterBranch()) {
     stage ('Integration test') {
         node {
-            unstash 'source'
-            sh 'chmod 755 gradlew'
-            sh 'SPRING_PROFILES_ACTIVE=online,test ./gradlew integrationTest'
+            timeout(time: 10, unit: 'MINUTES') {
+                unstash 'source'
+                sh 'chmod 755 gradlew'
+                sh 'SPRING_PROFILES_ACTIVE=online,test ./gradlew integrationTest'
 
-            stash includes: 'build/jacoco/*.exec', name: 'integrationCodeCoverage'
+                stash includes: 'build/jacoco/*.exec', name: 'integrationCodeCoverage'
+            }
         }
     }
 
     stage ('Functional test') {
         node {
-            unstash 'source'
-            sh 'chmod 755 gradlew'
-            gradle 'functionalTest'
+            timeout(time: 10, unit: 'MINUTES') {
+                unstash 'source'
+                sh 'chmod 755 gradlew'
+                gradle 'functionalTest'
 
-            stash includes: 'build/jacoco/*.exec', name: 'functionalCodeCoverage'
+                stash includes: 'build/jacoco/*.exec', name: 'functionalCodeCoverage'
+            }
         }
     }
 
     stage ('Code coverage') {
         node {
-            unstash 'source'
-            unstash 'unitCodeCoverage'
-            unstash 'integrationCodeCoverage'
-            unstash 'functionalCodeCoverage'
+            timeout(time: 5, unit: 'MINUTES') {
+                unstash 'source'
+                unstash 'unitCodeCoverage'
+                unstash 'integrationCodeCoverage'
+                unstash 'functionalCodeCoverage'
 
-            sh 'chmod 755 gradlew'
-            gradle 'jacocoTestReport'
+                sh 'chmod 755 gradlew'
+                gradle 'jacocoTestReport'
 
-            publishHTML(target: [reportDir:'build/reports/jacoco/test/html', reportFiles: 'index.html', reportName: 'Code Coverage'])
-            // step([$class: 'JacocoPublisher', execPattern:'build/jacoco/*.exec', classPattern: 'build/classes/main', sourcePattern: 'src/main/java'])
+                publishHTML(target: [reportDir:'build/reports/jacoco/test/html', reportFiles: 'index.html', reportName: 'Code Coverage'])
+                // step([$class: 'JacocoPublisher', execPattern:'build/jacoco/*.exec', classPattern: 'build/classes/main', sourcePattern: 'src/main/java'])
+            }
         }
     }
 
@@ -78,15 +84,17 @@ if (!isMasterBranch()) {
     lock('lock-merge') {
         stage ('Merge') {
             node {
-                checkout scm: [$class: 'GitSCM',
-                               branches: [[name: '*/master']],
-                               doGenerateSubmoduleConfigurations: false,
-                               extensions: [[$class: 'LocalBranch', localBranch: 'master'], [$class: 'WipeWorkspace']],
-                               submoduleCfg: [],
-                               userRemoteConfigs: [[url: REPOSITORY_URL]]]
+                timeout(time: 1, unit: 'MINUTES') {
+                    checkout scm: [$class: 'GitSCM',
+                                   branches: [[name: '*/master']],
+                                   doGenerateSubmoduleConfigurations: false,
+                                   extensions: [[$class: 'LocalBranch', localBranch: 'master'], [$class: 'WipeWorkspace']],
+                                   submoduleCfg: [],
+                                   userRemoteConfigs: [[url: REPOSITORY_URL]]]
 
-                sh "git merge ${COMMIT_ID}"
-                sh "git push origin master"
+                    sh "git merge ${COMMIT_ID}"
+                    sh "git push origin master"
+                }
             }
         }
     }
@@ -97,10 +105,12 @@ if (isMasterBranch()) {
     lock('lock-publish-snapshot') {
         stage ('Publish snapshot') {
             node {
-                unstash 'source'
-                sh 'chmod 755 gradlew'
+                timeout(time: 5, unit: 'MINUTES') {
+                    unstash 'source'
+                    sh 'chmod 755 gradlew'
 
-                gradle 'assemble uploadArchives'
+                    gradle 'assemble uploadArchives'
+                }
             }
         }
     }
@@ -120,25 +130,27 @@ if (isMasterBranch()) {
     lock('lock-publish-release-candidate') {
         stage ('Publish RC') {
             node {
-                sh "git branch -a -v --no-abbrev"
+                timeout(time: 5, unit: 'MINUTES') {
+                    sh "git branch -a -v --no-abbrev"
 
-                checkout scm: [$class: 'GitSCM',
-                               branches: [[name: '*/master']],
-                               doGenerateSubmoduleConfigurations: false,
-                               extensions: [[$class: 'LocalBranch', localBranch: 'master'], [$class: 'WipeWorkspace']],
-                               submoduleCfg: [],
-                               userRemoteConfigs: [[url: REPOSITORY_URL]]]
+                    checkout scm: [$class: 'GitSCM',
+                                   branches: [[name: '*/master']],
+                                   doGenerateSubmoduleConfigurations: false,
+                                   extensions: [[$class: 'LocalBranch', localBranch: 'master'], [$class: 'WipeWorkspace']],
+                                   submoduleCfg: [],
+                                   userRemoteConfigs: [[url: REPOSITORY_URL]]]
 
-                stash includes: 'gradle.properties', name: 'masterProperties'
+                    stash includes: 'gradle.properties', name: 'masterProperties'
 
-                unstash 'source'
-                unstash 'masterProperties'
+                    unstash 'source'
+                    unstash 'masterProperties'
 
-                def script = "scripts/release/activities_ui_release.sh"
-                sh "chmod 755 " + script
-                sh 'chmod 755 gradlew'
+                    def script = "scripts/release/activities_ui_release.sh"
+                    sh "chmod 755 " + script
+                    sh 'chmod 755 gradlew'
 
-                sh "./" + script + " ${SELECTED_SEMANTIC_VERSION_UPDATE} ${FALLBACK_RELEASE_VERSION}"
+                    sh "./" + script + " ${SELECTED_SEMANTIC_VERSION_UPDATE} ${FALLBACK_RELEASE_VERSION}"
+                }
             }
         }
     }

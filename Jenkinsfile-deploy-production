@@ -24,40 +24,44 @@ stage ('Approve deploy?') {
 lock('lock-deploy-production') {
     stage('Deploy production') {
         node {
-            checkout scm
+            timeout(time: 5, unit: 'MINUTES') {
+                checkout scm
 
-            stash excludes: 'build/', includes: '**', name: 'source'
+                stash excludes: 'build/', includes: '**', name: 'source'
 
-            if (SELECTED_DEPLOYMENT_OPTION == "latest") {
-                sh '''TAG=`git describe --abbrev=0`
+                if (SELECTED_DEPLOYMENT_OPTION == "latest") {
+                    sh '''TAG=`git describe --abbrev=0`
               ./gradlew deployToProduction -PrepoId=releases -PartifactVersion=$TAG'''
-            } else if (SELECTED_DEPLOYMENT_OPTION == "specific") {
-                echo "Deploying specific version: ${SPECIFIC_VERSION}"
-                sh './gradlew deployToProduction -PrepoId=releases -PartifactVersion=' + SPECIFIC_VERSION
-            } else {
-                throw new RuntimeException("Invalid deployment option selected: ${SELECTED_DEPLOYMENT_OPTION}")
+                } else if (SELECTED_DEPLOYMENT_OPTION == "specific") {
+                    echo "Deploying specific version: ${SPECIFIC_VERSION}"
+                    sh './gradlew deployToProduction -PrepoId=releases -PartifactVersion=' + SPECIFIC_VERSION
+                } else {
+                    throw new RuntimeException("Invalid deployment option selected: ${SELECTED_DEPLOYMENT_OPTION}")
+                }
             }
         }
     }
 }
 
 stage ('Health check') {
-    parallel 'prodServer1': {
-        node {
-            retry(5) {
-                unstash 'source'
-                sh 'chmod 755 gradlew'
+    timeout(time: 5, unit: 'MINUTES') {
+        parallel 'prodServer1': {
+            node {
+                retry(5) {
+                    unstash 'source'
+                    sh 'chmod 755 gradlew'
 
-                sh 'SPRING_PROFILES_ACTIVE=online,production,prodServer1 ./gradlew smokeTest'
+                    sh 'SPRING_PROFILES_ACTIVE=online,production,prodServer1 ./gradlew smokeTest'
+                }
             }
-        }
-    }, 'prodServer2': {
-        node {
-            retry(5) {
-                unstash 'source'
-                sh 'chmod 755 gradlew'
+        }, 'prodServer2': {
+            node {
+                retry(5) {
+                    unstash 'source'
+                    sh 'chmod 755 gradlew'
 
-                sh 'SPRING_PROFILES_ACTIVE=online,production,prodServer2 ./gradlew smokeTest'
+                    sh 'SPRING_PROFILES_ACTIVE=online,production,prodServer2 ./gradlew smokeTest'
+                }
             }
         }
     }

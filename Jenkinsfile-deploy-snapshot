@@ -10,32 +10,36 @@ stage ('Approve deploy?') {
 lock('lock-deploy-snapshot') {
     stage('Deploy snapshot') {
         node {
-            checkout scm
+            timeout(time: 5, unit: 'MINUTES') {
+                checkout scm
 
-            stash excludes: 'build/', includes: '**', name: 'source'
+                stash excludes: 'build/', includes: '**', name: 'source'
 
-            sh './gradlew deployToTest -PrepoId=snapshots -PartifactVersion=' + version()
+                sh './gradlew deployToTest -PrepoId=snapshots -PartifactVersion=' + version()
+            }
         }
     }
 }
 
 stage ('Health check') {
-    parallel 'testServer1': {
-        node {
-            retry(5) {
-                unstash 'source'
-                sh 'chmod 755 gradlew'
+    timeout(time: 5, unit: 'MINUTES') {
+        parallel 'testServer1': {
+            node {
+                retry(5) {
+                    unstash 'source'
+                    sh 'chmod 755 gradlew'
 
-                sh 'SPRING_PROFILES_ACTIVE=online,test,testServer1 ./gradlew smokeTest'
+                    sh 'SPRING_PROFILES_ACTIVE=online,test,testServer1 ./gradlew smokeTest'
+                }
             }
-        }
-    }, 'testServer2': {
-        node {
-            retry(5) {
-                unstash 'source'
-                sh 'chmod 755 gradlew'
+        }, 'testServer2': {
+            node {
+                retry(5) {
+                    unstash 'source'
+                    sh 'chmod 755 gradlew'
 
-                sh 'SPRING_PROFILES_ACTIVE=online,test,testServer2 ./gradlew smokeTest'
+                    sh 'SPRING_PROFILES_ACTIVE=online,test,testServer2 ./gradlew smokeTest'
+                }
             }
         }
     }
