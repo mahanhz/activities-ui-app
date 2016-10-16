@@ -14,9 +14,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-import static com.amhzing.activities.ui.configuration.AuthenticationConfig.ADMIN;
-import static com.amhzing.activities.ui.configuration.AuthenticationConfig.ROLE_PREFIX;
-import static com.amhzing.activities.ui.configuration.AuthenticationConfig.VAADIN_USER;
+import static com.amhzing.activities.ui.UserRole.ADMIN;
+import static com.amhzing.activities.ui.UserRole.VAADIN_USER;
 import static java.util.stream.Collectors.toList;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.apache.commons.lang3.StringUtils.replace;
@@ -52,9 +51,9 @@ public class RedirectAuthenticationSuccessHandler extends SavedRequestAwareAuthe
                                                  .map(GrantedAuthority::getAuthority)
                                                  .collect(toList());
 
-        if (roles.contains(ROLE_PREFIX + VAADIN_USER)) {
+        if (roles.contains(VAADIN_USER.getRoleFullName())) {
             return VAADIN_URI;
-        } else if (roles.contains(ROLE_PREFIX + ADMIN)) {
+        } else if (roles.contains(ADMIN.getRoleFullName())) {
             return TOGGLZ_CONSOLE_URI;
         }
 

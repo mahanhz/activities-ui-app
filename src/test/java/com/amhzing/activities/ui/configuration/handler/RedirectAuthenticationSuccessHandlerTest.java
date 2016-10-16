@@ -10,9 +10,8 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.util.Collection;
 
-import static com.amhzing.activities.ui.configuration.AuthenticationConfig.ADMIN;
-import static com.amhzing.activities.ui.configuration.AuthenticationConfig.ROLE_PREFIX;
-import static com.amhzing.activities.ui.configuration.AuthenticationConfig.VAADIN_USER;
+import static com.amhzing.activities.ui.UserRole.ADMIN;
+import static com.amhzing.activities.ui.UserRole.VAADIN_USER;
 import static com.amhzing.activities.ui.configuration.handler.RedirectAuthenticationSuccessHandler.TOGGLZ_CONSOLE_URI;
 import static com.amhzing.activities.ui.configuration.handler.RedirectAuthenticationSuccessHandler.VAADIN_URI;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -43,10 +42,10 @@ public class RedirectAuthenticationSuccessHandlerTest {
     }
 
     private Collection uiRole() {
-        return ImmutableSet.of(new SimpleGrantedAuthority(ROLE_PREFIX + VAADIN_USER));
+        return ImmutableSet.of(new SimpleGrantedAuthority(VAADIN_USER.getRoleFullName()));
     }
 
     private Collection adminRole() {
-        return ImmutableSet.of(new SimpleGrantedAuthority(ROLE_PREFIX + ADMIN));
+        return ImmutableSet.of(new SimpleGrantedAuthority(ADMIN.getRoleFullName()));
     }
 }

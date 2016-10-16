@@ -12,7 +12,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import static com.amhzing.activities.ui.configuration.AuthenticationConfig.VAADIN_USER;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.formLogin;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.logout;
@@ -50,7 +49,7 @@ public class SecurityIT {
     }
 
     @Test
-    @WithMockUser(roles = VAADIN_USER)
+    @WithMockUser(roles = "VAADIN_USER")
     public void should_allow_valid_vaadin_user() throws Exception {
         mockMvc.perform(get("/vaadin")).andExpect(status().isOk());
     }
