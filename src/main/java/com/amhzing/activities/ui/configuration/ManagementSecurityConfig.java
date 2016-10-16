@@ -12,7 +12,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 
 import java.util.Set;
 
-import static com.amhzing.activities.ui.configuration.AuthenticationConfig.ADMIN;
+import static com.amhzing.activities.ui.UserRole.ADMIN;
 
 @Configuration
 @EnableConfigurationProperties(ManagementProperties.class)
@@ -30,7 +30,7 @@ public class ManagementSecurityConfig extends WebSecurityConfigurerAdapter {
         http.requestMatcher(request -> request.getServerPort() == managementProperties.getPort())
             .authorizeRequests()
                 .requestMatchers(request -> !isOpenEndpoint(request.getRequestURI(), OPEN_ENDPOINTS))
-                .hasRole(ADMIN)
+                .hasRole(ADMIN.getRoleShortName())
                 .and()
             .httpBasic();
     }
