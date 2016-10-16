@@ -16,8 +16,12 @@
         </p>
 
         <p th:if="${status}">
-            <b>There was an unexpected error:</b> <span th:text="${status}">status-code</span>
+            <b>There was an error:</b> <span th:text="${status}">status-code</span>
             <span th:if="${error}" th:text="'('+${error}+')'">error ...</span>
+        </p>
+
+        <p>
+            <a th:href="@{/login}">Back to Login</a>
         </p>
 
     </body>
