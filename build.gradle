@@ -39,7 +39,8 @@ apply plugin: 'findbugs'
 apply plugin: 'org.owasp.dependencycheck'
 apply plugin: 'idea'
 apply plugin: 'com.gorylenko.gradle-git-properties'
-apply plugin: "org.kravemir.gradle.sass"
+apply plugin: 'org.kravemir.gradle.sass'
+apply plugin: 'jdepend'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8

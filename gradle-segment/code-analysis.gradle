@@ -8,6 +8,11 @@ pmd {
     ignoreFailures = true
 }
 
+jdepend {
+    sourceSets = [sourceSets.main, sourceSets.test]
+    ignoreFailures = true
+}
+
 dependencyCheck {
     format = 'ALL'
 }
