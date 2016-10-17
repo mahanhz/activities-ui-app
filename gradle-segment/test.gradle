@@ -15,7 +15,7 @@ task integrationTest(type:Test) {
 task functionalTest(type:Test) {
     include functionalTests
 
-    systemProperties['selenide.browser'] = 'chrome'
+    systemProperties['selenide.browser'] = 'phantomjs'
 }
 
 task smokeTest(type:Test) {

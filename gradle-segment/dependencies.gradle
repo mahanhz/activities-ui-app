@@ -91,8 +91,7 @@ dependencies {
     testCompile ('org.springframework.boot:spring-boot-starter-test')
     testCompile ("org.springframework.security:spring-security-test:${springSecurityTestVersion}")
     testCompile ("org.togglz:togglz-junit:${togglzVersion}")
-    testCompile ("com.codeborne:selenide:${selenideVersion}");
-
+    testCompile ("com.codeborne:selenide:${selenideVersion}")
 }
 
 dependencyManagement {
