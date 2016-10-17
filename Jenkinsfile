@@ -17,24 +17,27 @@ properties([[$class: 'BuildDiscarderProperty', strategy:
 stage ('Build') {
     node {
         timeout(time: 5, unit: 'MINUTES') {
-            checkout scm
+            try {
+                checkout scm
 
-            gradle 'clean compileSass test assemble'
+                gradle 'clean compileSass test assemble'
 
-            stash excludes: 'build/', includes: '**', name: 'source'
-            stash includes: 'build/jacoco/*.exec', name: 'unitCodeCoverage'
-           
-            junit '**/build/test-results/*.xml'
+                stash excludes: 'build/', includes: '**', name: 'source'
+                stash includes: 'build/jacoco/*.exec', name: 'unitCodeCoverage'
 
-            // Obtaining commit id like this until JENKINS-26100 is implemented
-            // See http://stackoverflow.com/questions/36304208/jenkins-workflow-checkout-accessing-branch-name-and-git-commit
-            sh 'git rev-parse HEAD > commit'
-            COMMIT_ID = readFile('commit').trim()
+                // Obtaining commit id like this until JENKINS-26100 is implemented
+                // See http://stackoverflow.com/questions/36304208/jenkins-workflow-checkout-accessing-branch-name-and-git-commit
+                sh 'git rev-parse HEAD > commit'
+                COMMIT_ID = readFile('commit').trim()
 
-            // Custom environment variable (e.g. for display in Spring Boot manage info page)
-            env.GIT_COMMIT_ID = COMMIT_ID
+                // Custom environment variable (e.g. for display in Spring Boot manage info page)
+                env.GIT_COMMIT_ID = COMMIT_ID
 
-            FALLBACK_RELEASE_VERSION = releaseVersion()
+                FALLBACK_RELEASE_VERSION = releaseVersion()
+            } catch(err) {
+                junit '**/build/test-results/*.xml'
+                throw err
+            }
         }
     }
 }
@@ -43,12 +46,16 @@ if (!isMasterBranch()) {
     stage ('Integration test') {
         node {
             timeout(time: 10, unit: 'MINUTES') {
-                unstash 'source'
-                sh 'chmod 755 gradlew'
-                sh 'SPRING_PROFILES_ACTIVE=online,test ./gradlew integrationTest'
+                try {
+                    unstash 'source'
+                    sh 'chmod 755 gradlew'
+                    sh 'SPRING_PROFILES_ACTIVE=online,test ./gradlew integrationTest'
 
-                stash includes: 'build/jacoco/*.exec', name: 'integrationCodeCoverage'
-                junit '**/build/test-results/*.xml'
+                    stash includes: 'build/jacoco/*.exec', name: 'integrationCodeCoverage'
+                } catch(err) {
+                    junit '**/build/test-results/*.xml'
+                    throw err
+                }
             }
         }
     }
@@ -56,12 +63,18 @@ if (!isMasterBranch()) {
     stage ('Functional test') {
         node {
             timeout(time: 10, unit: 'MINUTES') {
-                unstash 'source'
-                sh 'chmod 755 gradlew'
-                sh 'SPRING_PROFILES_ACTIVE=online,test,testServer1 ./gradlew functionalTest'
+                wrap([$class: 'Xvfb']) {
+                    try {
+                        unstash 'source'
+                        sh 'chmod 755 gradlew'
+                        sh 'SPRING_PROFILES_ACTIVE=online,test,testServer1 ./gradlew functionalTest'
 
-                stash includes: 'build/jacoco/*.exec', name: 'functionalCodeCoverage'
-                junit '**/build/test-results/*.xml'
+                        stash includes: 'build/jacoco/*.exec', name: 'functionalCodeCoverage'
+                    } catch(err) {
+                        junit '**/build/test-results/*.xml'
+                        throw err
+                    }
+                }
             }
         }
     }
