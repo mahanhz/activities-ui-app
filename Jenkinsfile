@@ -23,7 +23,8 @@ stage ('Build') {
 
             stash excludes: 'build/', includes: '**', name: 'source'
             stash includes: 'build/jacoco/*.exec', name: 'unitCodeCoverage'
-            // step([$class: 'JUnitResultArchiver', testResults: '**/build/test-results/*.xml'])
+           
+            junit '**/build/test-results/*.xml'
 
             // Obtaining commit id like this until JENKINS-26100 is implemented
             // See http://stackoverflow.com/questions/36304208/jenkins-workflow-checkout-accessing-branch-name-and-git-commit
@@ -47,6 +48,7 @@ if (!isMasterBranch()) {
                 sh 'SPRING_PROFILES_ACTIVE=online,test ./gradlew integrationTest'
 
                 stash includes: 'build/jacoco/*.exec', name: 'integrationCodeCoverage'
+                junit '**/build/test-results/*.xml'
             }
         }
     }
@@ -59,6 +61,7 @@ if (!isMasterBranch()) {
                 sh 'SPRING_PROFILES_ACTIVE=online,test,testServer1 ./gradlew functionalTest'
 
                 stash includes: 'build/jacoco/*.exec', name: 'functionalCodeCoverage'
+                junit '**/build/test-results/*.xml'
             }
         }
     }
