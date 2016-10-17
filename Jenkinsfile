@@ -56,7 +56,7 @@ if (!isMasterBranch()) {
             timeout(time: 10, unit: 'MINUTES') {
                 unstash 'source'
                 sh 'chmod 755 gradlew'
-                gradle 'functionalTest'
+                sh 'SPRING_PROFILES_ACTIVE=online,test,testServer1 ./gradlew functionalTest'
 
                 stash includes: 'build/jacoco/*.exec', name: 'functionalCodeCoverage'
             }
