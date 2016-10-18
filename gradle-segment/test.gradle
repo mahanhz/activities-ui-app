@@ -10,12 +10,14 @@ test {
 
 task integrationTest(type:Test) {
     include integrationTests
+
+    systemProperties['spring.profiles.active'] = 'online,test'
 }
 
 task functionalTest(type:Test) {
     include functionalTests
 
-    systemProperties['selenide.browser'] = 'phantomjs'
+    systemProperties['selenide.browser'] = 'chrome'
 }
 
 task smokeTest(type:Test) {
