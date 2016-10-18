@@ -3,7 +3,6 @@ package com.amhzing.activities.ui.functionaltest.ui;
 import com.amhzing.activities.ui.ActivitiesUIApplication;
 import com.amhzing.activities.ui.properties.TestServerProperties;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.By;
@@ -21,7 +20,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = ActivitiesUIApplication.class)
 @EnableConfigurationProperties(TestServerProperties.class)
-@Ignore("Ignoring Selenide test as it is difficult to get it to run in Jenkins")
 public class LoginUITest {
 
     @Autowired
