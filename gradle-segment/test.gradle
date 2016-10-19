@@ -1,24 +1,30 @@
 def integrationTests = 'com/amhzing/activities/ui/integrationtest/**'
+def acceptanceTests = 'com/amhzing/activities/ui/acceptancetest/**'
 def functionalTests = 'com/amhzing/activities/ui/functionaltest/**'
 def smokeTests = 'com/amhzing/activities/ui/smoketest/**'
 
 test {
     exclude integrationTests
+    exclude acceptanceTests
     exclude functionalTests
     exclude smokeTests
 }
 
 task integrationTest(type:Test) {
     include integrationTests
+    systemProperties['spring.profiles.active'] = 'online,test'
+}
 
+task acceptanceTest(type:Test) {
+    include acceptanceTests
     systemProperties['spring.profiles.active'] = 'online,test'
 }
 
 task functionalTest(type:Test) {
     include functionalTests
-
     systemProperties['selenide.browser'] = 'chrome'
 }
+
 
 task smokeTest(type:Test) {
     include smokeTests

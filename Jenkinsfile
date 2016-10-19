@@ -60,6 +60,23 @@ if (!isMasterBranch()) {
         }
     }
 
+    stage ('Acceptance test') {
+        node {
+            timeout(time: 10, unit: 'MINUTES') {
+                try {
+                    unstash 'source'
+                    sh 'chmod 755 gradlew'
+                    gradle 'acceptanceTest'
+
+                    stash includes: 'build/jacoco/*.exec', name: 'acceptanceCodeCoverage'
+                } catch(err) {
+                    junit '**/build/test-results/*.xml'
+                    throw err
+                }
+            }
+        }
+    }
+
     stage ('Functional test') {
         node {
             timeout(time: 10, unit: 'MINUTES') {
@@ -85,6 +102,7 @@ if (!isMasterBranch()) {
                 unstash 'source'
                 unstash 'unitCodeCoverage'
                 unstash 'integrationCodeCoverage'
+                unstash 'acceptanceCodeCoverage'
                 unstash 'functionalCodeCoverage'
 
                 sh 'chmod 755 gradlew'
