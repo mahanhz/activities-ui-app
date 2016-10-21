@@ -1,4 +1,4 @@
-package com.amhzing.activities.ui;
+package com.amhzing.activities.ui.user;
 
 import static org.apache.commons.lang3.Validate.notBlank;
 

@@ -1,3 +1,0 @@
-# This is needed by spring boot admin to display the version
-info:
-  version: ${version}

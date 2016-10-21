@@ -8,7 +8,7 @@ ext {
     janinoVersion = '3.0.5'
     slf4jVersion = '1.7.21'
 
-    springBootAdminClientVersion = '1.4.1'
+    springBootAdminClientVersion = '1.4.3'
     jolokiaVersion = '1.3.4'
 
     jcacheVersion = '1.0.0'

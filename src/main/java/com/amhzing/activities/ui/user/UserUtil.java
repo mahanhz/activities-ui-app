@@ -1,12 +1,12 @@
-package com.amhzing.activities.ui.application;
+package com.amhzing.activities.ui.user;
 
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 
-public final class SecurityUtil {
+public final class UserUtil {
 
-    private SecurityUtil() {
+    private UserUtil() {
     }
 
     public static boolean hasRole(String role) {

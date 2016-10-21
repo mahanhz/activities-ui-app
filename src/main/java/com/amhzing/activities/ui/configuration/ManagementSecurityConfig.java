@@ -12,7 +12,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 
 import java.util.Set;
 
-import static com.amhzing.activities.ui.UserRole.ADMIN;
+import static com.amhzing.activities.ui.user.UserRole.ADMIN;
 
 @Configuration
 @EnableConfigurationProperties(ManagementProperties.class)

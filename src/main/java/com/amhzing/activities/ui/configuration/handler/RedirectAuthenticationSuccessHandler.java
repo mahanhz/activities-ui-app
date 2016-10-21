@@ -14,8 +14,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-import static com.amhzing.activities.ui.UserRole.ADMIN;
-import static com.amhzing.activities.ui.UserRole.VAADIN_USER;
+import static com.amhzing.activities.ui.user.UserRole.ADMIN;
+import static com.amhzing.activities.ui.user.UserRole.VAADIN_USER;
 import static java.util.stream.Collectors.toList;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.apache.commons.lang3.StringUtils.replace;

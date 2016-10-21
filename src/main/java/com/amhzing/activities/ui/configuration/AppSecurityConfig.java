@@ -8,8 +8,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
-import static com.amhzing.activities.ui.UserRole.VAADIN_USER;
-
+import static com.amhzing.activities.ui.user.UserRole.VAADIN_USER;
 
 @Configuration
 @Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)

@@ -10,8 +10,8 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.util.Collection;
 
-import static com.amhzing.activities.ui.UserRole.ADMIN;
-import static com.amhzing.activities.ui.UserRole.VAADIN_USER;
+import static com.amhzing.activities.ui.user.UserRole.ADMIN;
+import static com.amhzing.activities.ui.user.UserRole.VAADIN_USER;
 import static com.amhzing.activities.ui.configuration.handler.RedirectAuthenticationSuccessHandler.TOGGLZ_CONSOLE_URI;
 import static com.amhzing.activities.ui.configuration.handler.RedirectAuthenticationSuccessHandler.VAADIN_URI;
 import static org.assertj.core.api.Assertions.assertThat;

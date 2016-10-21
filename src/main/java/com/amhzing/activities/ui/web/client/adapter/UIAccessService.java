@@ -2,8 +2,8 @@ package com.amhzing.activities.ui.web.client.adapter;
 
 import org.springframework.stereotype.Service;
 
-import static com.amhzing.activities.ui.UserRole.COORDINATOR;
-import static com.amhzing.activities.ui.application.SecurityUtil.hasRole;
+import static com.amhzing.activities.ui.user.UserRole.COORDINATOR;
+import static com.amhzing.activities.ui.user.UserUtil.hasRole;
 
 
 import static com.amhzing.activities.ui.feature.AppFeatures.ACTIVITY_FACILITATED;
