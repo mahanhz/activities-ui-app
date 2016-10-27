@@ -6,7 +6,7 @@ fallbackReleaseVersion=$2
 snapshotSuffix="-SNAPSHOT"
 
 # Fetch the latest version from Nexus
-nexusMetadata=`curl -s -L "http://192.168.1.31:8082/nexus/service/local/repositories/releases/content/com/amhzing/activities/ui/activities-ui/maven-metadata.xml"`
+nexusMetadata=`curl -s -L "http://192.168.1.31:8082/nexus/service/local/repositories/releases/content/com/amhzing/activities/activities-ui/maven-metadata.xml"`
 versionToRelease=`echo $nexusMetadata | grep -oP '(?<=<version>)[^<]+' | sort -nk1,1 | tail -1`
 
 echo "Latest version from Nexus: $versionToRelease"

@@ -1,4 +1,4 @@
-group = 'com.amhzing.activities.ui'
+group = 'com.amhzing.activities'
 
 jar {
 	baseName = 'activities-ui'
