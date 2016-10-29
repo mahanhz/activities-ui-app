@@ -32,7 +32,7 @@ public class ExternalParticipantIT {
 
     @Test
     public void should_get_participant_when_circuit_is_closed() throws Exception {
-        givenTimeout(10000);
+        givenTimeout(30000);
 
         final Either<CorrelatedFailure, Participants> result = participantRepository.participantsByCriteria(queryCriteria());
 
