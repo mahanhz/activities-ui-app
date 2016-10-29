@@ -2,7 +2,7 @@ language: java
 
 sudo: false
 
-#install: true # skip installation step
+install: true # skip installation step
 
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
@@ -15,7 +15,12 @@ cache:
 jdk:
   - oraclejdk8
 
-#script: ./gradlew assemble check -PmavenUser=x -PmavenPassword=x
+script: ./gradlew assemble check -PmavenUser=x -PmavenPassword=x
 
 after_success:
-  - ./gradlew jacocoTestReport coveralls
+  - ./gradlew jacocoTestReport coveralls -PmavenUser=x -PmavenPassword=x
+
+notifications:
+  email:
+    on_success: never
+    on_failure: never
