@@ -10,5 +10,8 @@ cache:
     - $HOME/.gradle/caches/
     - $HOME/.gradle/wrapper/
 
+jdk:
+  - oraclejdk8
+  
 after_success:
   - coveralls
