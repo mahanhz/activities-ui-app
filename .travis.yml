@@ -19,3 +19,8 @@ script: ./gradlew assemble check -PmavenUser=x -PmavenPassword=x
 
 after_success:
   - ./gradlew jacocoTestReport coveralls -PmavenUser=x -PmavenPassword=x
+
+notifications:
+  email:
+    on_success: never
+    on_failure: never

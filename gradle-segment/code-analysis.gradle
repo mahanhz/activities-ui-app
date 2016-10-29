@@ -17,6 +17,13 @@ dependencyCheck {
     format = 'ALL'
 }
 
+jacocoTestReport {
+    reports {
+        xml.enabled = true // coveralls plugin depends on xml format report
+        html.enabled = true
+    }
+}
+
 // This is needed as Vaadin causes javadoc to fail otherwise
 javadoc
 {
