@@ -1,5 +1,9 @@
 # activities-ui
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/b577171d4ff34477a272dd5012c61304)](https://www.codacy.com/app/mahanhz/activities-ui-app?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=mahanhz/activities-ui-app&amp;utm_campaign=Badge_Grade)
+[![Average time to resolve an issue](http://isitmaintained.com/badge/resolution/mahanhz/activities-ui-app.svg)](http://isitmaintained.com/project/mahanhz/activities-ui-app "Average time to resolve an issue")
+[![Percentage of issues still open](http://isitmaintained.com/badge/open/mahanhz/activities-ui-app.svg)](http://isitmaintained.com/project/mahanhz/activities-ui-app "Percentage of issues still open")
+
 The purpose of this microservice is to learn about Spring Boot + Vaadin + Spring Security + Hystrix.
 
 ## Why Spring Boot?
