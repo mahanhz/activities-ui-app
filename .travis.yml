@@ -18,4 +18,4 @@ jdk:
 script: ./gradlew assemble check -PmavenUser=x -PmavenPassword=x
 
 after_success:
-  - ./gradlew jacocoTestReport coveralls
+  - ./gradlew jacocoTestReport coveralls -PmavenUser=x -PmavenPassword=x
