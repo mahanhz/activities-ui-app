@@ -13,18 +13,10 @@ import static com.amhzing.activities.ui.feature.AppFeatures.ACTIVITY_HOSTED;
 public class UIAccessService {
 
     public boolean includeFacilitatedActivity() {
-        if (ACTIVITY_FACILITATED.isActive() && hasRole(COORDINATOR.getRoleFullName())) {
-            return true;
-        }
-
-        return false;
+        return ACTIVITY_FACILITATED.isActive() && hasRole(COORDINATOR.getRoleFullName());
     }
 
     public boolean includeHostedActivity() {
-        if (ACTIVITY_HOSTED.isActive() && hasRole(COORDINATOR.getRoleFullName())) {
-            return true;
-        }
-
-        return false;
+        return ACTIVITY_HOSTED.isActive() && hasRole(COORDINATOR.getRoleFullName());
     }
 }

@@ -10,7 +10,7 @@ import static org.apache.commons.lang3.Validate.notBlank;
 
 public class Email {
 
-    static final int MAX_LENGTH = 50;
+    private static final int MAX_LENGTH = 50;
 
     private final String value;
 

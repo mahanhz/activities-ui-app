@@ -15,12 +15,12 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 public class AuthenticationConfigOnline extends GlobalAuthenticationConfigurerAdapter {
 
     @Bean
-    UserDetailsService userDetailsService() {
+    private UserDetailsService userDetailsService() {
         return new DefaultUserDetailsService();
     }
 
     @Bean
-    AuthenticationProvider authenticationProvider() {
+    private AuthenticationProvider authenticationProvider() {
         return new UserAuthenticationProvider(userDetailsService());
     }
 

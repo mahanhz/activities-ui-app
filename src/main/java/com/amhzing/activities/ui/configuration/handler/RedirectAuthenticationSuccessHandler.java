@@ -22,8 +22,8 @@ import static org.apache.commons.lang3.StringUtils.replace;
 
 public class RedirectAuthenticationSuccessHandler extends SavedRequestAwareAuthenticationSuccessHandler {
 
-    static final String VAADIN_URI = "/vaadin";
-    static final String TOGGLZ_CONSOLE_URI = "/togglz-console";
+    public static final String VAADIN_URI = "/vaadin";
+    public static final String TOGGLZ_CONSOLE_URI = "/togglz-console";
 
     private RequestCache requestCache = new HttpSessionRequestCache();
 

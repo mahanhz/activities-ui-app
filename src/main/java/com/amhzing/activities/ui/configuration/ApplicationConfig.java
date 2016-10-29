@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Import;
 public class ApplicationConfig {
 
     @Autowired
-    DefaultParticipantRepository defaultParticipantRepository;
+    private DefaultParticipantRepository defaultParticipantRepository;
 
     @Bean
     public ParticipantService appParticipantService() {

@@ -29,7 +29,7 @@ public class DefaultUserDetailsService implements UserDetailsService {
                      .orElseThrow(() -> new UsernameNotFoundException("No user found for username: " + username));
     }
 
-    Collection<GrantedAuthority> authorities(final UserStore userStore) {
+    protected Collection<GrantedAuthority> authorities(final UserStore userStore) {
         return Arrays.stream(userStore.getRolesFullName())
                      .map(SimpleGrantedAuthority::new)
                      .collect(toList());

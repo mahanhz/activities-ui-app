@@ -21,6 +21,8 @@ import static org.apache.commons.lang3.Validate.notNull;
 @SpringUI(path = "/vaadin")
 public class VaadinUI extends UI {
 
+    private static final String VAADIN_THEMES = "/VAADIN/themes/";
+
     private ServletContext servletContext;
     private UIAccessService uiAccessService;
     private SearchParticipantPage searchParticipantPage;
@@ -41,7 +43,7 @@ public class VaadinUI extends UI {
         if (annotation != null) {
             String root = servletContext.getRealPath("/");
             if (root != null && Files.isDirectory(Paths.get(root))) {
-                Files.createDirectories(Paths.get(servletContext.getRealPath("/VAADIN/themes/" + annotation.value())));
+                Files.createDirectories(Paths.get(servletContext.getRealPath(VAADIN_THEMES + annotation.value())));
             }
         }
     }
