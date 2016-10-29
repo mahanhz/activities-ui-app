@@ -1,6 +1,7 @@
 # activities-ui
 [![Build Status](https://travis-ci.org/mahanhz/activities-ui-app.svg?branch=master)](https://travis-ci.org/mahanhz/activities-ui-app)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/b577171d4ff34477a272dd5012c61304)](https://www.codacy.com/app/mahanhz/activities-ui-app?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=mahanhz/activities-ui-app&amp;utm_campaign=Badge_Grade)
+[![Coverage Status](https://coveralls.io/repos/github/mahanhz/activities-ui-app/badge.svg?branch=master)](https://coveralls.io/github/mahanhz/activities-ui-app?branch=master)
 [![Average time to resolve an issue](http://isitmaintained.com/badge/resolution/mahanhz/activities-ui-app.svg)](http://isitmaintained.com/project/mahanhz/activities-ui-app "Average time to resolve an issue")
 [![Percentage of issues still open](http://isitmaintained.com/badge/open/mahanhz/activities-ui-app.svg)](http://isitmaintained.com/project/mahanhz/activities-ui-app "Percentage of issues still open")
 
