@@ -3,11 +3,6 @@ buildscript {
 		NEXUS_REPO_URL = 'http://192.168.1.31:8082/nexus/content/repositories'
 
 		springBootVersion = '1.4.1.RELEASE'
-		sshVersion = '2.2.0'
-		gradleReleaseVersion = '2.4.0'
-		gradleOwaspVersion = '1.4.3'
-		gradleGitPropertiesVersion = '1.4.17'
-		gradleSassVersion = '1.2.2'
 	}
 
 	repositories {
@@ -20,27 +15,30 @@ buildscript {
 
 	dependencies {
 		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-		classpath("org.hidetake:gradle-ssh-plugin:${sshVersion}")
-		classpath("net.researchgate:gradle-release:${gradleReleaseVersion}")
-		classpath("org.owasp:dependency-check-gradle:${gradleOwaspVersion}")
-		classpath("gradle.plugin.com.gorylenko.gradle-git-properties:gradle-git-properties:${gradleGitPropertiesVersion}")
-		classpath("gradle.plugin.org.kravemir.gradle.sass:GradleSassPlugin:${gradleSassVersion}")
 	}
 }
 
-apply plugin: 'java'
-apply plugin: 'maven'
+plugins {
+	id 'java'
+	id 'maven'
+	id 'jacoco'
+	id 'idea'
+	id 'jdepend'
+	id 'findbugs'
+	id 'pmd'
+
+	id 'com.moowork.node' version '0.13'
+	id 'de.richsource.gradle.plugins.typescript' version '1.8.0'
+	id 'org.kravemir.gradle.sass' version '1.2.2'
+	id 'net.saliman.cobertura' version '2.3.2'
+	id 'com.github.kt3k.coveralls' version '2.6.3'
+	id 'org.hidetake.ssh' version '2.2.0'
+	id 'net.researchgate.release' version '2.4.0'
+	id 'org.owasp.dependencycheck' version '1.4.3'
+	id 'com.gorylenko.gradle-git-properties' version '1.4.17'
+}
+
 apply plugin: 'spring-boot'
-apply plugin: 'org.hidetake.ssh'
-apply plugin: 'net.researchgate.release'
-apply plugin: 'jacoco'
-apply plugin: 'pmd'
-apply plugin: 'findbugs'
-apply plugin: 'org.owasp.dependencycheck'
-apply plugin: 'idea'
-apply plugin: 'com.gorylenko.gradle-git-properties'
-apply plugin: 'org.kravemir.gradle.sass'
-apply plugin: 'jdepend'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -54,6 +52,9 @@ apply from: 'gradle-segment/dependencies.gradle'
 
 // Sass
 apply from: 'gradle-segment/sass.gradle'
+
+// Angular
+// apply from: 'gradle-segment/angular.gradle'
 
 // Test
 apply from: 'gradle-segment/test.gradle'
