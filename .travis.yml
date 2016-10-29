@@ -12,6 +12,8 @@ cache:
 
 jdk:
   - oraclejdk8
-  
+
+script: ./gradlew assemble check -PmavenUser=x -PmavenPassword=x
+
 after_success:
   - coveralls
