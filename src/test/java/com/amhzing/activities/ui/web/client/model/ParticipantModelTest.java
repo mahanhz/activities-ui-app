@@ -11,9 +11,11 @@ import static org.junit.Assert.fail;
 @RunWith(JUnitParamsRunner.class)
 public class ParticipantModelTest {
 
+    private static final String PARTICIPANT_ID = "pId";
+
     @Test
     public void should_create_valid_participant() {
-        final ParticipantModel participant = ParticipantModel.create("pId", name(), address(), contactNumber(), email());
+        final ParticipantModel participant = ParticipantModel.create(PARTICIPANT_ID, name(), address(), contactNumber(), email());
 
         assertThat(participant.getName().getLastName()).isEqualTo("lName");
     }
@@ -37,5 +39,17 @@ public class ParticipantModelTest {
         ParticipantModel.create("pId", name(), null, contactNumber(), email());
 
         fail("Should not have gotten this far");
+    }
+
+    @Test
+    public void should_match_participant() {
+        final ParticipantModel participantModel = new ParticipantModel();
+        participantModel.setParticipantId(PARTICIPANT_ID);
+        participantModel.setName(name());
+        participantModel.setAddress(address());
+        participantModel.setContactNumber(contactNumber());
+        participantModel.setEmail(email());
+
+        assertThat(participantModel).isEqualTo(ParticipantModel.create(PARTICIPANT_ID, name(), address(), contactNumber(), email()));
     }
 }

@@ -7,9 +7,11 @@ import static org.junit.Assert.fail;
 
 public class ParticipantInfoTest {
 
+    private static final String PARTICIPANT_ID = "pId";
+
     @Test
     public void should_create_valid_participant() {
-        final ParticipantInfo participant = ParticipantInfo.create("pId", name(), address(), contactNumber(), email());
+        final ParticipantInfo participant = ParticipantInfo.create(PARTICIPANT_ID, name(), address(), contactNumber(), email());
 
         assertThat(participant.getName().getLastName()).isEqualTo("lName");
     }
