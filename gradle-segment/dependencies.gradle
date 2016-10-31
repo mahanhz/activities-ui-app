@@ -87,11 +87,10 @@ dependencies {
     compile ("org.togglz:togglz-spring-security:${togglzVersion}")
     compile ("com.github.heneke.thymeleaf:thymeleaf-extras-togglz:${togglzThymeleafVersion}")
 
-    compile ("pl.pragmatists:JUnitParams:${junitParamsVersion}")
-
     testCompile ('org.springframework.boot:spring-boot-starter-test')
     testCompile ("org.springframework.security:spring-security-test:${springSecurityTestVersion}")
     testCompile ("org.togglz:togglz-junit:${togglzVersion}")
+    testCompile ("pl.pragmatists:JUnitParams:${junitParamsVersion}")
     testCompile ("com.codeborne:selenide:${selenideVersion}")
     testCompile ("info.cukes:cucumber-junit:${cucumberVersion}")
     testCompile ("info.cukes:cucumber-java8:${cucumberVersion}")
