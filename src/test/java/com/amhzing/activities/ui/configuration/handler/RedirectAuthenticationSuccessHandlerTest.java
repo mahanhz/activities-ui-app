@@ -8,6 +8,8 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.Collection;
 
 import static com.amhzing.activities.ui.user.UserRole.ADMIN;
@@ -23,22 +25,28 @@ public class RedirectAuthenticationSuccessHandlerTest {
     private final RedirectAuthenticationSuccessHandler handler = new RedirectAuthenticationSuccessHandler();
 
     @Mock
+    private HttpServletRequest request;
+    @Mock
+    private HttpServletResponse response;
+    @Mock
     private Authentication authentication;
 
     @Test
-    public void should_use_role_based_ui_uri() {
+    public void should_use_role_based_ui_uri() throws Exception {
         given(authentication.getAuthorities()).willReturn(uiRole());
 
-        assertThat(handler.uri(authentication)).isEqualTo(VAADIN_URI);
+        handler.onAuthenticationSuccess(request, response, authentication);
 
+        assertThat(handler.uri(authentication)).isEqualTo(VAADIN_URI);
     }
 
     @Test
-    public void should_use_role_based_admin_uri() {
+    public void should_use_role_based_admin_uri() throws Exception {
         given(authentication.getAuthorities()).willReturn(adminRole());
 
-        assertThat(handler.uri(authentication)).isEqualTo(TOGGLZ_CONSOLE_URI);
+        handler.onAuthenticationSuccess(request, response, authentication);
 
+        assertThat(handler.uri(authentication)).isEqualTo(TOGGLZ_CONSOLE_URI);
     }
 
     private Collection uiRole() {
