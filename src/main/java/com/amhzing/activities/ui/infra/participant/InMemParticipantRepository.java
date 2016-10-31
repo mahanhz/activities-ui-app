@@ -30,7 +30,7 @@ public class InMemParticipantRepository implements DefaultParticipantRepository 
         }
     }
 
-    private Participants participants() throws IOException {
+    protected Participants participants() throws IOException {
         final ObjectMapper objectMapper = new ObjectMapper();
         final ClassLoader classLoader = getClass().getClassLoader();
 

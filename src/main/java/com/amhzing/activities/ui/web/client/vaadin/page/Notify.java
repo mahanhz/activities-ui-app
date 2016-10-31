@@ -11,7 +11,7 @@ import static org.apache.commons.lang3.Validate.notNull;
 public final class Notify {
 
     private Notify() {
-
+        // To prevent instantiation
     }
 
     public static void standard(final String caption,
