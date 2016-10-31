@@ -1,4 +1,4 @@
-package com.amhzing.activities.ui.util;
+package com.amhzing.activities.ui.helper;
 
 public class JUnitParamHelper {
 
