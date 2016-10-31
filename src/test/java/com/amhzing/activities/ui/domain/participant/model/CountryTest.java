@@ -5,8 +5,8 @@ import junitparams.Parameters;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static com.amhzing.activities.ui.util.JUnitParamHelper.invalidMatching;
-import static com.amhzing.activities.ui.util.JUnitParamHelper.valid;
+import static com.amhzing.activities.ui.helper.JUnitParamHelper.invalidMatching;
+import static com.amhzing.activities.ui.helper.JUnitParamHelper.valid;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(JUnitParamsRunner.class)
