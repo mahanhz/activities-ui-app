@@ -41,6 +41,22 @@ public class AddressModelTest {
         };
     }
 
+    @Test
+    public void should_create_address() {
+        final AddressModel addressModel = new AddressModel();
+        addressModel.setAddressLine1(addressLine1());
+        addressModel.setAddressLine2(addressLine2());
+        addressModel.setCity(city());
+        addressModel.setCountry(country());
+        addressModel.setPostalCode(postalCode());
+
+        assertThat(addressModel).isEqualTo(AddressModel.create(addressLine1(),
+                                                               addressLine2(),
+                                                               city(),
+                                                               postalCode(),
+                                                               country()));
+    }
+
     private String postalCode() {
         return "pCode";
     }

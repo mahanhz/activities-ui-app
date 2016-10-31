@@ -35,6 +35,17 @@ public class NameModelTest {
         };
     }
 
+    @Test
+    public void should_create_name() {
+        final NameModel nameModel = new NameModel();
+        nameModel.setFirstName(firstName());
+        nameModel.setMiddleName(middleName());
+        nameModel.setLastName(lastName());
+        nameModel.setSuffix(suffix());
+
+        assertThat(nameModel).isEqualTo(NameModel.create(firstName(), middleName(), lastName(), suffix()));
+    }
+
     private String firstName() {
         return "firstName";
     }
