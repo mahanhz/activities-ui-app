@@ -13,7 +13,10 @@ public class ParticipantInfoTest {
     public void should_create_valid_participant() {
         final ParticipantInfo participant = ParticipantInfo.create(PARTICIPANT_ID, name(), address(), contactNumber(), email());
 
-        assertThat(participant.getName().getLastName()).isEqualTo("lName");
+        assertThat(participant.getName()).isEqualTo(name());
+        assertThat(participant.getAddress()).isEqualTo(address());
+        assertThat(participant.getContactNumber()).isEqualTo(contactNumber());
+        assertThat(participant.getEmail()).isEqualTo(email());
     }
 
     @Test(expected = IllegalArgumentException.class)

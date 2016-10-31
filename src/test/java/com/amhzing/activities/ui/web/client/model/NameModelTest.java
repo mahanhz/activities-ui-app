@@ -26,6 +26,7 @@ public class NameModelTest {
         }
     }
 
+    @SuppressWarnings("unused")
     private Object nameValues() {
         return new Object[][]{
                 {valid(), firstName(), middleName(), lastName(), suffix()},

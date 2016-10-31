@@ -22,6 +22,7 @@ public class EmailTest {
         }
     }
 
+    @SuppressWarnings("unused")
     private Object emailValues() {
         return new Object[][]{
                 {valid(), "me@example.com"},

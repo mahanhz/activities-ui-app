@@ -22,6 +22,7 @@ public class CountryTest {
         }
     }
 
+    @SuppressWarnings("unused")
     private Object countryValues() {
         return new Object[][]{
                 {valid(), "SE", "Sweden"},
