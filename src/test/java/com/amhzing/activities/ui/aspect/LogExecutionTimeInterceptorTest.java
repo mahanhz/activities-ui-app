@@ -32,7 +32,7 @@ public class LogExecutionTimeInterceptorTest {
     }
 
     @Test
-    public void should_fail_handling_event() throws Throwable {
+    public void should_execute_method() throws Throwable {
         given(joinPoint.getTarget()).willReturn("Target");
         given(joinPoint.getArgs()).willReturn(new Object[0]);
         given(joinPoint.getSignature()).willReturn(signature);
