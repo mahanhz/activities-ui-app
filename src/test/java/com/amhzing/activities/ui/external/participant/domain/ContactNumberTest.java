@@ -22,6 +22,7 @@ public class ContactNumberTest {
         }
     }
 
+    @SuppressWarnings("unused")
     private Object contactNumberValues() {
         return new Object[][]{
                 {valid(), "12345678"},

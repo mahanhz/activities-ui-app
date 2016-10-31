@@ -13,7 +13,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class QueryCriteriaTest {
 
     @Test
-    @Parameters(method = "queryCriteriaValues")
+    @Parameters(method = "values")
     public void query_criteria_is_valid(final Class<? extends Exception> exception,
                                         final String country,
                                         final String city,
@@ -27,7 +27,8 @@ public class QueryCriteriaTest {
         }
     }
 
-    private Object queryCriteriaValues() {
+    @SuppressWarnings("unused")
+    private Object values() {
         return new Object[][]{
                 { valid(), country(), city(), addressLine1(), lastName(), participantId() },
                 { valid(), country(), "", "", "", "" },

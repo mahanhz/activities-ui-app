@@ -27,6 +27,7 @@ public class SearchSpecificationTest {
         }
     }
 
+    @SuppressWarnings("unused")
     private Object searchSpecificationValues() {
         return new Object[][]{
                 { valid(), country(), city(), addressLine1(), lastName(), participantId() },

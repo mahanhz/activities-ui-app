@@ -1,14 +1,11 @@
 package com.amhzing.activities.ui.web.client.model;
 
-import junitparams.JUnitParamsRunner;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import static com.amhzing.activities.ui.web.client.model.ParticipantModelHelper.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.fail;
 
-@RunWith(JUnitParamsRunner.class)
 public class ParticipantModelTest {
 
     private static final String PARTICIPANT_ID = "pId";

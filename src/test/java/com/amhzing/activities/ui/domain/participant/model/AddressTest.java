@@ -32,6 +32,7 @@ public class AddressTest {
         }
     }
 
+    @SuppressWarnings("unused")
     private Object addressValues() {
         return new Object[][]{
                 {valid(), addressLine1(), addressLine2(), city(), postalCode(), countryCode(), countryName()},
