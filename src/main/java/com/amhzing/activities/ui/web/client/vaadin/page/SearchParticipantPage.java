@@ -37,14 +37,14 @@ public class SearchParticipantPage {
 
     private ParticipantAdapter participantAdapter;
 
-    private ComboBox countrySelect = new ComboBox();
+    protected ComboBox countrySelect = new ComboBox();
     private TextField cityText = new TextField();
     private TextField addressLine1Text = new TextField();
     private TextField lastNameText = new TextField();
     private TextField idText = new TextField();
 
-    private Button searchBtn = new Button("Search");
-    private Grid grid = new Grid();
+    protected Button searchBtn = new Button("Search");
+    protected Grid grid = new Grid();
     private ParticipantForm participantForm = new ParticipantForm();
     private Panel resultErrorPanel = new Panel();
 
@@ -155,16 +155,16 @@ public class SearchParticipantPage {
         countrySelect.validate();
     }
 
-    private void gridSelectionListener() {
-        grid.addSelectionListener(event -> {
-            if (event.getSelected().isEmpty()) {
-                participantForm.setVisible(false);
-            } else {
-                final ParticipantModel participant = (ParticipantModel) event.getSelected().iterator().next();
-                participantForm.participantDetails(participant);
-            }
-        });
-    }
+//    private void gridSelectionListener() {
+//        grid.addSelectionListener(event -> {
+//            if (event.getSelected().isEmpty()) {
+//                participantForm.setVisible(false);
+//            } else {
+//                final ParticipantModel participant = (ParticipantModel) event.getSelected().iterator().next();
+//                participantForm.participantDetails(participant);
+//            }
+//        });
+//    }
 
     private SearchSpecification searchSpec() {
         return SearchSpecification.create(countryCode(),
