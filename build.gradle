@@ -28,6 +28,7 @@ plugins {
 	id 'pmd'
 
 	id 'com.moowork.node' version '0.13'
+	id "com.moowork.gulp" version "0.13"
 	id 'de.richsource.gradle.plugins.typescript' version '1.8.0'
 	id 'org.kravemir.gradle.sass' version '1.2.2'
 	id 'net.saliman.cobertura' version '2.3.2'
@@ -54,7 +55,7 @@ apply from: 'gradle-segment/dependencies.gradle'
 apply from: 'gradle-segment/sass.gradle'
 
 // Angular
-// apply from: 'gradle-segment/angular.gradle'
+apply from: 'gradle-segment/angular.gradle'
 
 // Test
 apply from: 'gradle-segment/test.gradle'

@@ -1,0 +1,47 @@
+node {
+    version = '7.0.0'
+    npmVersion = '3.10.8'
+    download = true
+    nodeModulesDir = file("${project.projectDir}/angular")
+}
+
+// if the /node_modules directory already exists somewhere other than at the base of where your build.gradle is
+//  plugin looks for gulp in the node_modules directory
+gulp {
+    workDir = file("${project.projectDir}/angular")
+}
+
+// run npm install
+gulp_default.dependsOn 'npmInstall'
+
+// run gulp install
+gulp_default.dependsOn 'installGulp'
+
+// processResources is a Java task. Run the gulpfile.js before this task using the 'default' task in the gulpfile.js
+processResources.dependsOn gulp_default
+
+
+//task appNpmInstall(type: NpmTask) {
+//    description = "Installs dependencies from package.json"
+//    workingDir = file("${project.projectDir}/angular")
+//    args = ['install']
+//}
+//
+//task tsc(type: NodeTask) {
+//    script = file("${project.projectDir}/angular/node_modules/typescript/lib/tsc.js")
+//    execOverrides {
+//        it.ignoreExitValue = true
+//        it.workingDir = file("${project.projectDir}/angular/app")
+//    }
+//}
+//
+//task appNpmRun(type: NpmTask) {
+//    description = "Installs dependencies from package.json"
+//    workingDir = file("${project.projectDir}/angular")
+//    args = ['run', 'start']
+//}
+//
+//project.afterEvaluate {
+//    tasks.npm_install.outputs.dir(file("${project.projectDir}/angular/node_modules"))
+//    tasks.tsc.outputs.dir(file("${project.projectDir}/angular/app"))
+//}
