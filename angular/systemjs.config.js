@@ -2,7 +2,7 @@
   System.config({
     paths: {
       // paths serve as alias
-      'npm:': 'node_modules/'
+      'npm:': 'lib/'
     },
     // map tells the System loader where to look for things
     map: {
@@ -18,8 +18,9 @@
       '@angular/router': 'npm:@angular/router/bundles/router.umd.js',
       '@angular/forms': 'npm:@angular/forms/bundles/forms.umd.js',
       // other libraries
-      'rxjs':                      'npm:rxjs',
-      'angular-in-memory-web-api': 'npm:angular-in-memory-web-api',
+      'rxjs':                       'npm:rxjs',
+      'angular2-in-memory-web-api': 'npm:angular2-in-memory-web-api',
+      'symbol-observable':          'npm:symbol-observable',
     },
     // packages tells the System loader how to load when no filename and/or no extension
     packages: {
@@ -27,10 +28,14 @@
         main: './main.js',
         defaultExtension: 'js'
       },
+      'symbol-observable': {
+        main: './index.js',
+        defaultExtension: 'js'
+      },
       rxjs: {
         defaultExtension: 'js'
       },
-      'angular-in-memory-web-api': {
+      'angular2-in-memory-web-api': {
         main: './index.js',
         defaultExtension: 'js'
       }

@@ -23,25 +23,30 @@
     "@angular/platform-browser-dynamic": "~2.1.1",
     "@angular/router": "~3.1.1",
     "@angular/upgrade": "~2.1.1",
-    "angular-in-memory-web-api": "~0.1.13",
+    "angular2-in-memory-web-api": "~0.0.21",
     "bootstrap": "^3.3.7",
+    "font-awesome": "^4.7.0",
+    "ng2-bootstrap": "^1.1.16",
     "core-js": "^2.4.1",
     "reflect-metadata": "^0.1.8",
-    "rxjs": "5.0.0-beta.12",
-    "systemjs": "0.19.39",
-    "zone.js": "^0.6.25"
+    "rxjs": "^5.0.0-rc.1",
+    "systemjs": "^0.19.40",
+    "zone.js": "^0.6.26"
   },
   "devDependencies": {
+    "@types/jasmine": "^2.5.35",
     "@types/core-js": "^0.9.34",
     "@types/node": "^6.0.45",
     "concurrently": "^3.0.0",
     "del": "2.2.2",
+    "event-stream": "3.3.4",
     "gulp": "^3.9.1",
     "gulp-autoprefixer": "3.1.1",
     "gulp-cli": "^1.2.2",
     "gulp-sass": "^2.3.2",
     "gulp-typescript": "3.1.2",
     "lite-server": "^2.2.2",
+    "jasmine-core": "2.5.2",
     "typescript": "^2.0.3"
   }
 }

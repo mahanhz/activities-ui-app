@@ -2,6 +2,7 @@ const gulp = require('gulp');
 const del = require('del');
 const typescript = require('gulp-typescript');
 const tscConfig = require('./tsconfig.json');
+const es = require('event-stream');
 
 var distDir = 'dist';
 
@@ -12,61 +13,70 @@ var angularStylesDir = angularDir + '/css';
 
 var resourcesDir = '../src/main/resources';
 var staticResourcesDir = resourcesDir + '/static';
-var templatesDir = resourcesDir + '/templates/' + angularDir;
 
 // clean the contents of the distribution directory
 gulp.task('clean', function () {
   return del([distDir + '/**/*',
-              staticResourcesDir + angularDir + '/**/*',
-              templatesDir + '/**/*'],
+              staticResourcesDir + angularDir],
               {force: true});
 });
 
 // copy static assets - i.e. non TypeScript compiled source
 gulp.task('copy:assets', ['clean'], function() {
   return gulp.src(['app/**/*', '!app/**/*.ts'], { base : './' })
-    .pipe(gulp.dest(distDir + angularAppDir))
-    .pipe(gulp.dest(staticResourcesDir + angularAppDir))
+             .pipe(gulp.dest(distDir + angularAppDir))
 });
 
 // copy styles
 gulp.task('copy:styles', ['clean'], function() {
-  return gulp.src(['styles.cs'], { base : './' })
-         .pipe(gulp.dest(staticResourcesDir + angularStylesDir))
+  return gulp.src(['styles.css'], { base : './' })
+             .pipe(gulp.dest(distDir + angularStylesDir))
 })
 
 // copy html
 gulp.task('copy:html', ['clean'], function() {
-  return gulp.src(['index.html'], { base : './' })
-    .pipe(gulp.dest(templatesDir))
+  return gulp.src(['*.html'], { base : './' })
+             .pipe(gulp.dest(distDir + angularDir))
 })
+
+// copy html
+gulp.task('copy:systemjsConfig', ['clean'], function() {
+  return gulp.src(['systemjs.config.js'], { base : './' })
+             .pipe(gulp.dest(distDir + angularDir))
+})
+
 
 // copy dependencies
 gulp.task('copy:libs', ['clean'], function() {
-  return gulp.src([
-      'node_modules/core-js/client/shim.min.js',
-      'node_modules/zone.js/dist/zone.js',
-      'node_modules/reflect-metadata/Reflect.js',
-      'node_modules/rxjs/bundles/Rx.js',
-      'node_modules/@angular/core/bundles/core.umd.js',
-      'node_modules/@angular/common/bundles/common.umd.js',
-      'node_modules/@angular/compiler/bundles/compiler.umd.js',
-      'node_modules/@angular/platform-browser/bundles/platform-browser.umd.js',
-      'node_modules/@angular/platform-browser-dynamic/bundles/platform-browser-dynamic.umd.js',
-      'node_modules/systemjs/dist/system.src.js',
-    ])
-    .pipe(gulp.dest(distDir + angularLibDir))
-    .pipe(gulp.dest(staticResourcesDir + angularLibDir))
+
+  return es.merge(
+    // copy libs
+    gulp.src(['./node_modules/@angular/**/bundles/*.js'])
+        .pipe(gulp.dest(distDir + angularLibDir + '/@angular')),
+    gulp.src(['./node_modules/angular2-in-memory-web-api/**/*.js*'])
+        .pipe(gulp.dest(distDir + angularLibDir + '/angular2-in-memory-web-api')),
+    gulp.src(['./node_modules/symbol-observable/**/*.js*'])
+        .pipe(gulp.dest(distDir + angularLibDir + '/symbol-observable')),
+    gulp.src(['./node_modules/rxjs/**/*.js*'])
+        .pipe(gulp.dest(distDir + angularLibDir + '/rxjs')),
+    gulp.src(['node_modules/core-js/client/shim.min.js',
+              'node_modules/zone.js/dist/zone.js',
+              'node_modules/reflect-metadata/Reflect.js',
+              'node_modules/systemjs/dist/system.src.js',
+              'node_modules/systemjs/dist/system.src.js'])
+        .pipe(gulp.dest(distDir + angularLibDir)));
 });
 
 // TypeScript compile
 gulp.task('compile', ['clean'], function () {
-  return gulp
-    .src('app/**/*.ts')
-    .pipe(typescript(tscConfig.compilerOptions))
-    .pipe(gulp.dest(distDir + angularAppDir))
-    .pipe(gulp.dest(staticResourcesDir + angularAppDir));
+  return gulp.src('app/**/*.ts')
+             .pipe(typescript(tscConfig.compilerOptions))
+             .pipe(gulp.dest(distDir + angularAppDir));
 });
 
-gulp.task('build', ['compile', 'copy:libs', 'copy:assets', 'copy:html', 'copy:styles']);
-gulp.task('default', ['build']);
+gulp.task('build', ['compile', 'copy:libs', 'copy:assets', 'copy:systemjsConfig', 'copy:html', 'copy:styles']);
+gulp.task('copyDist', ['build'], function() {
+  return gulp.src(['dist/**/*'], { base : './dist' })
+             .pipe(gulp.dest(staticResourcesDir))
+});
+gulp.task('default', ['copyDist']);

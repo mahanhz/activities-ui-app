@@ -1,29 +1,22 @@
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org">
+<html>
 <head>
     <title>Angular QuickStart JS</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <!-- 1. Load libraries -->
     <!-- IE required polyfill -->
-    <script th:src="@{angular/lib/shim.min.js}"></script>
+    <script src="lib/shim.min.js"></script>
+    <script src="lib/zone.js"></script>
+    <script src="lib/Reflect.js"></script>
+    <script src="lib/system.src.js"></script>
 
-    <script th:src="@{angular/lib/zone.js}"></script>
-    <script th:src="@{angular/lib/Reflect.js}"></script>
-
-    <script th:src="@{angular/lib/Rx.js}"></script>
-    <script th:src="@{angular/lib/core.umd.js}"></script>
-    <script th:src="@{angular/lib/common.umd.js}"></script>
-    <script th:src="@{angular/lib/compiler.umd.js}"></script>
-    <script th:src="@{angular/lib/platform-browser.umd.js}"></script>
-    <script th:src="@{angular/lib/platform-browser-dynamic.umd.js}"></script>
-
-    <!-- 2. Load our 'modules' -->
-    <script th:src="@{angular/app/app.component.js}"></script>
-    <script th:src="@{angular/app/app.module.js}"></script>
-    <script th:src="@{angular/app/main.js}"></script>
-
+    <!-- systemjs config -->
+    <script src="systemjs.config.js"></script>
+    <script>
+        System.import('app/main').catch(function(err) {
+            console.error(err);
+        });
+	</script>
 </head>
 
 <!-- 3. Display the application -->
