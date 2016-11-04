@@ -22,7 +22,7 @@ stage ('Build') {
 
                 gradle 'clean compileSass gulp_default test assemble'
 
-                stash excludes: 'build/, angular/node_modules/', includes: '**', name: 'source'
+                stash excludes: 'build/, .gradle/, angular/node_modules/', includes: '**', name: 'source'
                 stash includes: 'build/jacoco/*.exec', name: 'unitCodeCoverage'
 
                 // Obtaining commit id like this until JENKINS-26100 is implemented
@@ -49,8 +49,7 @@ if (!isMasterBranch()) {
                 try {
                     unstash 'source'
 
-                    def myG = "gradlew"
-                    grantExecutePermission myG
+                    grantExecutePermission 'gradlew'
 
                     gradle 'integrationTest'
 
