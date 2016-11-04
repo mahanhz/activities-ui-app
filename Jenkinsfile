@@ -16,7 +16,7 @@ properties([[$class: 'BuildDiscarderProperty', strategy:
 
 stage ('Build') {
     node {
-        timeout(time: 5, unit: 'MINUTES') {
+        timeout(time: 15, unit: 'MINUTES') {
             try {
                 checkout scm
 
