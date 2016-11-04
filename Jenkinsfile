@@ -20,6 +20,7 @@ stage ('Build') {
             try {
                 checkout scm
 
+                grantExecutePermissions()
                 gradle 'clean compileSass test assemble'
 
                 stash excludes: 'build/, angular/node_modules/', includes: '**', name: 'source'
