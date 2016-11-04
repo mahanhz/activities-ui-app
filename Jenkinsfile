@@ -22,7 +22,7 @@ stage ('Build') {
 
                 gradle 'clean compileSass test assemble'
 
-                stash excludes: 'build/', includes: '**', name: 'source'
+                stash excludes: 'build/, angular/node_modules/', includes: '**', name: 'source'
                 stash includes: 'build/jacoco/*.exec', name: 'unitCodeCoverage'
 
                 // Obtaining commit id like this until JENKINS-26100 is implemented
