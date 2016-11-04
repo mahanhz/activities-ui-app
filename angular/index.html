@@ -1,0 +1,27 @@
+<html>
+<head>
+    <title>Angular QuickStart JS</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- 1. Load libraries -->
+    <!-- IE required polyfill -->
+    <script src="lib/shim.min.js"></script>
+    <script src="lib/zone.js"></script>
+    <script src="lib/Reflect.js"></script>
+    <script src="lib/system.src.js"></script>
+
+    <!-- systemjs config -->
+    <script src="systemjs.config.js"></script>
+    <script>
+        System.import('app/main').catch(function(err) {
+            console.error(err);
+        });
+	</script>
+</head>
+
+<!-- 3. Display the application -->
+<body>
+<my-app>Loading...</my-app>
+</body>
+
+</html>

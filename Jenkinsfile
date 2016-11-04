@@ -16,13 +16,13 @@ properties([[$class: 'BuildDiscarderProperty', strategy:
 
 stage ('Build') {
     node {
-        timeout(time: 5, unit: 'MINUTES') {
+        timeout(time: 10, unit: 'MINUTES') {
             try {
                 checkout scm
 
-                gradle 'clean compileSass test assemble'
+                gradle 'clean compileSass gulp_default test assemble'
 
-                stash excludes: 'build/', includes: '**', name: 'source'
+                stash excludes: 'build/, angular/node_modules/', includes: '**', name: 'source'
                 stash includes: 'build/jacoco/*.exec', name: 'unitCodeCoverage'
 
                 // Obtaining commit id like this until JENKINS-26100 is implemented
@@ -48,7 +48,10 @@ if (!isMasterBranch()) {
             timeout(time: 10, unit: 'MINUTES') {
                 try {
                     unstash 'source'
-                    sh 'chmod 755 gradlew'
+
+                    def myG = "gradlew"
+                    grantExecutePermission myG
+
                     gradle 'integrationTest'
 
                     stash includes: 'build/jacoco/*.exec', name: 'integrationCodeCoverage'
@@ -65,7 +68,9 @@ if (!isMasterBranch()) {
             timeout(time: 10, unit: 'MINUTES') {
                 try {
                     unstash 'source'
-                    sh 'chmod 755 gradlew'
+
+                    grantExecutePermission 'gradlew'
+
                     gradle 'acceptanceTest'
 
                     stash includes: 'build/jacoco/*.exec', name: 'acceptanceCodeCoverage'
@@ -83,7 +88,9 @@ if (!isMasterBranch()) {
                 wrap([$class: 'Xvfb']) {
                     try {
                         unstash 'source'
-                        sh 'chmod 755 gradlew'
+
+                        grantExecutePermission 'gradlew'
+
                         sh 'SPRING_PROFILES_ACTIVE=online,test,testServer1 ./gradlew functionalTest'
 
                         stash includes: 'build/jacoco/*.exec', name: 'functionalCodeCoverage'
@@ -105,7 +112,8 @@ if (!isMasterBranch()) {
                 unstash 'acceptanceCodeCoverage'
                 unstash 'functionalCodeCoverage'
 
-                sh 'chmod 755 gradlew'
+                grantExecutePermission 'gradlew'
+
                 gradle 'jacocoTestReport'
 
                 publishHTML(target: [reportDir:'build/reports/jacoco/test/html', reportFiles: 'index.html', reportName: 'Code Coverage'])
@@ -141,7 +149,8 @@ if (isMasterBranch()) {
             node {
                 timeout(time: 5, unit: 'MINUTES') {
                     unstash 'source'
-                    sh 'chmod 755 gradlew'
+
+                    grantExecutePermission 'gradlew'
 
                     gradle 'assemble uploadArchives'
                 }
@@ -179,9 +188,11 @@ if (isMasterBranch()) {
                     unstash 'source'
                     unstash 'masterProperties'
 
+                    grantExecutePermission 'gradlew'
+
                     def script = "scripts/release/activities_ui_release.sh"
-                    sh "chmod 755 " + script
-                    sh 'chmod 755 gradlew'
+                    grantExecutePermission script
+
 
                     sh "./" + script + " ${SELECTED_SEMANTIC_VERSION_UPDATE} ${FALLBACK_RELEASE_VERSION}"
                 }
@@ -216,4 +227,18 @@ void gradle(String tasks, String switches = null) {
     }
 
     sh gradleCommand.toString()
+}
+
+// fixes unstash overwrite bug ... https://issues.jenkins-ci.org/browse/JENKINS-33126
+void grantExecutePermission(String fileOrDir, boolean recursive = false) {
+    String permissionCommand = "chmod ";
+
+    if (recursive) {
+        permissionCommand += '-R '
+    }
+
+    permissionCommand += 'u+x '
+    permissionCommand += fileOrDir
+
+    sh permissionCommand.toString()
 }

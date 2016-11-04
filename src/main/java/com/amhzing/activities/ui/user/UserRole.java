@@ -6,6 +6,7 @@ public enum UserRole {
 
     ADMIN("ROLE_ADMIN", "ADMIN"),
     VAADIN_USER("ROLE_VAADIN_USER", "VAADIN_USER"),
+    ANGULAR_USER("ROLE_ANGULAR_USER", "ANGULAR_USER"),
     COORDINATOR("ROLE_COORDINATOR", "COORDINATOR");
 
     private final String roleFullName;

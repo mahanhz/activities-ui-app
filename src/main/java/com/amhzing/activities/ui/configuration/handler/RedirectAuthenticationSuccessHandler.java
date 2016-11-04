@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.util.List;
 
 import static com.amhzing.activities.ui.user.UserRole.ADMIN;
+import static com.amhzing.activities.ui.user.UserRole.ANGULAR_USER;
 import static com.amhzing.activities.ui.user.UserRole.VAADIN_USER;
 import static java.util.stream.Collectors.toList;
 import static org.apache.commons.lang3.StringUtils.isBlank;
@@ -23,6 +24,7 @@ import static org.apache.commons.lang3.StringUtils.replace;
 public class RedirectAuthenticationSuccessHandler extends SavedRequestAwareAuthenticationSuccessHandler {
 
     public static final String VAADIN_URI = "/vaadin";
+    public static final String ANGULAR_URI = "/angular/index.html";
     public static final String TOGGLZ_CONSOLE_URI = "/togglz-console";
 
     private RequestCache requestCache = new HttpSessionRequestCache();
@@ -53,6 +55,8 @@ public class RedirectAuthenticationSuccessHandler extends SavedRequestAwareAuthe
 
         if (roles.contains(VAADIN_USER.getRoleFullName())) {
             return VAADIN_URI;
+        } else if (roles.contains(ANGULAR_USER.getRoleFullName())) {
+            return ANGULAR_URI;
         } else if (roles.contains(ADMIN.getRoleFullName())) {
             return TOGGLZ_CONSOLE_URI;
         }
