@@ -22,6 +22,10 @@ public class AuthenticationConfigOffline extends GlobalAuthenticationConfigurerA
             .password(USER_VAADIN.getPassword())
             .roles(USER_VAADIN.getRolesShortName())
             .and()
+            .withUser(USER_ANGULAR.getName())
+            .password(USER_ANGULAR.getPassword())
+            .roles(USER_ANGULAR.getRolesShortName())
+            .and()
             .withUser(USER_COORDINATOR.getName())
             .password(USER_COORDINATOR.getPassword())
             .roles(USER_COORDINATOR.getRolesShortName());

@@ -11,14 +11,9 @@ var angularAppDir = angularDir + '/app';
 var angularLibDir = angularDir + '/lib';
 var angularStylesDir = angularDir + '/css';
 
-var resourcesDir = '../src/main/resources';
-var staticResourcesDir = resourcesDir + '/static';
-
 // clean the contents of the distribution directory
 gulp.task('clean', function () {
-  return del([distDir + '/**/*',
-              staticResourcesDir + angularDir],
-              {force: true});
+  return del([distDir]);
 });
 
 // copy static assets - i.e. non TypeScript compiled source
@@ -75,8 +70,4 @@ gulp.task('compile', ['clean'], function () {
 });
 
 gulp.task('build', ['compile', 'copy:libs', 'copy:assets', 'copy:systemjsConfig', 'copy:html', 'copy:styles']);
-gulp.task('copyDist', ['build'], function() {
-  return gulp.src(['dist/**/*'], { base : './dist' })
-             .pipe(gulp.dest(staticResourcesDir))
-});
-gulp.task('default', ['copyDist']);
+gulp.task('default', ['build']);

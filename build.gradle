@@ -103,6 +103,14 @@ springBoot {
 // Make the System.properties available in the bootRun task.
 bootRun.systemProperties = System.properties
 
+sourceSets {
+	main {
+		resources {
+			srcDirs = ["${project.projectDir}/src/main/resources", "${project.projectDir}/angular/dist"]
+		}
+	}
+}
+
 // Automatically expand info properties
 processResources {
 	filesMatching('**/application.yml') { expand(project.properties) }

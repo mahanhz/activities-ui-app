@@ -8,6 +8,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
+import static com.amhzing.activities.ui.user.UserRole.ANGULAR_USER;
 import static com.amhzing.activities.ui.user.UserRole.VAADIN_USER;
 
 @Configuration
@@ -20,6 +21,7 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
                 .disable() // Use Vaadin's CSRF protection
             .authorizeRequests()
                 .antMatchers("/config-message").permitAll()
+                .antMatchers("/angular/**").hasRole(ANGULAR_USER.getRoleShortName())
                 .antMatchers("/vaadin/**").hasRole(VAADIN_USER.getRoleShortName())
                 .anyRequest().authenticated()
                 .and()
@@ -40,6 +42,6 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/css/*", "/js/*"); // Static resources are ignored
+        web.ignoring().antMatchers("/css/**", "/js/**"); // Static resources are ignored
     }
 }
