@@ -20,9 +20,9 @@ stage ('Build') {
             try {
                 checkout scm
 
-                gradle 'clean compileSass gulp_default test assemble'
+                gradle 'clean compileSass test assemble'
 
-                stash excludes: 'build/, angular/node_modules/', includes: '**', name: 'source'
+                stash excludes: 'build/, .gradle/, angular/node_modules/', includes: '**', name: 'source'
                 stash includes: 'build/jacoco/*.exec', name: 'unitCodeCoverage'
 
                 // Obtaining commit id like this until JENKINS-26100 is implemented
@@ -49,8 +49,7 @@ if (!isMasterBranch()) {
                 try {
                     unstash 'source'
 
-                    def myG = "gradlew"
-                    grantExecutePermission myG
+                    grantExecutePermission 'gradlew'
 
                     gradle 'integrationTest'
 
@@ -136,6 +135,8 @@ if (!isMasterBranch()) {
 
                     sh "git merge ${COMMIT_ID}"
                     sh "git push origin master"
+
+                    deleteDir() // Wipe out the workspace
                 }
             }
         }
@@ -192,7 +193,6 @@ if (isMasterBranch()) {
 
                     def script = "scripts/release/activities_ui_release.sh"
                     grantExecutePermission script
-
 
                     sh "./" + script + " ${SELECTED_SEMANTIC_VERSION_UPDATE} ${FALLBACK_RELEASE_VERSION}"
                 }
