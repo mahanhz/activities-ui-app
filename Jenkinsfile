@@ -49,7 +49,8 @@ if (!isMasterBranch()) {
                 try {
                     unstash 'source'
 
-                    grantExecutePermission(gradlew)
+                    def myG = "gradlew"
+                    grantExecutePermission myG
 
                     gradle 'integrationTest'
 
@@ -68,7 +69,7 @@ if (!isMasterBranch()) {
                 try {
                     unstash 'source'
 
-                    grantExecutePermission(gradlew)
+                    grantExecutePermission 'gradlew'
 
                     gradle 'acceptanceTest'
 
@@ -88,7 +89,7 @@ if (!isMasterBranch()) {
                     try {
                         unstash 'source'
 
-                        grantExecutePermission(gradlew)
+                        grantExecutePermission 'gradlew'
 
                         sh 'SPRING_PROFILES_ACTIVE=online,test,testServer1 ./gradlew functionalTest'
 
@@ -111,7 +112,7 @@ if (!isMasterBranch()) {
                 unstash 'acceptanceCodeCoverage'
                 unstash 'functionalCodeCoverage'
 
-                grantExecutePermission(gradlew)
+                grantExecutePermission 'gradlew'
 
                 gradle 'jacocoTestReport'
 
@@ -149,7 +150,7 @@ if (isMasterBranch()) {
                 timeout(time: 5, unit: 'MINUTES') {
                     unstash 'source'
 
-                    grantExecutePermission(gradlew)
+                    grantExecutePermission 'gradlew'
 
                     gradle 'assemble uploadArchives'
                 }
@@ -187,10 +188,10 @@ if (isMasterBranch()) {
                     unstash 'source'
                     unstash 'masterProperties'
 
-                    grantExecutePermission(gradlew)
+                    grantExecutePermission 'gradlew'
 
                     def script = "scripts/release/activities_ui_release.sh"
-                    grantExecutePermission(script)
+                    grantExecutePermission script
 
 
                     sh "./" + script + " ${SELECTED_SEMANTIC_VERSION_UPDATE} ${FALLBACK_RELEASE_VERSION}"
