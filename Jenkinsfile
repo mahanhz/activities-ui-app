@@ -20,8 +20,7 @@ stage ('Build') {
             try {
                 checkout scm
 
-                grantExecutePermissions()
-                gradle 'clean compileSass test assemble'
+                gradle 'clean compileSass gulp_default test assemble'
 
                 stash excludes: 'build/, angular/node_modules/', includes: '**', name: 'source'
                 stash includes: 'build/jacoco/*.exec', name: 'unitCodeCoverage'
@@ -50,7 +49,7 @@ if (!isMasterBranch()) {
                 try {
                     unstash 'source'
 
-                    grantExecutePermissions()
+                    grantExecutePermission(gradlew)
 
                     gradle 'integrationTest'
 
@@ -69,7 +68,7 @@ if (!isMasterBranch()) {
                 try {
                     unstash 'source'
 
-                    grantExecutePermissions()
+                    grantExecutePermission(gradlew)
 
                     gradle 'acceptanceTest'
 
@@ -89,7 +88,7 @@ if (!isMasterBranch()) {
                     try {
                         unstash 'source'
 
-                        grantExecutePermissions()
+                        grantExecutePermission(gradlew)
 
                         sh 'SPRING_PROFILES_ACTIVE=online,test,testServer1 ./gradlew functionalTest'
 
@@ -112,7 +111,7 @@ if (!isMasterBranch()) {
                 unstash 'acceptanceCodeCoverage'
                 unstash 'functionalCodeCoverage'
 
-                grantExecutePermissions()
+                grantExecutePermission(gradlew)
 
                 gradle 'jacocoTestReport'
 
@@ -150,7 +149,7 @@ if (isMasterBranch()) {
                 timeout(time: 5, unit: 'MINUTES') {
                     unstash 'source'
 
-                    grantExecutePermissions()
+                    grantExecutePermission(gradlew)
 
                     gradle 'assemble uploadArchives'
                 }
@@ -188,7 +187,7 @@ if (isMasterBranch()) {
                     unstash 'source'
                     unstash 'masterProperties'
 
-                    grantExecutePermissions()
+                    grantExecutePermission(gradlew)
 
                     def script = "scripts/release/activities_ui_release.sh"
                     grantExecutePermission(script)
@@ -229,12 +228,7 @@ void gradle(String tasks, String switches = null) {
     sh gradleCommand.toString()
 }
 
-void grantExecutePermissions() {
-    // fixes unstash overwrite bug ... https://issues.jenkins-ci.org/browse/JENKINS-33126
-    sh 'chmod -R u+w .gradle'
-    sh 'chmod u+x gradlew'
-}
-
+// fixes unstash overwrite bug ... https://issues.jenkins-ci.org/browse/JENKINS-33126
 void grantExecutePermission(String fileOrDir, boolean recursive = false) {
     String permissionCommand = "chmod ";
 
