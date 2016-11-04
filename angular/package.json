@@ -47,6 +47,7 @@
     "gulp-typescript": "3.1.2",
     "lite-server": "^2.2.2",
     "jasmine-core": "2.5.2",
-    "typescript": "^2.0.3"
+    "typescript": "^2.0.3",
+    "user-home": "^2.0.0"
   }
 }

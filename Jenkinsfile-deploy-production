@@ -64,5 +64,7 @@ stage ('Health check') {
                 }
             }
         }
+
+        deleteDir() // Wipe out the workspace
     }
 }
