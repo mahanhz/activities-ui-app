@@ -16,7 +16,7 @@ properties([[$class: 'BuildDiscarderProperty', strategy:
 
 stage ('Build') {
     node {
-        timeout(time: 15, unit: 'MINUTES') {
+        timeout(time: 10, unit: 'MINUTES') {
             try {
                 checkout scm
 
@@ -48,7 +48,9 @@ if (!isMasterBranch()) {
             timeout(time: 10, unit: 'MINUTES') {
                 try {
                     unstash 'source'
-                    sh 'chmod 755 gradlew'
+
+                    grantExecutePermissions()
+
                     gradle 'integrationTest'
 
                     stash includes: 'build/jacoco/*.exec', name: 'integrationCodeCoverage'
@@ -65,7 +67,9 @@ if (!isMasterBranch()) {
             timeout(time: 10, unit: 'MINUTES') {
                 try {
                     unstash 'source'
-                    sh 'chmod 755 gradlew'
+
+                    grantExecutePermissions()
+
                     gradle 'acceptanceTest'
 
                     stash includes: 'build/jacoco/*.exec', name: 'acceptanceCodeCoverage'
@@ -83,7 +87,9 @@ if (!isMasterBranch()) {
                 wrap([$class: 'Xvfb']) {
                     try {
                         unstash 'source'
-                        sh 'chmod 755 gradlew'
+
+                        grantExecutePermissions()
+
                         sh 'SPRING_PROFILES_ACTIVE=online,test,testServer1 ./gradlew functionalTest'
 
                         stash includes: 'build/jacoco/*.exec', name: 'functionalCodeCoverage'
@@ -105,7 +111,8 @@ if (!isMasterBranch()) {
                 unstash 'acceptanceCodeCoverage'
                 unstash 'functionalCodeCoverage'
 
-                sh 'chmod 755 gradlew'
+                grantExecutePermissions()
+
                 gradle 'jacocoTestReport'
 
                 publishHTML(target: [reportDir:'build/reports/jacoco/test/html', reportFiles: 'index.html', reportName: 'Code Coverage'])
@@ -141,7 +148,8 @@ if (isMasterBranch()) {
             node {
                 timeout(time: 5, unit: 'MINUTES') {
                     unstash 'source'
-                    sh 'chmod 755 gradlew'
+
+                    grantExecutePermissions()
 
                     gradle 'assemble uploadArchives'
                 }
@@ -179,9 +187,11 @@ if (isMasterBranch()) {
                     unstash 'source'
                     unstash 'masterProperties'
 
+                    grantExecutePermissions()
+
                     def script = "scripts/release/activities_ui_release.sh"
-                    sh "chmod 755 " + script
-                    sh 'chmod 755 gradlew'
+                    grantExecutePermission(script)
+
 
                     sh "./" + script + " ${SELECTED_SEMANTIC_VERSION_UPDATE} ${FALLBACK_RELEASE_VERSION}"
                 }
@@ -216,4 +226,23 @@ void gradle(String tasks, String switches = null) {
     }
 
     sh gradleCommand.toString()
+}
+
+void grantExecutePermissions() {
+    // fixes unstash overwrite bug ... https://issues.jenkins-ci.org/browse/JENKINS-33126
+    sh 'chmod -R u+w .gradle'
+    sh 'chmod u+x gradlew'
+}
+
+void grantExecutePermission(String fileOrDir, boolean recursive = false) {
+    String permissionCommand = "chmod ";
+
+    if (recursive) {
+        permissionCommand += '-R '
+    }
+
+    permissionCommand += 'u+x '
+    permissionCommand += fileOrDir
+
+    sh permissionCommand.toString()
 }
