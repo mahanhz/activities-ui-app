@@ -42,6 +42,9 @@ gradle bootRun -Dspring.profiles.active=online,local -Deureka.client.serviceUrl.
 ## URLs
 
 **Vaadin**: http://localhost:13309/activities/ui/vaadin (vaadin/p)
+
 **Angular2**: http://localhost:13309/activities/ui/angular/index.html (angular/p)
+
 **Togglz**: http://localhost:13309/activities/ui/togglz-console (admin/p)
+
 **Management**: http://192.168.1.33:13310/activities/ui/manage (admin/p)
