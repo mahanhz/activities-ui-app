@@ -39,7 +39,7 @@
     "@types/jasmine": "2.5.35",
     "@types/core-js": "0.9.34",
     "@types/node": "6.0.45",
-    "concurrently": "^.0.0",
+    "concurrently": "3.1.0",
     "del": "2.2.2",
     "event-stream": "3.3.4",
     "gulp": "3.9.1",

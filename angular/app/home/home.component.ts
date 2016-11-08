@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { AccessService } from './access.service';
+import { AccessService } from 'app/access/access.service';
 
 interface Access {
     includeFacilitatedActivity: boolean;
