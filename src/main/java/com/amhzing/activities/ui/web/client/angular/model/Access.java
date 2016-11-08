@@ -1,18 +1,11 @@
 package com.amhzing.activities.ui.web.client.angular.model;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import java.io.Serializable;
 import java.util.Objects;
 
-@JsonInclude
 public class Access implements Serializable {
 
-    @JsonProperty("includeFacilitatedActivity")
     private final boolean includeFacilitatedActivity;
-
-    @JsonProperty("includeHostedActivity")
     private final boolean includeHostedActivity;
 
     private Access(final boolean includeFacilitatedActivity, final boolean includeHostedActivity) {
