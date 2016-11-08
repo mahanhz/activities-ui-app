@@ -101,7 +101,9 @@ springBoot {
 }
 
 // Make the System.properties available in the bootRun task.
-bootRun.systemProperties = System.properties
+bootRun {
+	systemProperties = System.properties
+}
 
 sourceSets {
 	main {
