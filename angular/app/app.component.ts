@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'angular-home',
+  selector: 'activities-ui-angular',
   template: '<router-outlet></router-outlet>'
 })
 export class AppComponent {

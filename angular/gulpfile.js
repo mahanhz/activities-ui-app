@@ -39,7 +39,7 @@ gulp.task('copy:html', ['clean'], function() {
   )
 })
 
-// copy html
+// copy systemjs config
 gulp.task('copy:systemjsConfig', ['clean'], function() {
   return gulp.src(['systemjs.config.js'], { base : './' })
              .pipe(gulp.dest(distDir + angularDir))
@@ -73,7 +73,13 @@ gulp.task('copy:libs', ['clean'], function() {
         .pipe(gulp.dest(distDir + angularJsLibDir)),
     gulp.src(['./node_modules/tether/dist/css/tether.css',
               './node_modules/bootstrap/dist/css/bootstrap.css'])
-        .pipe(gulp.dest(distDir + angularStylesDir))
+        .pipe(gulp.dest(distDir + angularStylesDir)),
+
+    // copy font-awesome
+    gulp.src(['./node_modules/font-awesome/css/font-awesome.css'])
+        .pipe(gulp.dest(distDir + angularStylesDir + '/font-awesome/css')),
+    gulp.src(['./node_modules/font-awesome/fonts/*'])
+        .pipe(gulp.dest(distDir + angularStylesDir + '/font-awesome/fonts'))
   );
 });
 
