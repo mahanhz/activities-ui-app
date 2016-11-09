@@ -10,7 +10,7 @@ public enum UserStore {
     USER_ADMIN("admin", "p", ADMIN),
     USER_VAADIN("vaadin", "p", VAADIN_USER),
     USER_ANGULAR("angular", "p", ANGULAR_USER),
-    USER_COORDINATOR("coordinator", "p", COORDINATOR, VAADIN_USER);
+    USER_COORDINATOR("coordinator", "p", COORDINATOR, VAADIN_USER, ANGULAR_USER);
 
     private final String name;
     private final String password;

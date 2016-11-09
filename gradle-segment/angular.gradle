@@ -17,6 +17,11 @@ gulp_default.dependsOn 'npmInstall'
 // run gulp install
 gulp_default.dependsOn 'installGulp'
 
+// watch files for changes and build
+task gulpWatch(type: GulpTask) {
+    args = ['watch']
+}
+
 // processResources is a Java task. Run the gulpfile.js before this task using the 'default' task in the gulpfile.js
 // processResources.dependsOn gulp_default
 
