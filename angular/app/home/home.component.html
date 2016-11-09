@@ -39,41 +39,7 @@
 
         <div class="tab-content">
             <div id="searchParticipants" class="tab-pane fade in active">
-                <br/>
-                <form [formGroup]="searchParticipantForm" (ngSubmit)="searchParticipant($event)">
-                    <div class="row">
-                        <div class="form-group col-xs-2">
-                            <input type="text" class="form-control" [formControl]="searchParticipantForm.controls['country']" autofocus="true" placeholder="Country"/>
-                        </div>
-                        <div class="form-group col-xs-2">
-                            <input type="text" class="form-control" [formControl]="searchParticipantForm.controls['city']" placeholder="City"/>
-                        </div>
-                        <div class="form-group col-xs-2">
-                            <input type="text" class="form-control" [formControl]="searchParticipantForm.controls['addressLine1']" placeholder="Address line 1"/>
-                        </div>
-                        <div class="form-group col-xs-2">
-                            <input type="text" class="form-control" [formControl]="searchParticipantForm.controls['lastname']" placeholder="Last name"/>
-                        </div>
-                        <div class="form-group col-xs-2">
-                            <input type="text" class="form-control" [formControl]="searchParticipantForm.controls['id']" placeholder="Id"/>
-                        </div>
-                        <div class="form-group col-xs-2">
-                            <button type="submit" class="btn btn-primary">Search</button>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div *ngIf ="searchParticipantForm.controls['country'].touched" >
-                            <div *ngIf = "!searchParticipantForm.controls['country'].valid" class = "alert alert-danger">
-                                <strong>Country is required</strong>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-                <ul *ngIf ="participantsResponse">
-                    <li *ngFor="let participant of participantsResponse.participants">
-                        {{ participant.name.lastName }}
-                    </li>
-                </ul>
+                <search-participants></search-participants>
             </div>
             <div *ngIf="accessRights && accessRights.includeFacilitatedActivity" id="activityFacilitated" class="tab-pane fade">
                 <p>Some content in menu 1.</p>

@@ -7,6 +7,7 @@ import { HttpModule }    from '@angular/http';
 import { routing, appRouterProviders } from './app.routing';
 import { AppComponent }  from './app.component';
 import { HomeComponent } from './home/home.component';
+import { SearchParticipantsComponent } from './search/search.participants.component';
 
 @NgModule({
     imports:      [ BrowserModule,
@@ -16,7 +17,8 @@ import { HomeComponent } from './home/home.component';
                     routing
     ],
     declarations: [ AppComponent,
-                    HomeComponent
+                    HomeComponent,
+                    SearchParticipantsComponent
     ],
     providers:    [ appRouterProviders,
                   [ {provide: APP_BASE_HREF, useValue: '/activities/ui/angular'} ]
