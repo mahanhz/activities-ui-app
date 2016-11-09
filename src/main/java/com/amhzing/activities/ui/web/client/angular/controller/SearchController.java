@@ -5,16 +5,13 @@ import com.amhzing.activities.ui.web.client.angular.model.Participants;
 import com.amhzing.activities.ui.web.client.exception.UIFriendlyException;
 import com.amhzing.activities.ui.web.client.model.ParticipantModel;
 import com.amhzing.activities.ui.web.client.model.SearchSpecification;
-import org.apache.commons.collections.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Map;
 
 import static com.amhzing.activities.ui.web.client.exception.UIFriendlyException.HTML_ERROR_MESSAGE;
 
@@ -40,17 +37,5 @@ public class SearchController extends AbstractController {
         }  catch (final Exception ex) {
             return Participants.createWithError(HTML_ERROR_MESSAGE);
         }
-    }
-
-    private SearchSpecification searchSpec(final @PathVariable Map<String, String> pathVars) {
-        return SearchSpecification.create(pathVariable(pathVars, "country"),
-                                          pathVariable(pathVars, "city"),
-                                          pathVariable(pathVars, "addressLine1"),
-                                          pathVariable(pathVars, "lastName"),
-                                          pathVariable(pathVars, "participantId"));
-    }
-
-    private String pathVariable(final Map<String, String> pathVars, final String pathVar) {
-        return MapUtils.getString(pathVars, pathVar, "");
     }
 }
