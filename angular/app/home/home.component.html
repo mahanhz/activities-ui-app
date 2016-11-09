@@ -62,13 +62,18 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div *ngIf ="country.touched" >
-                            <div *ngIf = "!country.valid" class = "alert alert-danger">
+                        <div *ngIf ="searchParticipantForm.controls['country'].touched" >
+                            <div *ngIf = "!searchParticipantForm.controls['country'].valid" class = "alert alert-danger">
                                 <strong>Country is required</strong>
                             </div>
                         </div>
                     </div>
                 </form>
+                <ul *ngIf ="participantsResponse">
+                    <li *ngFor="let participant of participantsResponse.participants">
+                        {{ participant.name.lastName }}
+                    </li>
+                </ul>
             </div>
             <div *ngIf="accessRights && accessRights.includeFacilitatedActivity" id="activityFacilitated" class="tab-pane fade">
                 <p>Some content in menu 1.</p>

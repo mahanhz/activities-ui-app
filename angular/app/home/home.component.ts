@@ -1,24 +1,30 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { FormGroup, FormControl, FormBuilder, Validators }      from '@angular/forms';
-import { AccessService }                from 'app/access/access.service';
+import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 
-interface Access {
-    includeFacilitatedActivity: boolean;
-    includeHostedActivity: boolean;
-}
+import { AccessService } from 'app/access/access.service';
+import { Access } from 'app/access/access.interface';
+import { SearchService } from 'app/search/search.service';
+import { Participants } from 'app/search/participants.interface';
+
 
 @Component({
     selector: 'home',
     templateUrl: 'app/home/home.component.html',
-    providers: [AccessService]
+    providers: [AccessService, SearchService]
 })
 export class HomeComponent implements OnInit, OnDestroy {
 
     private accessRights: Access;
-    private subscription;
-    public searchParticipantForm: FormGroup;
+    private participantsResponse: Participants;
+    private searchParticipantForm: FormGroup;
+    private accessSubscription;
+    private searchSubscription;
 
-    constructor(private accessService: AccessService) {
+    constructor(private accessService: AccessService, private searchService: SearchService) {
+    }
+
+    // on-init
+    ngOnInit() {
         let fb = new FormBuilder();
         this.searchParticipantForm = fb.group({
             country: ['', <any>Validators.required],
@@ -27,11 +33,8 @@ export class HomeComponent implements OnInit, OnDestroy {
             lastname: [''],
             id: ['']
         });
-    }
 
-    // on-init
-    ngOnInit() {
-        this.subscription = this.accessService.getAccessRights()
+        this.accessSubscription = this.accessService.getAccessRights()
             .subscribe(
                 (data) => {
                     this.accessRights = data;
@@ -43,11 +46,26 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     // on-destroy
     ngOnDestroy() {
-        this.subscription.unsubscribe();
+        this.accessSubscription.unsubscribe();
+        this.searchSubscription.unsubscribe();
     }
 
     searchParticipant(event) {
-        console.log(this.searchParticipantForm.value);
+        var country = this.searchParticipantForm.controls.country.value;
+        var city = this.searchParticipantForm.controls.city.value;
+        var addressLine1 = this.searchParticipantForm.controls.addressLine1.value;
+        var lastName = this.searchParticipantForm.controls.lastname.value;
+        var id = this.searchParticipantForm.controls.id.value;
+
+        this.searchSubscription = this.searchService.getParticipants(country, city, addressLine1, lastName, id)
+            .subscribe(
+                (data) => {
+                    this.participantsResponse = data;
+                },
+                (err) => console.log(err),
+                () => console.log('Search service complete')
+        );
+
         event.preventDefault();
     }
 }
