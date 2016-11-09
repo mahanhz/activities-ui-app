@@ -1,5 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { AccessService } from 'app/access/access.service';
+import { FormGroup, FormControl, FormBuilder, Validators }      from '@angular/forms';
+import { AccessService }                from 'app/access/access.service';
 
 interface Access {
     includeFacilitatedActivity: boolean;
@@ -15,8 +16,18 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     private accessRights: Access;
     private subscription;
+    public searchParticipantForm: FormGroup;
 
-    constructor(private accessService: AccessService) {}
+    constructor(private accessService: AccessService) {
+        let fb = new FormBuilder();
+        this.searchParticipantForm = fb.group({
+            country: ['', <any>Validators.required],
+            city: [''],
+            addressLine1: [''],
+            lastname: [''],
+            id: ['']
+        });
+    }
 
     // on-init
     ngOnInit() {
@@ -26,12 +37,17 @@ export class HomeComponent implements OnInit, OnDestroy {
                     this.accessRights = data;
                 },
                 (err) => console.log(err),
-                () => console.log('access service complete')
+                () => console.log('Access service complete')
         );
     }
 
     // on-destroy
     ngOnDestroy() {
         this.subscription.unsubscribe();
+    }
+
+    searchParticipant(event) {
+        console.log(this.searchParticipantForm.value);
+        event.preventDefault();
     }
 }

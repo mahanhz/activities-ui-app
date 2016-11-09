@@ -1,23 +1,81 @@
-<ul class="nav nav-tabs">
-    <li role="presentation" class="active">
-        <a data-toggle="tab" href="#searchParticipants">Search Participants</a>
-    </li>
-    <li *ngIf="accessRights && accessRights.includeFacilitatedActivity" role="presentation">
-        <a data-toggle="tab" href="#activityFacilitated">Facilitated Activity</a>
-    </li>
-    <li *ngIf="accessRights && accessRights.includeHostedActivity" role="presentation">
-        <a data-toggle="tab" href="#activityHosted">Hosted Activity</a>
-    </li>
-</ul>
 
-<div class="tab-content">
-    <div id="searchParticipants" class="tab-pane fade in active">
-        <p>Some content.</p>
+
+<!-- Static navbar -->
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">Activities UI</a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="../login?logout">Logout</a></li>
+                </ul>
+            </div><!--/.nav-collapse -->
+        </div><!--/.container-fluid -->
     </div>
-    <div *ngIf="accessRights && accessRights.includeFacilitatedActivity" id="activityFacilitated" class="tab-pane fade">
-        <p>Some content in menu 1.</p>
+</nav>
+
+<div class="container">
+    <!-- Main component -->
+    <div class="well">
+        <ul class="nav nav-tabs">
+            <li role="presentation" class="active">
+                <a data-toggle="tab" href="#searchParticipants">Search Participants</a>
+            </li>
+            <li *ngIf="accessRights && accessRights.includeFacilitatedActivity" role="presentation">
+                <a data-toggle="tab" href="#activityFacilitated">Facilitated Activity</a>
+            </li>
+            <li *ngIf="accessRights && accessRights.includeHostedActivity" role="presentation">
+                <a data-toggle="tab" href="#activityHosted">Hosted Activity</a>
+            </li>
+        </ul>
+
+        <div class="tab-content">
+            <div id="searchParticipants" class="tab-pane fade in active">
+                <br/>
+                <form [formGroup]="searchParticipantForm" (ngSubmit)="searchParticipant($event)">
+                    <div class="row">
+                        <div class="form-group col-xs-2">
+                            <input type="text" class="form-control" [formControl]="searchParticipantForm.controls['country']" autofocus="true" placeholder="Country"/>
+                        </div>
+                        <div class="form-group col-xs-2">
+                            <input type="text" class="form-control" [formControl]="searchParticipantForm.controls['city']" placeholder="City"/>
+                        </div>
+                        <div class="form-group col-xs-2">
+                            <input type="text" class="form-control" [formControl]="searchParticipantForm.controls['addressLine1']" placeholder="Address line 1"/>
+                        </div>
+                        <div class="form-group col-xs-2">
+                            <input type="text" class="form-control" [formControl]="searchParticipantForm.controls['lastname']" placeholder="Last name"/>
+                        </div>
+                        <div class="form-group col-xs-2">
+                            <input type="text" class="form-control" [formControl]="searchParticipantForm.controls['id']" placeholder="Id"/>
+                        </div>
+                        <div class="form-group col-xs-2">
+                            <button type="submit" class="btn btn-primary">Search</button>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div *ngIf ="country.touched" >
+                            <div *ngIf = "!country.valid" class = "alert alert-danger">
+                                <strong>Country is required</strong>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div *ngIf="accessRights && accessRights.includeFacilitatedActivity" id="activityFacilitated" class="tab-pane fade">
+                <p>Some content in menu 1.</p>
+            </div>
+            <div *ngIf="accessRights && accessRights.includeHostedActivity" id="activityHosted" class="tab-pane fade">
+                <p>Some content in menu 2.</p>
+            </div>
+        </div>
     </div>
-    <div *ngIf="accessRights && accessRights.includeHostedActivity" id="activityHosted" class="tab-pane fade">
-        <p>Some content in menu 2.</p>
-    </div>
-</div>
+</div> <!-- /container -->

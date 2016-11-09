@@ -1,5 +1,8 @@
+'use strict';
+
 const gulp = require('gulp');
 const del = require('del');
+const sass = require('gulp-sass');
 const typescript = require('gulp-typescript');
 const tscConfig = require('./tsconfig.json');
 const es = require('event-stream');
@@ -9,24 +12,13 @@ var distDir = 'dist';
 var angularDir = '/angular';
 var angularAppDir = angularDir + '/app';
 var angularJsLibDir = angularDir + '/js/lib';
-var angularStylesDir = angularDir + '/css/lib';
+var angularStylesDir = angularDir + '/css';
+var angularStylesLibDir = angularStylesDir + '/lib';
 
 // clean the contents of the distribution directory
 gulp.task('clean', function () {
   return del([distDir]);
 });
-
-// copy static assets - i.e. non TypeScript compiled source
-gulp.task('copy:assets', ['clean'], function() {
-//  return gulp.src(['app/**/*', '!app/**/*.ts'], { base : './' })
-//             .pipe(gulp.dest(distDir + angularAppDir))
-});
-
-// copy styles
-gulp.task('copy:styles', ['clean'], function() {
-  return gulp.src(['styles.css'], { base : './' })
-             .pipe(gulp.dest(distDir + angularStylesDir))
-})
 
 // copy html
 gulp.task('copy:html', ['clean'], function() {
@@ -38,6 +30,15 @@ gulp.task('copy:html', ['clean'], function() {
         .pipe(gulp.dest(distDir + angularAppDir))
   )
 })
+
+// sass compile
+gulp.task('copy:sass', ['clean'], function() {
+
+    // compile sass and copy
+    return gulp.src('./assets/sass/**/*.scss')
+        .pipe(sass.sync().on('error', sass.logError))
+        .pipe(gulp.dest(distDir + angularStylesDir));
+});
 
 // copy systemjs config
 gulp.task('copy:systemjsConfig', ['clean'], function() {
@@ -73,13 +74,13 @@ gulp.task('copy:libs', ['clean'], function() {
         .pipe(gulp.dest(distDir + angularJsLibDir)),
     gulp.src(['./node_modules/tether/dist/css/tether.css',
               './node_modules/bootstrap/dist/css/bootstrap.css'])
-        .pipe(gulp.dest(distDir + angularStylesDir)),
+        .pipe(gulp.dest(distDir + angularStylesLibDir)),
 
     // copy font-awesome
     gulp.src(['./node_modules/font-awesome/css/font-awesome.css'])
-        .pipe(gulp.dest(distDir + angularStylesDir + '/font-awesome/css')),
+        .pipe(gulp.dest(distDir + angularStylesLibDir + '/font-awesome/css')),
     gulp.src(['./node_modules/font-awesome/fonts/*'])
-        .pipe(gulp.dest(distDir + angularStylesDir + '/font-awesome/fonts'))
+        .pipe(gulp.dest(distDir + angularStylesLibDir + '/font-awesome/fonts'))
   );
 });
 
@@ -97,7 +98,7 @@ gulp.task('tscompilew', function() {
 });
 
 // build task
-gulp.task('build', ['tscompile', 'copy:libs', 'copy:assets', 'copy:systemjsConfig', 'copy:html', 'copy:styles']);
+gulp.task('build', ['tscompile', 'copy:libs', 'copy:sass', 'copy:systemjsConfig', 'copy:html', 'copy:sass']);
 
 // watch task
 gulp.task('watch', ['build', 'tscompilew']);
