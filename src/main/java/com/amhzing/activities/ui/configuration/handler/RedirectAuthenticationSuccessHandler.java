@@ -47,7 +47,7 @@ public class RedirectAuthenticationSuccessHandler extends SavedRequestAwareAuthe
         getRedirectStrategy().sendRedirect(request, response, targetUri);
     }
 
-    String uri(final Authentication authentication) {
+    protected String uri(final Authentication authentication) {
         final List<String> roles = authentication.getAuthorities()
                                                  .stream()
                                                  .map(GrantedAuthority::getAuthority)
