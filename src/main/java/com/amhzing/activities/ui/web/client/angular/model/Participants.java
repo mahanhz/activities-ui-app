@@ -10,8 +10,8 @@ import static org.apache.commons.lang3.Validate.noNullElements;
 
 public class Participants {
 
-    final List<ParticipantModel> participants;
-    final String errorMessage;
+    private final List<ParticipantModel> participants;
+    private final String errorMessage;
 
     private Participants(final List<ParticipantModel> participants, final String errorMessage) {
         this.participants = noNullElements(participants);
