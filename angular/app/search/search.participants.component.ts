@@ -6,10 +6,10 @@ import { Participants } from './participants.interface';
 
 @Component({
     selector: 'search-participants',
-    templateUrl: 'app/search/search.participants.component.html'
+    templateUrl: 'app/search/search.participants.component.html',
     providers: [SearchService]
 })
-export class SearchParticipantsComponent {
+export class SearchParticipantsComponent implements OnInit, OnDestroy {
 
     private participantsResponse: Participants;
     private searchParticipantForm: FormGroup;

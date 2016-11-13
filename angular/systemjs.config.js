@@ -21,8 +21,10 @@
       'rxjs':                       'jsLib:rxjs',
       'angular2-in-memory-web-api': 'jsLib:angular2-in-memory-web-api',
       'symbol-observable':          'jsLib:symbol-observable',
-      'jquery': 'jsLib:jquery.js',
-      'ng2-bootstrap/ng2-bootstrap': 'jsLib:ng2-bootstrap.umd.js'
+      'jquery': 'jsLib:jquery.min.js',
+      'ng2-bootstrap/ng2-bootstrap': 'jsLib:ng2-bootstrap.umd.minjs',
+      'ag-grid-ng2': 'jsLib:ag-grid-ng2',
+      'ag-grid': 'jsLib:ag-grid'
     },
     // packages tells the System loader how to load when no filename and/or no extension
     packages: {
@@ -40,6 +42,16 @@
       'angular2-in-memory-web-api': {
         main: './index.js',
         defaultExtension: 'js'
+      },
+      lib: {
+        format: 'register',
+        defaultExtension: 'js'
+      },
+      'ag-grid-ng2': {
+        defaultExtension: "js"
+      },
+      'ag-grid': {
+        defaultExtension: "js"
       }
     }
   });
