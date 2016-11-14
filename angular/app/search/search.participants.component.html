@@ -29,7 +29,7 @@
     </div>
 </form>
 
-<div *ngIf ="participantsResponse" style="width: 100%;">
+<div *ngIf="participantsResponse && participantsResponse.participants.length > 0" style="width: 100%;">
     <div>
         <input (keyup)="onQuickFilterChanged($event)" type="text" id="quickFilterInput" placeholder="Type text to filter..."/>
     </div>
@@ -69,4 +69,6 @@
             <ag-grid-column headerName="Id" field="participantId" [width]="300"></ag-grid-column>
         </ag-grid-ng2>
     </div>
+</div>
+<div *ngIf="participantsResponse && participantsResponse.participants.length <= 0" [innerHTML]="participantsResponse.errorMessage" class="alert alert-danger">
 </div>
