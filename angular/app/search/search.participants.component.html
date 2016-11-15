@@ -28,8 +28,47 @@
         </div>
     </div>
 </form>
-<ul *ngIf ="participantsResponse">
-    <li *ngFor="let participant of participantsResponse.participants">
-        {{ participant.name.lastName }}
-    </li>
-</ul>
+
+<div *ngIf="participantsResponse && participantsResponse.participants.length > 0" style="width: 100%;">
+    <div>
+        <input (keyup)="onQuickFilterChanged($event)" type="text" id="quickFilterInput" placeholder="Type text to filter..."/>
+    </div>
+    <br/>
+    <div>
+        <ag-grid-ng2 #agGrid style="width: 100%;" class="ag-fresh"
+                     [gridOptions]="gridOptions"
+                     [rowData]="rowData"
+
+                     enableColResize
+                     enableSorting
+                     enableFilter
+                     groupHeaders
+                     suppressRowClickSelection
+                     toolPanelSuppressGroups
+                     toolPanelSuppressValues
+                     rowHeight="22"
+                     rowSelection="multiple">
+            <ag-grid-column headerName="Name">
+                <ag-grid-column headerName="#" [width]="30" [checkboxSelection]="true" [suppressSorting]="true" [suppressMenu]="true" [pinned]="true"></ag-grid-column>
+                <ag-grid-column headerName="First" field="firstName" [width]="100" [pinned]="true"></ag-grid-column>
+                <ag-grid-column headerName="Middle" field="middleName" [width]="75" [pinned]="true"></ag-grid-column>
+                <ag-grid-column headerName="Last" field="lastName" [width]="150" [pinned]="true"></ag-grid-column>
+                <ag-grid-column headerName="Suffix" field="suffix" [width]="75" [pinned]="true"></ag-grid-column>
+            </ag-grid-column>
+            <ag-grid-column headerName="Address">
+                <ag-grid-column headerName="Line 1" field="addressLine1" [width]="150"></ag-grid-column>
+                <ag-grid-column headerName="Line 2" field="addressLine2" [width]="75"></ag-grid-column>
+                <ag-grid-column headerName="City" field="city" [width]="150"></ag-grid-column>
+                <ag-grid-column headerName="Country" field="country" [width]="100"></ag-grid-column>
+                <ag-grid-column headerName="Postal Code" field="postalCode" [width]="125"></ag-grid-column>
+            </ag-grid-column>
+            <ag-grid-column headerName="Contact">
+                <ag-grid-column headerName="Phone" field="contactNumber" [width]="125"></ag-grid-column>
+                <ag-grid-column headerName="Email" field="email" [width]="200"></ag-grid-column>
+            </ag-grid-column>
+            <ag-grid-column headerName="Id" field="participantId" [width]="300"></ag-grid-column>
+        </ag-grid-ng2>
+    </div>
+</div>
+<div *ngIf="participantsResponse && participantsResponse.participants.length <= 0" [innerHTML]="participantsResponse.errorMessage" class="alert alert-danger">
+</div>

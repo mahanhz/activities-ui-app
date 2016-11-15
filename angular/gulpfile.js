@@ -60,27 +60,35 @@ gulp.task('copy:libs', ['clean'], function() {
     gulp.src(['./node_modules/rxjs/**/*.js*'])
         .pipe(gulp.dest(distDir + angularJsLibDir + '/rxjs')),
     gulp.src(['node_modules/core-js/client/shim.min.js',
-              'node_modules/zone.js/dist/zone.js',
+              'node_modules/zone.js/dist/zone.min.js',
               'node_modules/reflect-metadata/Reflect.js',
-              'node_modules/systemjs/dist/system.src.js',
               'node_modules/systemjs/dist/system.src.js'])
         .pipe(gulp.dest(distDir + angularJsLibDir)),
 
     // copy bootstrap dependencies
-    gulp.src(['./node_modules/jquery/dist/jquery.js',
-              './node_modules/tether/dist/js/tether.js',
-              './node_modules/bootstrap/dist/js/bootstrap.js',
-              './node_modules/ng2-bootstrap/bundles/ng2-bootstrap.umd.js'])
+    gulp.src(['./node_modules/jquery/dist/jquery.min.js',
+              './node_modules/tether/dist/js/tether.min.js',
+              './node_modules/bootstrap/dist/js/bootstrap.min.js',
+              './node_modules/ng2-bootstrap/bundles/ng2-bootstrap.umd.min.js'])
         .pipe(gulp.dest(distDir + angularJsLibDir)),
-    gulp.src(['./node_modules/tether/dist/css/tether.css',
-              './node_modules/bootstrap/dist/css/bootstrap.css'])
+    gulp.src(['./node_modules/tether/dist/css/tether.min.css',
+              './node_modules/bootstrap/dist/css/bootstrap.min.css',
+              './node_modules/jquery/dist/css/jquery.min.css'])
         .pipe(gulp.dest(distDir + angularStylesLibDir)),
 
     // copy font-awesome
-    gulp.src(['./node_modules/font-awesome/css/font-awesome.css'])
+    gulp.src(['./node_modules/font-awesome/css/font-awesome.min.css'])
         .pipe(gulp.dest(distDir + angularStylesLibDir + '/font-awesome/css')),
     gulp.src(['./node_modules/font-awesome/fonts/*'])
-        .pipe(gulp.dest(distDir + angularStylesLibDir + '/font-awesome/fonts'))
+        .pipe(gulp.dest(distDir + angularStylesLibDir + '/font-awesome/fonts')),
+
+    // copy ag-grid
+    gulp.src(['./node_modules/ag-grid-ng2/**/*.js*'])
+        .pipe(gulp.dest(distDir + angularJsLibDir + '/ag-grid-ng2')),
+    gulp.src(['./node_modules/ag-grid/**/*.js*'])
+        .pipe(gulp.dest(distDir + angularJsLibDir + '/ag-grid')),
+    gulp.src(['./node_modules/ag-grid/**/*.css*'])
+        .pipe(gulp.dest(distDir + angularStylesLibDir + '/ag-grid'))
   );
 });
 

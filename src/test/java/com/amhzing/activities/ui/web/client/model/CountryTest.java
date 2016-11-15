@@ -1,4 +1,4 @@
-package com.amhzing.activities.ui.web.client.vaadin.page;
+package com.amhzing.activities.ui.web.client.model;
 
 import junitparams.JUnitParamsRunner;
 import junitparams.Parameters;
