@@ -2,6 +2,7 @@ package com.amhzing.activities.ui.web.client.vaadin.page;
 
 import com.amhzing.activities.ui.web.client.adapter.ParticipantAdapter;
 import com.amhzing.activities.ui.web.client.exception.UIFriendlyException;
+import com.amhzing.activities.ui.web.client.model.Country;
 import com.amhzing.activities.ui.web.client.model.ParticipantModel;
 import com.amhzing.activities.ui.web.client.model.SearchSpecification;
 import com.vaadin.data.Item;

@@ -1,4 +1,4 @@
-package com.amhzing.activities.ui.web.client.vaadin.page;
+package com.amhzing.activities.ui.web.client.model;
 
 import static org.apache.commons.lang3.Validate.notBlank;
 
@@ -6,9 +6,6 @@ public class Country {
 
     private String code;
     private String name;
-
-    public Country() {
-    }
 
     private Country(final String code, final String name) {
         this.code = notBlank(code);
