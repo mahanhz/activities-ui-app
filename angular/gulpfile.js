@@ -15,6 +15,8 @@ var angularJsLibDir = angularDir + '/js/lib';
 var angularStylesDir = angularDir + '/css';
 var angularStylesLibDir = angularStylesDir + '/lib';
 
+var angularUnitTestResultsDir = 'unit_tests/results';
+
 // clean the contents of the distribution directory
 gulp.task('clean', function () {
   return del([distDir]);
@@ -26,6 +28,8 @@ gulp.task('copy:html', ['clean'], function() {
   return es.merge(
     gulp.src(['index.html'], { base : './' })
         .pipe(gulp.dest(distDir + angularDir)),
+    gulp.src('unit_tests/**/*.html')
+        .pipe(gulp.dest(angularUnitTestResultsDir)),
     gulp.src('app/**/*.html')
         .pipe(gulp.dest(distDir + angularAppDir))
   )
@@ -65,6 +69,14 @@ gulp.task('copy:libs', ['clean'], function() {
               'node_modules/systemjs/dist/system.src.js'])
         .pipe(gulp.dest(distDir + angularJsLibDir)),
 
+    // copy jasmine-core dependencies
+    gulp.src(['./node_modules/jasmine-core/lib/jasmine-core/jasmine.js',
+              './node_modules/jasmine-core/lib/jasmine-core/jasmine-html.js',
+              './node_modules/jasmine-core/lib/jasmine-core/boot.js'])
+        .pipe(gulp.dest(angularUnitTestResultsDir + '/js/lib')),
+    gulp.src(['./node_modules/jasmine-core/lib/jasmine-core/jasmine.css'])
+        .pipe(gulp.dest(angularUnitTestResultsDir + '/css/lib')),
+
     // copy bootstrap dependencies
     gulp.src(['./node_modules/jquery/dist/jquery.min.js',
               './node_modules/tether/dist/js/tether.min.js',
@@ -92,23 +104,30 @@ gulp.task('copy:libs', ['clean'], function() {
   );
 });
 
-// TypeScript compile
-gulp.task('tscompile', ['clean'], function () {
+// TypeScript compile app
+gulp.task('tsc:app', ['clean'], function () {
   return gulp.src('app/**/*.ts')
              .pipe(typescript(tscConfig.compilerOptions))
              .pipe(gulp.dest(distDir + angularAppDir));
 });
 
+// TypeScript compile app
+gulp.task('tsc:unitTest', ['clean'], function () {
+  return gulp.src('unit_tests/**/*.ts')
+             .pipe(typescript(tscConfig.compilerOptions))
+             .pipe(gulp.dest(angularUnitTestResultsDir));
+});
+
 // typescript watch compile
-gulp.task('tscompilew', function() {
+gulp.task('tscw:app', function() {
     gulp.watch(['./app/**/*.ts'],
-                ['tscompile']);
+                ['tsc:app']);
 });
 
 // build task
-gulp.task('build', ['tscompile', 'copy:libs', 'copy:sass', 'copy:systemjsConfig', 'copy:html', 'copy:sass']);
+gulp.task('build', ['tsc:app', 'tsc:unitTest', 'copy:libs', 'copy:sass', 'copy:systemjsConfig', 'copy:html', 'copy:sass']);
 
 // watch task
-gulp.task('watch', ['build', 'tscompilew']);
+gulp.task('watch', ['build', 'tscw:app']);
 
 gulp.task('default', ['build']);
